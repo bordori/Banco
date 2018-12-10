@@ -4,6 +4,8 @@ import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.unika.paginas.HomePage;
+
 /**
  * Simple test using the WicketTester
  */
