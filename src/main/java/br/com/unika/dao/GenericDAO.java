@@ -2,7 +2,9 @@ package br.com.unika.dao;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.Entity;
 import javax.persistence.NoResultException;
 
 import org.hibernate.HibernateException;
@@ -19,28 +21,40 @@ import br.com.unika.util.Retorno;
 
 
 public class GenericDAO<Entidade, Id extends Serializable> extends GenericDAOImpl<Entidade, Id> {
-	protected Session session;
-	private SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-	//private SessionFactory sessionFactory;
+	public Session session;
+	
+	
 	
 
 	
-
-	public void setSession(Session session) {
-		this.session = session;
-		
+	@Override
+	public void setSessionFactory(SessionFactory sessionFactory) {
+	// TODO Auto-generated method stub
+	super.setSessionFactory(sessionFactory);
 	}
-
+	
+	
+	
+	
 	public Session getSession() {
 		return session;
 	}
+
+	public void setSession(Session session) {
+		this.session = session;
+	}
+
 	
+	
+	
+	
+
 	public Retorno salvarDAO(Entidade ent) {
 		Retorno retorno = new Retorno(true, null);
 		try {
-			session = sessionFactory.openSession();
+		
+			session = getSessionFactory().openSession();
 			session.beginTransaction();
-			this.setSession(session);
 			this.save(ent);
 
 			session.getTransaction().commit();
@@ -61,10 +75,9 @@ public class GenericDAO<Entidade, Id extends Serializable> extends GenericDAOImp
 	public Retorno removerDAO(Entidade ent) {
 		Retorno retorno = new Retorno(true, null);
 		try {
-			session = sessionFactory.openSession();
+			session = getSessionFactory().openSession();
 			session.beginTransaction();
-			this.setSession(session);
-			session.delete(ent);
+			this.remove(ent);
 			session.getTransaction().commit();
 			session.close();
 
@@ -84,24 +97,20 @@ public class GenericDAO<Entidade, Id extends Serializable> extends GenericDAOImp
 		return retorno;
 	}
 
-	public Retorno listarDAO( ) {
-		ArrayList<?> lista = new ArrayList<>();
-		Retorno retorno = new Retorno(true, null);
+	public List<Entidade> listarDAO( ) {
+		ArrayList<Entidade> lista = new ArrayList<>();
+		
 		try {
-			session = sessionFactory.openSession();
+			session = getSessionFactory().openSession();
 			session.beginTransaction();
-			this.setSessionFactory(sessionFactory);
-			//this.setSessionFactory(HibernateUtil.getSessionFactory());
-			//lista = (ArrayList<?>) session.createQuery("SELECT " + tab.nomeTabela() + " from " + tab.getClass().getName() + " " + tab.nomeTabela()).list();
-			lista = (ArrayList<?>) this.findAll();
+			lista =  (ArrayList<Entidade>) this.findAll();
 			session.close();
-			retorno.setLista(lista);
-			return retorno;
+			
 		} catch (NullPointerException e) {
 			System.out.println("Defina a tabela para usar Dao.listar");
-			retorno = catchRetorno(retorno, "Defina a tabela para usar Dao.listar");
+			return null;
 		}
-		return retorno;
+		return lista;
 	}
 
 	public Retorno alterarDAO(Entidade ent) {
@@ -109,7 +118,7 @@ public class GenericDAO<Entidade, Id extends Serializable> extends GenericDAOImp
 		Retorno retorno = new Retorno(true, null);
 
 		try {
-			session = sessionFactory.openSession();
+			session = getSessionFactory().openSession();
 			session.beginTransaction();
 			session.merge(ent);
 			session.getTransaction().commit();
@@ -129,46 +138,35 @@ public class GenericDAO<Entidade, Id extends Serializable> extends GenericDAOImp
 		return retorno;
 	}
 
-	public Retorno procurarDAO(Entidade ent,Id pk) {
-		Retorno retorno = new Retorno(true, null);
-		ArrayList<?> tabela = new ArrayList<>();
+	public Entidade procurarDAO( Id pk) {
+		Entidade ent = null;
 		try {
-			session = sessionFactory.openSession();
+			session = getSessionFactory().openSession();
 			session.beginTransaction();
-			this.setSession(session);
-			/*tabela = (ArrayList<?>) session
-					.createQuery("SELECT " + ent.nomeTabela() + "" + " from " + ent.getClass().getName() + " "
-							+ ent.nomeTabela() + " WHERE " + ent.nomePk() + " = " + ent.getPkValor())
-					.list();*/
-			this.find(pk);
+			ent =  this.find(pk);
 			session.getTransaction().commit();
 			session.close();
-			retorno.setLista(tabela);
-			return retorno;
 		} catch (HibernateException e) {
 			System.out.println("Nao foi encontrado na tabela" + e.getMessage());
-			retorno = catchRetorno(retorno, "Nao foi encontrado na tabela " + e.getMessage());
 		} catch (NoResultException e) {
 			System.out.println("Nao foi encontrado nenhum dado "+e.getMessage());
-			retorno = catchRetorno(retorno, "Nao foi encontrado nenhum dado ");
+
 		}
-		return retorno;
+		return ent;
 
 	}
 	
-	public Retorno searchDAO(Search search) {
-		Retorno retorno = new Retorno(true, null);
+	public List<Entidade> searchDAO(Search search) {
 		
-		session = sessionFactory.openSession();
+		session = getSessionFactory().openSession();
 		session.beginTransaction();
-		this.setSessionFactory(sessionFactory);
 		
-		ArrayList<?> lista = new ArrayList<>();
-		lista = (ArrayList<?>) this.search(search);
-		retorno.setLista(lista);
+		ArrayList<Entidade> lista = new ArrayList<>();
+		lista =  (ArrayList<Entidade>) this.search(search);
+		
 		
 		session.close();
-		return retorno;
+		return lista;
 	}
 	
 	

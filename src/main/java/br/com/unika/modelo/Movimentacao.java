@@ -1,53 +1,175 @@
 package br.com.unika.modelo;
 
-import java.util.Date;
+import java.io.Serializable;
+import java.util.Calendar;
 
-public class Movimentacao {
-	
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.springframework.stereotype.Component;
+
+@Entity
+@Table(name = "movimentacao")
+@Component
+public class Movimentacao implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(nullable = false, name = "ID_MOVIMENTACAO", unique = true)
 	private Long idMovimentacao;
+
+	@Column(nullable = false, name = "TIPO_MOVIMENTACAO")
 	private int tipoMovimentacao;
+
+	@ManyToOne
+	@JoinColumn(name = "USUARIO_ID", nullable = false)
 	private Usuario usuario;
-	private Contato contato;
+
+	@Column(nullable = false, name = "NOME_FAVORECIDO")
+	private String nomeFavorecido;
+
+	@Column(nullable = false, name = "CPF_FAVORECIDO")
+	private String cpfFavoracido;
+
+	@Column(nullable = false, name = "NUMERO_BANCO_FAVORECIDO")
+	private String numeroBancoFavorecido;
+
+	@Column(nullable = false, name = "NOME_BANCO_FAVORECIDO")
+	private String nomeBancoFavorecido;
+
+	@Column(nullable = false, name = "AGENCIA_FAVORECIDO")
+	private String agenciaFavorecido;
+
+	@Column(nullable = false, name = "DIGITO_AGENCIA_FAVORECIDO")
+	private String digitoAgenciaFavorecido;
+
+	@Column(nullable = false, name = "CONTA_FAVORECIDO")
+	private String contaFavorecido;
+
+	@Column(nullable = false, name = "DIGITO_CONTA_FAVORECIDO")
+	private String digitoContaFavorecido;
+
+	@Column(nullable = false, name = "VALOR")
 	private Double Valor;
-	private Date data;
-	
-	
+
+	@Column(nullable = false, name = "DATA")
+	private Calendar data;
+
 	
 	public Long getIdMovimentacao() {
 		return idMovimentacao;
 	}
+
 	public void setIdMovimentacao(Long idMovimentacao) {
 		this.idMovimentacao = idMovimentacao;
 	}
+
 	public int getTipoMovimentacao() {
 		return tipoMovimentacao;
 	}
+
 	public void setTipoMovimentacao(int tipoMovimentacao) {
 		this.tipoMovimentacao = tipoMovimentacao;
 	}
+
 	public Usuario getUsuario() {
 		return usuario;
 	}
+
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
-	public Contato getContato() {
-		return contato;
-	}
-	public void setContato(Contato contato) {
-		this.contato = contato;
-	}
+
 	public Double getValor() {
 		return Valor;
 	}
+
 	public void setValor(Double valor) {
 		Valor = valor;
 	}
-	public Date getData() {
+
+	public String getNomeFavorecido() {
+		return nomeFavorecido;
+	}
+
+	public void setNomeFavorecido(String nomeFavorecido) {
+		this.nomeFavorecido = nomeFavorecido;
+	}
+
+	public String getCpfFavoracido() {
+		return cpfFavoracido;
+	}
+
+	public void setCpfFavoracido(String cpfFavoracido) {
+		this.cpfFavoracido = cpfFavoracido;
+	}
+
+	public String getNumeroBancoFavorecido() {
+		return numeroBancoFavorecido;
+	}
+
+	public void setNumeroBancoFavorecido(String numeroBancoFavorecido) {
+		this.numeroBancoFavorecido = numeroBancoFavorecido;
+	}
+
+	public String getNomeBancoFavorecido() {
+		return nomeBancoFavorecido;
+	}
+
+	public void setNomeBancoFavorecido(String nomeBancoFavorecido) {
+		this.nomeBancoFavorecido = nomeBancoFavorecido;
+	}
+
+	public String getAgenciaFavorecido() {
+		return agenciaFavorecido;
+	}
+
+	public void setAgenciaFavorecido(String agenciaFavorecido) {
+		this.agenciaFavorecido = agenciaFavorecido;
+	}
+
+	public String getDigitoAgenciaFavorecido() {
+		return digitoAgenciaFavorecido;
+	}
+
+	public void setDigitoAgenciaFavorecido(String digitoAgenciaFavorecido) {
+		this.digitoAgenciaFavorecido = digitoAgenciaFavorecido;
+	}
+
+	public String getContaFavorecido() {
+		return contaFavorecido;
+	}
+
+	public void setContaFavorecido(String contaFavorecido) {
+		this.contaFavorecido = contaFavorecido;
+	}
+
+	public String getDigitoContaFavorecido() {
+		return digitoContaFavorecido;
+	}
+
+	public Calendar getData() {
 		return data;
 	}
-	public void setData(Date data) {
+
+	public void setData(Calendar data) {
 		this.data = data;
+	}
+
+	public void setDigitoContaFavorecido(String digitoContaFavorecido) {
+		this.digitoContaFavorecido = digitoContaFavorecido;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 }

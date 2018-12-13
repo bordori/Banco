@@ -2,8 +2,10 @@ package br.com.unika;
 
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 
 import br.com.unika.paginas.HomePage;
+
 
 /**
  * Application object for your web application.
@@ -30,6 +32,7 @@ public class WicketApplication extends WebApplication
 	{
 		super.init();
 
+		getComponentInstantiationListeners().add(new SpringComponentInjector(this));
 		// add your configuration here
 	}
 }

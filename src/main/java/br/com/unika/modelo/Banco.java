@@ -1,10 +1,41 @@
 package br.com.unika.modelo;
 
-public class Banco {
+import java.io.Serializable;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+
+import org.springframework.stereotype.Component;
+
+@Entity
+@Table(name = "banco")
+@Component
+public class Banco implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 	
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(nullable = false,name ="ID_BANCO",unique = true)
 	private Long idBanco;
+	
+	@Column(nullable = false, name = "NUMERO" ,unique=true)
 	private String numero;
+	
+	@Column(nullable = false, name = "NOME",unique=true)
 	private String nome;
+	
+	@OneToMany(mappedBy="banco", targetEntity = Conta.class,  fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	private List<Conta> conta;
 	
 	
 	public Long getIdBanco() {
@@ -24,6 +55,15 @@ public class Banco {
 	}
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+	public List<Conta> getConta() {
+		return conta;
+	}
+	public void setConta(List<Conta> conta) {
+		this.conta = conta;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 	
 }

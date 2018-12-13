@@ -1,63 +1,554 @@
-<!DOCTYPE html>
-<html xmlns:wicket="http://wicket.apache.org">
-	<head>
-		<meta charset="utf-8" />
-		<title>Apache Wicket Quickstart</title>
-		<link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:regular,bold' rel='stylesheet' type='text/css' />
-		<link rel="stylesheet" href="style.css" type="text/css" media="screen" title="Stylesheet" />
-	</head>
-	<body>
-		<div id="hd">
-			<div id="logo">
-				<img src="logo.png" width="50px" height="50px" alt="Wicket Logo" />
-				<h1>Apache Wicket</h1>
-			</div>
-		</div>
-		<div id="bd">
-			<h2>Congratulations!</h2>
-			<p>
-				Your quick start works! This project is especially useful to
-                start developing your Wicket application or to create a test
-                case for a bug report.
-			</p>
-			<h3>Get started</h3>
-			<p>
-				You can even <a href="https://localhost:8443">switch to HTTPS</a>!
-			</p> 
-			<p>
-				From here you can start hacking away at your application and
-                wow your clients:
-			</p>
-			<ul>
-				<li>work through <a href="http://wicket.apache.org/learn/examples" target="_blank" title="Hello world and friends">some examples</a></li>
-				<li>read <a href="http://wicket.apache.org/learn/books" target="_blank" title="Books about Wicket in English, German and Japanese">some books</a></li>
-				<li>find <a href="http://wicket.apache.org/learn/projects" target="_blank" title="Additional projects, components and libraries">additional components, projects and libraries</a></li>
-			</ul>
-			<h3>Get help</h3>
-			<p>
-				We are here to help!
-			</p>
-			<ul>
-				<li>join us on IRC on <a href="irc:%23%23wicket@irc.freenode.net">&#35;&#35;wicket@irc.freenode.net</a></li>
-				<li><a href="http://wicket-users.markmail.org/" target="_blank" title="Search the mailing list archives">search</a> our mailing list archives</li>
-				<li>ask a question on the <a href="http://wicket.apache.org/help/email.html">users list</a></li>
-			</ul>
-			<h3>Reporting a bug</h3>
-			<p>
-				Help us help you:
-			</p>
-			<ol>
-				<li>reproduce the bug with the <strong>least</strong> amount of code</li>
-				<li>create a unit test that shows the bug</li>
-				<li>fix the bug and create a patch</li>
-				<li>attach the result of step 1, 2 or 3 to a <a href="https://issues.apache.org/jira/browse/WICKET" target="_blank">JIRA issue</a></li>
-				<li>profit!</li>
-			</ol>
-			<p>
-				Please mention the correct Wicket version: <wicket:container wicket:id="version">1.5-SNAPSHOT</wicket:container>.
-			</p>
-		</div>
-		<div id="ft">
-		</div>
-	</body>
-</html>
+
+<wicket:extend>
+	<!-- banner -->
+    <div class="banner">
+        <div class="banner-right">
+            <img src="images/new.png" alt="" class="img-responsive" />
+        </div>
+        <div class="banner-text">
+            <div id="top" class="callbacks_container">
+                <ul class="rslides" id="slider3">
+                    <li>
+                        <div class="banner-textagileinfo">
+                            <h6>Welcome To Revenue</h6>
+                            <h3>For Your Personal And Professional Banking Needs.</h3>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit nullam in consectetur.</p>
+
+                        </div>
+                    </li>
+                    <li>
+                        <div class="banner-textagileinfo">
+                            <h6>the Internet banking portal</h6>
+                            <h3>Ensuring a high level of customer service.</h3>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit llam in consectetur.</p>
+
+                        </div>
+                    </li>
+                    <li>
+                        <div class="banner-textagileinfo">
+                            <h6>Ideal for Personal Banking</h6>
+                            <h3>For Your Personal And Professional Banking Needs.</h3>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit llam in consecteelit.</p>
+
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
+    <!-- //banner -->
+    <!--about -->
+    <div id="about" class="section">
+        <h3 class="title-txt">
+            <span>a</span>bout us</h3>
+        <div class="abt-container">
+            <fieldset>
+                <legend>Building the Finest Quality Bank.</legend>
+                <div class="stats-info">
+                    <div class="col-sm-3 col-xs-3 stats-grid">
+                        <div class='numscroller numscroller-big-bottom' data-slno='1' data-min='0' data-max='324' data-delay='.5' data-increment="1">324</div>
+                        <div class="stats-img stat2">
+                            <p>branches</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-xs-3 stats-grid">
+                        <div class='numscroller numscroller-big-bottom' data-slno='1' data-min='0' data-max='574' data-delay='.5' data-increment="1">574</div>
+                        <div class="stats-img stat2">
+                            <p>personal loans</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-xs-3 stats-grid stat1">
+                        <div class='numscroller numscroller-big-bottom' data-slno='1' data-min='0' data-max='350' data-delay='.5' data-increment="1">350</div>
+                        <div class="stats-img stat2">
+                            <p>ATM's</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-xs-3 stats-grid stat1">
+                        <div class='numscroller numscroller-big-bottom' data-slno='1' data-min='0' data-max='874' data-delay='.5' data-increment="1">874</div>
+                        <div class="stats-img stat2">
+                            <p>Deposit Accounts</p>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="abt-pos">
+                    <div class="col-md-6  about-left">
+                        <h3 class="title">Proin vel enim nec ipsum finibus.</h3>
+                        <p class="about-bottom">Duis euismod massa ut sem fringilla blandit. </p>
+                        <p>Duis euismod massa ut sem fringilla blandit. Proin vel enim nec ipsum finibus.Duis euismod massa
+                            ut sem fringilla blandit. </p>
+                        <a href="#services" class="abtlink scroll">read more</a>
+
+                        <img src="images/c.png" class="img-responsive" alt="" />
+                    </div>
+                    <div class="col-md-6 w3ls-row">
+                        <img src="images/a.jpg" class="img-responsive" alt="" />
+                    </div>
+                    <div class="clearfix"> </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    <!-- //about -->
+    <!-- services -->
+    <div class="services section" id="services">
+        <div class="container2">
+            <h3 class="title-txt">
+                <span>s</span>ervices</h3>
+            <h5>we offer products and services for your
+                <span>personal</span> and
+                <span>professional banking</span> needs.</h5>
+            <div class="col-md-5 service-left-grid">
+                <div class="services-left">
+
+                    <h4> Lorem ipsum dolor sit amet,
+                        <span>consectetur adipisicing elit, sed do</span> sit amet conse eiusmod. </h4>
+                    <p> Taque earum rerum hic tenetur a sapiente delectus. Lorem ipsum dolor sit amet, consectetur adipisicing
+                        elit, sed do sit amet conse eiusmod. taque earum rerum hic tenetur a sapiente delectus </p>
+                    <ul class="serv-list">
+                        <li>
+                            <a href="#gallery" class="abtlink scroll">view more</a>
+                        </li>
+                        <li>
+                            <a href="#contact" class="abtlink scroll">contact us</a>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+            <div class="col-md-7 text-center agileinfo-about-grid">
+                <div class="col-md-4 col-xs-4 service-subgrids">
+                    <div class="w3ls-about-grid">
+                        <i class="fa fa-cc-diners-club" aria-hidden="true"></i>
+                        <h6>Deposits</h6>
+                        <p> Taque earum rerum hitaque tenetur rum sapiente</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-xs-4 service-subgrids">
+                    <div class="w3ls-about-grid">
+                        <i class="fa fa-google-wallet" aria-hidden="true"></i>
+                        <h6>loans</h6>
+                        <p> Taque earum rerum hitaque tenetur rum sapiente</p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-xs-4 service-subgrids">
+                    <div class="w3ls-about-grid">
+                        <i class="fa fa-check" aria-hidden="true"></i>
+                        <h6>prepaid card</h6>
+                        <p> Taque earum rerum hitaque tenetur rum sapiente</p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-xs-4 service-subgrids">
+                    <div class="w3ls-about-grid">
+                        <i class="fa fa-briefcase" aria-hidden="true"></i>
+                        <h6>net banking</h6>
+                        <p> Taque earum rerum hitaque tenetur rum sapiente</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-xs-4 service-subgrids">
+                    <div class="w3ls-about-grid">
+                        <i class="fa fa-inbox" aria-hidden="true"></i>
+                        <h6>mcash</h6>
+                        <p> Taque earum rerum hitaque tenetur rum sapiente</p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-xs-4 service-subgrids">
+                    <div class="w3ls-about-grid">
+                        <i class="fa fa-cc-mastercard" aria-hidden="true"></i>
+                        <h6>fund transfer</h6>
+                        <p> Taque earum rerum hitaque tenetur rum sapiente</p>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+
+        </div>
+    </div>
+    <!-- //services -->
+    <!--about manager -->
+    <div class="section manager" id="manger">
+        <div class="container">
+            <h3 class="title-txt">
+                <span>K</span>now more</h3>
+            <div class="about-main">
+                <div class="col-md-4 man-grid2">
+                    <h5>Ensuring there's a high level of customer service.</h5>
+                    <p class="about-text-w3l">Pellentesque accumsan cursus dui, sodales blandit urna sodal vitaepel entesque accumsan cursus dui,sod
+                        les blandit urna urna sodales vitae pellentesque accumsan cursus dui Maece placerat eget mi vitae
+                        euismod. Du aliquam efficitur mi, et eleifend ye</p>
+                    <img src="images/sign.png" alt="" class="img-responsive" />
+                    <h4 class="man-txt">Samuel C. Kelly</h4>
+                    <p> Chairman of the Board</p>
+                </div>
+                <div class="col-md-8 man-right">
+                <div class="col-md-5 col-sm-5 man-grid">
+                    <ul>
+                        <li>
+                            <i class="fa fa-square" aria-hidden="true"></i>Maece placerat eget mi
+                            <p>les blandit urna urna sodales vitae pellentesq urna sodales vitaeue</p>
+                        </li>
+                        <li>
+                            <i class="fa fa-square" aria-hidden="true"></i>sodales blandit urna
+                            <p>les blandit urna urna sodales vitae pellentesq urna sodales vitaeue</p>
+                        </li>
+
+                        <li>
+                            <i class="fa fa-square" aria-hidden="true"></i>vitae pellentesque ac
+                            <p>les blandit urna urna sodales vitae pellentesq urna sodales vitaeue</p>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="w3ls-about-right col-md-7 col-sm-7">
+                    <img class="img-responsive" src="images/man.jpg" alt="about-image" />
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            </div>
+        </div>
+    </div>
+    <!-- //about manager -->
+    <!-- faq -->
+    <div class="section faq">
+        <div class="container">
+            <h3 class="title-txt text-center">
+                <span>F</span>AQ</h3>
+
+            <div class="faq-info">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active">
+                        <a href="#testi" aria-controls="testi" role="tab" data-toggle="tab">tab1</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">tab2</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">tab3</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#tab4" aria-controls="messages" role="tab" data-toggle="tab">tab4</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#tab5" aria-controls="messages" role="tab" data-toggle="tab">tab5</a>
+                    </li>
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="testi">
+                        <div class="faqmain-info">
+                            <div class="faq-subinfo">
+                                <div class="col-md-6  latest-grid">
+                                    <div class="faq-left">
+                                        <h5>
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i> ed do sit amet conse eiusmod ?</h5>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do sit amet conse eiusmod.</p>
+                                    </div>
+                                    <div class="faq-left">
+                                        <h5>
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i> ed do sit amet conse eiusmod ?</h5>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do sit amet conse eiusmod.</p>
+                                    </div>
+                                    <div class="faq-left">
+                                        <h5>
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i> ed do sit amet conse eiusmod ?</h5>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do sit amet conse eiusmod.</p>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6 latest-grid">
+                                    <div class="faq-left">
+                                        <h5>
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i> ed do sit amet conse eiusmod ?</h5>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do sit amet conse eiusmod.</p>
+                                    </div>
+                                    <div class="faq-left">
+                                        <h5>
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i> ed do sit amet conse eiusmod ?</h5>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do sit amet conse eiusmod.</p>
+                                    </div>
+                                    <div class="faq-left">
+                                        <h5>
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i> ed do sit amet conse eiusmod ?</h5>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do sit amet conse eiusmod.</p>
+                                    </div>
+                                </div>
+                                <div class="clearfix"> </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="profile">
+                        <div class="faqmain-info">
+                            <div class="faq-subinfo">
+                                <div class="col-md-6  latest-grid">
+                                    <div class="faq-left">
+                                        <h5>
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i> conse eiusmod ed do sit amet ?</h5>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do sit amet conse eiusmod.</p>
+                                    </div>
+                                    <div class="faq-left">
+                                        <h5>
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i> ed do sit amet conse eiusmod ?</h5>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do sit amet conse eiusmod.</p>
+                                    </div>
+                                    <div class="faq-left">
+                                        <h5>
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i> conse eiusmod ed do sit amet ?</h5>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do sit amet conse eiusmod.</p>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6 latest-grid">
+                                    <div class="faq-left">
+                                        <h5>
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i> conse eiusmod ed do sit amet ?</h5>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do sit amet conse eiusmod.</p>
+                                    </div>
+                                    <div class="faq-left">
+                                        <h5>
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i> ed do sit amet conse eiusmod ?</h5>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do sit amet conse eiusmod.</p>
+                                    </div>
+                                    <div class="faq-left">
+                                        <h5>
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i> conse eiusmod ed do sit amet ?</h5>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do sit amet conse eiusmod.</p>
+                                    </div>
+                                </div>
+                                <div class="clearfix"> </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="messages">
+                        <div class="faqmain-info">
+                            <div class="faq-subinfo">
+                                <div class="col-md-6  latest-grid">
+                                    <div class="faq-left">
+                                        <h5>
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i> ed do sit amet conse eiusmod ?</h5>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do sit amet conse eiusmod.</p>
+                                    </div>
+                                    <div class="faq-left">
+                                        <h5>
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i> ed do sit amet conse eiusmod ?</h5>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do sit amet conse eiusmod.</p>
+                                    </div>
+                                    <div class="faq-left">
+                                        <h5>
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i> ed do sit amet conse eiusmod ?</h5>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do sit amet conse eiusmod.</p>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6 latest-grid">
+                                    <div class="faq-left">
+                                        <h5>
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i> ed do sit amet conse eiusmod ?</h5>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do sit amet conse eiusmod.</p>
+                                    </div>
+                                    <div class="faq-left">
+                                        <h5>
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i> ed do sit amet conse eiusmod ?</h5>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do sit amet conse eiusmod.</p>
+                                    </div>
+                                    <div class="faq-left">
+                                        <h5>
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i> ed do sit amet conse eiusmod ?</h5>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do sit amet conse eiusmod.</p>
+                                    </div>
+                                </div>
+                                <div class="clearfix"> </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="tab4">
+                        <div class="faqmain-info">
+                            <div class="faq-subinfo">
+                                <div class="col-md-6  latest-grid">
+                                    <div class="faq-left">
+                                        <h5>
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i> eiusmod conse ed do sit amet ?</h5>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do sit amet conse eiusmod.</p>
+                                    </div>
+                                    <div class="faq-left">
+                                        <h5>
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i> eiusmod ed do sit amet conse ?</h5>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do sit amet conse eiusmod.</p>
+                                    </div>
+                                    <div class="faq-left">
+                                        <h5>
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i> ed do conse eiusmod sit amet ?</h5>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do sit amet conse eiusmod.</p>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6 latest-grid">
+                                    <div class="faq-left">
+                                        <h5>
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i> conse eiusmod ed do sit amet ?</h5>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do sit amet conse eiusmod.</p>
+                                    </div>
+                                    <div class="faq-left">
+                                        <h5>
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i> ed do sit amet conse eiusmod ?</h5>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do sit amet conse eiusmod.</p>
+                                    </div>
+                                    <div class="faq-left">
+                                        <h5>
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i> conse eiusmod ed do sit amet ?</h5>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do sit amet conse eiusmod.</p>
+                                    </div>
+                                </div>
+                                <div class="clearfix"> </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="tab5">
+                        <div class="faqmain-info">
+                            <div class="faq-subinfo">
+                                <div class="col-md-6  latest-grid">
+                                    <div class="faq-left">
+                                        <h5>
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i> conse eiusmod ed do sit amet ?</h5>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do sit amet conse eiusmod.</p>
+                                    </div>
+                                    <div class="faq-left">
+                                        <h5>
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i> ed do sit amet conse eiusmod ?</h5>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do sit amet conse eiusmod.</p>
+                                    </div>
+                                    <div class="faq-left">
+                                        <h5>
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i> conse eiusmod ed do sit amet ?</h5>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do sit amet conse eiusmod.</p>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6 latest-grid">
+                                    <div class="faq-left">
+                                        <h5>
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i> conse eiusmod ed do sit amet ?</h5>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do sit amet conse eiusmod.</p>
+                                    </div>
+                                    <div class="faq-left">
+                                        <h5>
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i> ed do sit amet conse eiusmod ?</h5>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do sit amet conse eiusmod.</p>
+                                    </div>
+                                    <div class="faq-left">
+                                        <h5>
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i> conse eiusmod ed do sit amet ?</h5>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do sit amet conse eiusmod.</p>
+                                    </div>
+                                </div>
+                                <div class="clearfix"> </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- //faq -->
+    <!-- gallery -->
+    <div class="jarallax section gallery" id="gallery">
+        <div class="container">
+            <div class="w3ls-title">
+                <h3 class="title-txt">
+                    <span>G</span>allery</h3>
+            </div>
+            <div class="w3ls_gallery_grids">
+                <div class="col-xs-4 agileits_w3layouts_gallery_grid">
+                    <div class="agileits_w3layouts_gallery_grid1 w3layouts_gallery_grid1 hover14 column">
+                        <div class="w3_agile_gallery_effect">
+                            <a href="images/g1.jpg" class="sb" title="quis nostrud exercitation ullamco laboris quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum">
+                                <figure>
+                                    <img src="images/g1.jpg" alt=" " class="img-responsive" />
+                                </figure>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="agileits_w3layouts_gallery_grid1 hover14 column">
+                        <div class="w3_agile_gallery_effect">
+                            <a href="images/g2.jpg" class="sb" title="quis nostrud exercitation ullamco laboris quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum">
+                                <figure>
+                                    <img src="images/g2.jpg" alt=" " class="img-responsive" />
+                                </figure>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="agileits_w3layouts_gallery_grid1 hover14 column">
+                        <div class="w3_agile_gallery_effect">
+                            <a href="images/g6.jpg" class="sb" title="quis nostrud exercitation ullamco laboris quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum">
+                                <figure>
+                                    <img src="images/g6.jpg" alt=" " class="img-responsive" />
+                                </figure>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-4 agileits_w3layouts_gallery_grid">
+                    <div class="agileits_w3layouts_gallery_grid1 hover14 column">
+                        <div class="w3_agile_gallery_effect">
+                            <a href="images/g4.jpg" class="sb" title="quis nostrud exercitation ullamco laboris quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum">
+                                <figure>
+                                    <img src="images/g4.jpg" alt=" " class="img-responsive" />
+                                </figure>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="agileits_w3layouts_gallery_grid1 hover14 column">
+                        <div class="w3_agile_gallery_effect">
+                            <a href="images/g5.jpg" class="sb" title="quis nostrud exercitation ullamco laboris quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum">
+                                <figure>
+                                    <img src="images/g5.jpg" alt=" " class="img-responsive" />
+                                </figure>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-4 agileits_w3layouts_gallery_grid">
+                    <div class="agileits_w3layouts_gallery_grid1 w3layouts_gallery_grid1 hover14 column">
+                        <div class="w3_agile_gallery_effect">
+                            <a href="images/g6.jpg" class="sb" title="quis nostrud exercitation ullamco laboris quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum">
+                                <figure>
+                                    <img src="images/g6.jpg" alt=" " class="img-responsive" />
+                                </figure>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="agileits_w3layouts_gallery_grid1 hover14 column">
+                        <div class="w3_agile_gallery_effect">
+                            <a href="images/g2.jpg" class="sb" title="quis nostrud exercitation ullamco laboris quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum">
+                                <figure>
+                                    <img src="images/g2.jpg" alt=" " class="img-responsive" />
+                                </figure>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="agileits_w3layouts_gallery_grid1 hover14 column">
+                        <div class="w3_agile_gallery_effect">
+                            <a href="images/g1.jpg" class="sb" title="quis nostrud exercitation ullamco laboris quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum">
+                                <figure>
+                                    <img src="images/g1.jpg" alt=" " class="img-responsive" />
+                                </figure>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"> </div>
+
+            </div>
+        </div>
+    </div>
+</wicket:extend>

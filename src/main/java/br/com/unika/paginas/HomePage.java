@@ -1,18 +1,25 @@
 package br.com.unika.paginas;
 
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
-public class HomePage extends WebPage {
+import br.com.unika.modelo.PermissaoDeAcesso;
+import br.com.unika.servicos.ServicoPermissaoDeAcesso;
+import br.com.unika.util.Retorno;
+
+public class HomePage extends NavBar {
 	private static final long serialVersionUID = 1L;
+	
+	@SpringBean(name="servicoPermissaoDeAcesso")
+	private ServicoPermissaoDeAcesso servicoPermissaoDeAcesso;
+	
+	public HomePage() {
+		PermissaoDeAcesso permissao = new PermissaoDeAcesso();
+		permissao.setAlterarPermissoes(true);
+		permissao.setAlterarBanco(true);
+		permissao.setAlterarConta(true);
+		
+		Retorno retorno = servicoPermissaoDeAcesso.incluir(permissao);
+		
+	}
 
-	public HomePage(final PageParameters parameters) {
-		super(parameters);
-
-		add(new Label("version", getApplication().getFrameworkSettings().getVersion()));
-
-		// TODO Add your page's components here
-
-    }
 }

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+	<!-- DataSource -->
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName"
+			value="com.mysql.jdbc.Driver" />
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/banco" />
+		<property name="username" value="root" />
+		<property name="password" value="erp123456" />
+	</bean>
+
+	<!-- usando annotation para mapeamento do bean -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="annotatedClasses">
+			<!-- passando a bean anotado -->
+			<list>
+				<value>br.com.unika.modelo.PermissaoDeAcesso</value>
+				<value>br.com.unika.modelo.Usuario</value>
+				<value>br.com.unika.modelo.Banco</value>
+				<value>br.com.unika.modelo.Conta</value>
+				<value>br.com.unika.modelo.Contato</value>
+				<value>br.com.unika.modelo.Movimentacao</value>
+			</list>
+		</property>
+		<!-- configurações para o hibernate properties -->
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+
+			</props>
+		</property>
+	</bean>
+
+
+	<!-- <context:component-scan base-package="br.com.unika" /> -->
+
+	<!-- inicio da bean de PermissaoDeAcesso -->
+	<bean id="servicoPermissaoDeAcesso"
+		class="br.com.unika.servicos.ServicoPermissaoDeAcesso">
+		<property name="permissaoDeAcessoDAO"
+			ref="permissaoDeAcessoDAO" />
+	</bean>
+
+	<bean id="permissaoDeAcessoDAO"
+		class="br.com.unika.dao.PermissaoDeAcessoDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<!-- fim da bean de PermissaoDeAcesso -->
+
+	<!-- inicio da bean de Conta -->
+	<bean id="servicoConta"
+		class="br.com.unika.servicos.ServicoConta">
+		<property name="contaDAO"
+			ref="contaDAO" />
+	</bean>
+
+	<bean id="contaDAO"
+		class="br.com.unika.dao.ContaDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<!-- Fim da bean de Banco -->
+	
+	<!-- inicio da bean de Banco -->
+	<bean id="servicoBanco"
+		class="br.com.unika.servicos.ServicoBanco">
+		<property name="bancoDAO"
+			ref="bancoDAO" />
+	</bean>
+
+	<bean id="bancoDAO"
+		class="br.com.unika.dao.BancoDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<!-- Fim da bean de Banco -->
+	
+	<!-- inicio da bean de Usuario -->
+	<bean id="servicoUsuario"
+		class="br.com.unika.servicos.ServicoUsuario">
+		<property name="usuarioDAO"
+			ref="usuarioDAO" />
+	</bean>
+
+	<bean id="usuarioDAO"
+		class="br.com.unika.dao.UsuarioDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<!-- Fim da bean de Usuario -->
+	
+	<!-- inicio da bean de Movimentacao -->
+	<bean id="servicoMovimentacao"
+		class="br.com.unika.servicos.ServicoMovimentacao">
+		<property name="movimentacaoDAO"
+			ref="movimentacaoDAO" />
+	</bean>
+
+	<bean id="movimentacaoDAO"
+		class="br.com.unika.dao.MovimentacaoDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<!-- Fim da bean de Movimentacao -->
+	
+	<!-- inicio da bean de Contato -->
+	<bean id="servicoContato"
+		class="br.com.unika.servicos.ServicoContato">
+		<property name="contatoDAO"
+			ref="contatoDAO" />
+	</bean>
+
+	<bean id="contatoDAO"
+		class="br.com.unika.dao.ContatoDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<!-- Fim da bean de Contato -->
+
+
+
+</beans>

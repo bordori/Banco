@@ -5,7 +5,7 @@
 <hibernate-configuration>
     <session-factory>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/controleestoque</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/banco</property>
         <property name="hibernate.connection.password">erp123456</property>
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
@@ -13,7 +13,7 @@
 		<property name="hbm2ddl.auto">create</property>
 		<property name="hbm2ddl.auto">update</property>
         
-        <mapping class="br.com.modelo.Produto"  />
-         <mapping class="br.com.modelo.Fornecedor"  />
+        <mapping package="br.com.unika.modelo"  />
+        
     </session-factory>
 </hibernate-configuration>

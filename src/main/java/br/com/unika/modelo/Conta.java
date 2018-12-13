@@ -1,15 +1,56 @@
 package br.com.unika.modelo;
 
-public class Conta {
+import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import org.springframework.stereotype.Component;
+
+
+@Entity
+@Table(name = "conta")
+@Component
+public class Conta implements Serializable{
+
+	private static final long serialVersionUID = 1L;
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(nullable = false, name = "ID_CONTA", unique = true)
 	private Long idConta;
+	
+	@Column(nullable = false, name = "CONTA")
 	private String conta;
+	
+	@Column(nullable = false, name = "DIGITO_CONTA")
 	private String digitoConta;
+	
+	@Column(nullable = false, name = "AGENCIA")
 	private String agencia;
+	
+	@Column(nullable = false, name = "DIGITO_AGENCIA")
 	private String digitoAgencia;
+	
+	@Column(nullable = false, name = "TIPO_CONTA")
 	private int tipoConta;
+	
+	@Column(nullable = false, name = "ATIVO")
 	private boolean ativo;
+	
+	@ManyToOne
+	@JoinColumn(name = "BANCO_ID" , nullable=false)
 	private Banco banco;
+	
+	@ManyToOne
+	@JoinColumn(name = "USUARIO_ID" , nullable=false)
 	private Usuario usuario;
 	
 	

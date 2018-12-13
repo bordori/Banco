@@ -1,18 +1,25 @@
 package br.com.unika.interfaces;
 
-public interface IServico  {
+import java.io.Serializable;
+import java.util.List;
 
-//	public Retorno incluir(Tabela tab);
-//	
-//	public Retorno alterar(Tabela tab);
-//	
-//	public Retorno procurar(Tabela tab);
-//	
-//	public Retorno listar();
-//	
-//	public Retorno remover(Tabela tab);
-//	
-//	public Retorno search(Search search);
+import com.googlecode.genericdao.search.Search;
+
+import br.com.unika.util.Retorno;
+
+public interface IServico<Entidade,id extends Serializable>  {
+
+	public Retorno incluir(Entidade ent);
+	
+	public Retorno alterar(Entidade ent);
+	
+	public Entidade procurar(Entidade ent);
+	
+	public List<Entidade>  listar();
+	
+	public Retorno remover(Entidade ent);
+	
+	public List<Entidade> search(Search search);
 
 	
 }
