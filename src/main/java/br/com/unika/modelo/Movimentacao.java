@@ -27,7 +27,7 @@ public class Movimentacao implements Serializable {
 	private Long idMovimentacao;
 
 	@Column(nullable = false, name = "TIPO_MOVIMENTACAO")
-	private int tipoMovimentacao;
+	private Integer tipoMovimentacao;
 
 	@ManyToOne
 	@JoinColumn(name = "USUARIO_ID", nullable = false)
@@ -72,11 +72,11 @@ public class Movimentacao implements Serializable {
 		this.idMovimentacao = idMovimentacao;
 	}
 
-	public int getTipoMovimentacao() {
+	public Integer getTipoMovimentacao() {
 		return tipoMovimentacao;
 	}
 
-	public void setTipoMovimentacao(int tipoMovimentacao) {
+	public void setTipoMovimentacao(Integer tipoMovimentacao) {
 		this.tipoMovimentacao = tipoMovimentacao;
 	}
 

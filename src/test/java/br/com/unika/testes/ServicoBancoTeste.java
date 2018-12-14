@@ -31,8 +31,8 @@ public class ServicoBancoTeste {
 		banco.setNumero("1");
 		
 		Banco banco2 = new Banco();
-		banco2.setNome("");
-		banco2.setNumero("1");
+		banco2.setNome("Caixa");
+		banco2.setNumero("104");
 		
 		Retorno retorno = servicoBanco.incluir(banco);
 		Retorno retorno2 = servicoBanco.incluir(banco2);

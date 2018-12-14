@@ -44,7 +44,7 @@ public class ServicoUsuarioTeste {
 		usuario.setLogin("bordori");
 		usuario.setSenha("abrenhosa");
 		PermissaoDeAcesso permissaoDeAcesso = new PermissaoDeAcesso();
-		permissaoDeAcesso.setIdPermissao(new Long(3));
+		permissaoDeAcesso.setIdPermissao(new Long(1));
 		usuario.setPermissaoDeAcesso(permissaoDeAcesso);
 		
 		Retorno retorno = servicoUsuario.incluir(usuario);

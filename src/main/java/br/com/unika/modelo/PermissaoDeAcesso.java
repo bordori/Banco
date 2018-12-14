@@ -27,52 +27,75 @@ public class PermissaoDeAcesso implements Serializable {
 	@Column(nullable = false, name = "ID_PERMISSAO", unique = true)
 	private Long idPermissao;
 	
+	@Column(nullable = false , name ="DESCRICAO")
+	private String descricao;
+	
 	@Column(nullable = false, name = "ALTERAR_BANCO")
-	private boolean alterarBanco;
+	private Boolean alterarBanco;
 	
 	@Column(nullable = false, name = "ALTERAR_CONTA")
-	private boolean alterarConta;
+	private Boolean alterarConta;
 	
 	@Column(nullable = false, name = "ALTERAR_PERMISSOES")
-	private boolean alterarPermissoes;
+	private Boolean alterarPermissoes;
 	
 	@OneToMany(mappedBy = "permissaoDeAcesso",targetEntity= Usuario.class ,fetch = FetchType.EAGER ,cascade = CascadeType.MERGE)
 	private List<Usuario> usuarios;
-	
-	
+
 	public Long getIdPermissao() {
 		return idPermissao;
 	}
+
 	public void setIdPermissao(Long idPermissao) {
 		this.idPermissao = idPermissao;
 	}
-	public boolean isAlterarBanco() {
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public Boolean getAlterarBanco() {
 		return alterarBanco;
 	}
-	public void setAlterarBanco(boolean alterarBanco) {
+
+	public void setAlterarBanco(Boolean alterarBanco) {
 		this.alterarBanco = alterarBanco;
 	}
-	public boolean isAlterarConta() {
+
+	public Boolean getAlterarConta() {
 		return alterarConta;
 	}
-	public void setAlterarConta(boolean alterarConta) {
+
+	public void setAlterarConta(Boolean alterarConta) {
 		this.alterarConta = alterarConta;
 	}
-	public boolean isAlterarPermissoes() {
+
+	public Boolean getAlterarPermissoes() {
 		return alterarPermissoes;
 	}
-	public void setAlterarPermissoes(boolean alterarPermissoes) {
+
+	public void setAlterarPermissoes(Boolean alterarPermissoes) {
 		this.alterarPermissoes = alterarPermissoes;
 	}
+
 	public List<Usuario> getUsuarios() {
 		return usuarios;
 	}
+
 	public void setUsuarios(List<Usuario> usuarios) {
 		this.usuarios = usuarios;
 	}
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+	
+	
+	
 	
 	
 }

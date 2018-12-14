@@ -67,7 +67,7 @@ public class Usuario implements Serializable {
 	private String bairro;
 	
 	@Column(nullable = false, name = "SEXO")
-	private boolean sexo; // true masculino false feminino
+	private Boolean sexo; // true masculino false feminino
 	
 	@ManyToOne
 	@JoinColumn(name="PERMISSAO_DE_ACESSO_ID", nullable= false)
@@ -81,6 +81,9 @@ public class Usuario implements Serializable {
 	
 	@OneToMany(mappedBy = "usuario", targetEntity = Contato.class, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	private Set<Contato> contatos;
+	
+	@Column(name="ATIVO",nullable=false)
+	private Boolean ativo;
 	
 	@Column(nullable = false, name = "LOGIN", unique = true)
 	private String login;
@@ -186,11 +189,11 @@ public class Usuario implements Serializable {
 		this.bairro = bairro;
 	}
 
-	public boolean getSexo() {
+	public Boolean getSexo() {
 		return sexo;
 	}
 
-	public void setSexo(boolean sexo) {
+	public void setSexo(Boolean sexo) {
 		this.sexo = sexo;
 	}
 
@@ -226,6 +229,14 @@ public class Usuario implements Serializable {
 		this.contatos = contatos;
 	}
 
+	public Boolean getAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(Boolean ativo) {
+		this.ativo = ativo;
+	}
+
 	public String getLogin() {
 		return login;
 	}
@@ -246,6 +257,8 @@ public class Usuario implements Serializable {
 		return serialVersionUID;
 	}
 	
+	
+
 	
 
 		
