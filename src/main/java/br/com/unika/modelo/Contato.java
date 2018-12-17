@@ -41,17 +41,12 @@ public class Contato implements Serializable {
 	@Column(nullable = false, name = "NOME_BANCO")
 	private String nomeBanco;
 
-	@Column(nullable = false, name = "AGENCIA_")
+	@Column(nullable = false, name = "AGENCIA")
 	private String agencia;
-
-	@Column(nullable = false, name = "DIGITO_AGENCIA")
-	private String digitoAgencia;
 
 	@Column(nullable = false, name = "CONTA")
 	private String conta;
 
-	@Column(nullable = false, name = "DIGITO_CONTA")
-	private String digitoConta;
 
 	
 	
@@ -111,28 +106,12 @@ public class Contato implements Serializable {
 		this.agencia = agencia;
 	}
 
-	public String getDigitoAgencia() {
-		return digitoAgencia;
-	}
-
-	public void setDigitoAgencia(String digitoAgencia) {
-		this.digitoAgencia = digitoAgencia;
-	}
-
 	public String getConta() {
 		return conta;
 	}
 
 	public void setConta(String conta) {
 		this.conta = conta;
-	}
-
-	public String getDigitoConta() {
-		return digitoConta;
-	}
-
-	public void setDigitoConta(String digitoConta) {
-		this.digitoConta = digitoConta;
 	}
 
 	public static long getSerialversionuid() {

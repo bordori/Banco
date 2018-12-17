@@ -48,14 +48,8 @@ public class Movimentacao implements Serializable {
 	@Column(nullable = false, name = "AGENCIA_FAVORECIDO")
 	private String agenciaFavorecido;
 
-	@Column(nullable = false, name = "DIGITO_AGENCIA_FAVORECIDO")
-	private String digitoAgenciaFavorecido;
-
 	@Column(nullable = false, name = "CONTA_FAVORECIDO")
 	private String contaFavorecido;
-
-	@Column(nullable = false, name = "DIGITO_CONTA_FAVORECIDO")
-	private String digitoContaFavorecido;
 
 	@Column(nullable = false, name = "VALOR")
 	private Double Valor;
@@ -136,24 +130,12 @@ public class Movimentacao implements Serializable {
 		this.agenciaFavorecido = agenciaFavorecido;
 	}
 
-	public String getDigitoAgenciaFavorecido() {
-		return digitoAgenciaFavorecido;
-	}
-
-	public void setDigitoAgenciaFavorecido(String digitoAgenciaFavorecido) {
-		this.digitoAgenciaFavorecido = digitoAgenciaFavorecido;
-	}
-
 	public String getContaFavorecido() {
 		return contaFavorecido;
 	}
 
 	public void setContaFavorecido(String contaFavorecido) {
 		this.contaFavorecido = contaFavorecido;
-	}
-
-	public String getDigitoContaFavorecido() {
-		return digitoContaFavorecido;
 	}
 
 	public Calendar getData() {
@@ -164,9 +146,6 @@ public class Movimentacao implements Serializable {
 		this.data = data;
 	}
 
-	public void setDigitoContaFavorecido(String digitoContaFavorecido) {
-		this.digitoContaFavorecido = digitoContaFavorecido;
-	}
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;

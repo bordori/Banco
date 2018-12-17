@@ -14,6 +14,7 @@ import com.googlecode.genericdao.search.Search;
 import br.com.unika.dao.UsuarioDAO;
 import br.com.unika.interfaces.IServico;
 import br.com.unika.modelo.Usuario;
+import br.com.unika.util.Reflexao;
 import br.com.unika.util.Retorno;
 import br.com.unika.util.Validacao;
 
@@ -26,10 +27,9 @@ public class ServicoUsuario implements IServico<Usuario, Long>, Serializable {
 
 	@Override
 	public Retorno incluir(Usuario usuario) {
-
 		Retorno retorno = new Retorno(true, null);
-		retorno = Validacao.verificarCamposObrigatorios(usuario);
-		validacaoDeNegocio(usuario);
+		usuario = (Usuario) Validacao.retiraEspacoDesnecessarios(usuario);
+		retorno = validacaoDeNegocio(usuario);
 
 		if (!retorno.isSucesso()) {
 			return retorno;
@@ -44,13 +44,20 @@ public class ServicoUsuario implements IServico<Usuario, Long>, Serializable {
 	public Retorno alterar(Usuario usuario) {
 
 		Retorno retorno = new Retorno(true, null);
-		retorno = Validacao.verificarCamposObrigatorios(usuario);
+		usuario = (Usuario) Validacao.retiraEspacoDesnecessarios(usuario);
+		retorno = validacaoDeNegocio(usuario);
 
 		if (!retorno.isSucesso()) {
 			return retorno;
 		}
-
-		retorno = usuarioDAO.alterarDAO(usuario);
+		
+		if (usuario.getIdUsuario() != null) {
+			retorno = usuarioDAO.alterarDAO(usuario);
+		}else {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Nenhum Id Informado");
+		}
+		
 
 		return retorno;
 
@@ -99,6 +106,8 @@ public class ServicoUsuario implements IServico<Usuario, Long>, Serializable {
 
 	private Retorno validacaoDeNegocio(Usuario usuario) {
 		Retorno retorno = new Retorno(true, null);
+		
+		
 
 		if (usuario.getNome().length() < 3 || usuario.getNome().length() > 20) {
 			retorno.setSucesso(false);
@@ -110,9 +119,12 @@ public class ServicoUsuario implements IServico<Usuario, Long>, Serializable {
 			retorno.addMensagem("Sobrenome Deve Ter Entre 3 e 20 Digitos!");
 		}
 
-		if (usuario.getTelefone().length() < 13 || usuario.getTelefone().length() > 14) {
+		if (usuario.getTelefone().length() < 13 || usuario.getTelefone().length() > 14 ) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Telefone Incorreto!");
+		}else if (!verificaSeCampoExiste("telefone", usuario.getTelefone())) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("O Telefone "+usuario.getTelefone()+" Ja Esta Cadastrado!");
 		}
 
 		if (usuario.getCpf().length() != 14) {
@@ -121,26 +133,86 @@ public class ServicoUsuario implements IServico<Usuario, Long>, Serializable {
 		} else if (!verificarCPF(usuario.getCpf())) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Digito Verificador do CPF Invalido!");
+		} else if(!verificaSeCampoExiste("cpf", usuario.getCpf())) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("O CPF "+usuario.getCpf()+" Ja Esta Cadastrado!");
 		}
 		
 		if (!validarEmail(usuario.getEmail())) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Email Invalido!");
+		}else if(!verificaSeCampoExiste("email", usuario.getEmail())){
+			retorno.setSucesso(false);
+			retorno.addMensagem("O Email "+usuario.getEmail()+" Ja Esta Cadastrado!");
 		}
 		
-		if (!validarDataNascimento(usuario.getDataNascimento())) {
-			
+		if (usuario.getCep().length() != 9) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Cep Invalido!");
 		}
-
+		
+		if(usuario.getEndereco().length() < 5 || usuario.getEndereco().length() > 40) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Endereço Deve Ter Mais de 5 Digitos!");
+		}
+		
+		if(usuario.getNumero().length() > 6) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Numero Deve Ter Menos de 6 Digitos!");
+		}
+		
+		if (usuario.getComplemento().length() < 3 || usuario.getComplemento().length() > 40) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Complemento Deve Ter Mais de 3 Digitos!");	
+		}
+		
+		if (usuario.getSexo() == null) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Sexo Não Esta Preechido!");	
+		}
+		
+		if(usuario.getBairro().length() < 4 || usuario.getBairro().length() > 20) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Bairro Deve Ter Entre 4 e 20 Digitos!");
+		}
+		if(usuario.getLogin().length() < 4 || usuario.getLogin().length() > 12) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Login Deve Ter Entre 4 e 12 Digitos!");
+		}else if(!verificaSeCampoExiste("login",usuario.getLogin())) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("O Usuario "+usuario.getLogin()+" Ja Esta Cadastrado!");
+		}else if (!Validacao.validaSeTemSoLetraENumeros(usuario.getLogin())) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Login Não Deve Ter Espaço ou Acentos");
+		}
+		
+		if (usuario.getSenha().length() < 4 || usuario.getSenha().length() > 12) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Senha Deve Ter Entre 4 e 12 Digitos!");
+		}else if (!Validacao.validaSeTemSoLetraENumeros(usuario.getSenha())) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Senha Não Deve Ter Espaço ou Acentos");
+		}
+		
+		if (usuario.getPermissaoDeAcesso() == null) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Permissão Não Esta Preechido!");	
+		}
 		return retorno;
 	}
 	
-	private boolean validarDataNascimento(Calendar dataNascimento) {
+	
 
-		dataNascimento.get(Calendar.YEAR);
-		dataNascimento.get(Calendar.MONTH);
-		dataNascimento.get(Calendar.DAY_OF_MONTH);
+	
+
+	private boolean verificaSeCampoExiste(String campo, String pesquisa) {
+		Search search = new Search(Usuario.class);
+		search.addFilterEqual(campo, pesquisa);
+		ArrayList<Usuario> lista = (ArrayList<Usuario>) search(search);
 		
+		if (lista.isEmpty()) {
+			return true;
+		}
 		return false;
 	}
 

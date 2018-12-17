@@ -29,6 +29,7 @@ http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 				<value>br.com.unika.modelo.Banco</value>
 				<value>br.com.unika.modelo.Conta</value>
 				<value>br.com.unika.modelo.Contato</value>
+				<value>br.com.unika.modelo.Agencia</value>
 				<value>br.com.unika.modelo.Movimentacao</value>
 			</list>
 		</property>
@@ -124,6 +125,19 @@ http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 	<!-- Fim da bean de Contato -->
+	
+	<!-- inicio da bean de Agencia  -->
+	<bean id="servicoAgencia"
+		class="br.com.unika.servicos.ServicoAgencia">
+		<property name="agenciaDAO"
+			ref="agenciaDAO" />
+	</bean>
+
+	<bean id="agenciaDAO"
+		class="br.com.unika.dao.AgenciaDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<!-- Fim da bean de Agencia -->
 
 
 

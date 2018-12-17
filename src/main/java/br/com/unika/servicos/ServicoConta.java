@@ -3,6 +3,7 @@ package br.com.unika.servicos;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -10,14 +11,16 @@ import com.googlecode.genericdao.search.Search;
 
 import br.com.unika.dao.ContaDAO;
 import br.com.unika.interfaces.IServico;
+import br.com.unika.modelo.Banco;
 import br.com.unika.modelo.Conta;
 import br.com.unika.util.Retorno;
+import br.com.unika.util.Validacao;
 
 public class ServicoConta implements IServico<Conta, Long>,Serializable{
 private static final long serialVersionUID = 1L;
 	
 	@SpringBean(name="contaDAO")
-	ContaDAO contaDAO;
+	private ContaDAO contaDAO;
 	
 
 	
@@ -26,7 +29,8 @@ private static final long serialVersionUID = 1L;
 	public Retorno incluir(Conta conta) {
 
 		Retorno retorno = new Retorno(true, null);
-		
+		conta = (Conta) Validacao.retiraEspacoDesnecessarios(conta);
+		retorno = validacaoDeNegocio(conta);
 		
 		if (!retorno.isSucesso()) {
 			return retorno;
@@ -96,8 +100,58 @@ private static final long serialVersionUID = 1L;
 		return lista;
 	}
 	
+	private Retorno validacaoDeNegocio(Conta conta) {
+		Retorno retorno = new Retorno(true, null);
+		
+		
+		
+		
+		return retorno;	
+	}
+	
+	public String gerarConta(Long idBanco) {
+		String conta = geradorDeConta();
+		
+		while(!verificaSeContaExisteNoBanco(conta, idBanco)) {
+			conta = geradorDeConta();
+		}
+		
+		
+		return conta;
+		
+	}
+	
+	private String geradorDeConta() {
+		String conta = "";
+		Random random = new Random();
+		for (int i = 0; i < 6; i++) {
+			conta = conta+""+random.nextInt(10);
+		}
+		
+		return conta;
+	}
+	
+	private boolean verificaSeContaExisteNoBanco(String conta,Long idBanco) {
+		Banco banco = new Banco();
+		banco.setIdBanco(idBanco);
+		
+		Search search = new Search(Conta.class);
+		search.addFilterEqual("conta", conta);
+		search.addFilterEqual("banco", banco);
+		
+		ArrayList<Conta> lista = (ArrayList<Conta>) this.search(search);
+		
+		if(lista.isEmpty()) {
+			return true;
+		}
+		
+		return false;
+	}
+	
 	public void setContaDAO(ContaDAO contaDAO) {
 		this.contaDAO = contaDAO;
 	}
 
+	
+	
 }

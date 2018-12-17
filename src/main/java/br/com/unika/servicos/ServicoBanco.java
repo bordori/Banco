@@ -14,6 +14,7 @@ import br.com.unika.interfaces.IServico;
 import br.com.unika.modelo.Banco;
 import br.com.unika.modelo.Conta;
 import br.com.unika.util.Retorno;
+import br.com.unika.util.Validacao;
 
 public class ServicoBanco implements IServico<Banco, Long>,Serializable{
 
@@ -23,13 +24,12 @@ public class ServicoBanco implements IServico<Banco, Long>,Serializable{
 	private BancoDAO bancoDAO;
 	
 
-	
-
 	@Override
 	public Retorno incluir(Banco banco) {
 
 		Retorno retorno = new Retorno(true, null);
-		
+		banco = (Banco) Validacao.retiraEspacoDesnecessarios(banco);
+		retorno = validacaoDeNegocio(banco);
 		
 		if (!retorno.isSucesso()) {
 			return retorno;
@@ -44,13 +44,20 @@ public class ServicoBanco implements IServico<Banco, Long>,Serializable{
 	public Retorno alterar(Banco banco) {
 
 		Retorno retorno = new Retorno(true, null);
+		banco = (Banco) Validacao.retiraEspacoDesnecessarios(banco);
+		retorno = validacaoDeNegocio(banco);
 		
 		
 		if (!retorno.isSucesso()) {
 			return retorno;
 		} 
+		if (banco.getIdBanco() != null) {
+			retorno = bancoDAO.alterarDAO(banco);
+		}else {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Nenhum Id Informado");
+		}
 		
-		retorno = bancoDAO.alterarDAO(banco);
 
 		return retorno;
 
@@ -104,6 +111,27 @@ public class ServicoBanco implements IServico<Banco, Long>,Serializable{
 		lista = (ArrayList<Banco>) bancoDAO.searchDAO(search);
 		
 		return lista;
+	}
+	
+	private Retorno validacaoDeNegocio(Banco banco) {
+		Retorno retorno = new Retorno(true, null);
+		
+		if(banco.getNome().length() < 3 || banco.getNome().length() > 20) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Nome do Banco Deve Ter Entre 3 e 20 Digitos");
+		}
+		
+		if (banco.getNumero() == null) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Numero Não Esta Preenchido!");
+			
+		} else if(!Validacao.validaSeTemSoNumeros(banco.getNumero())) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Numero do Banco Deve Ter Apenas Numeros!");
+		}
+		
+		
+		return retorno;
 	}
 	
 	public void setBancoDAO(BancoDAO bancoDAO) {

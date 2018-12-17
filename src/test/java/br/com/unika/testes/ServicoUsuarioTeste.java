@@ -27,8 +27,8 @@ public class ServicoUsuarioTeste {
 
 	@Test public void testIncluir() {
 		Usuario usuario = new Usuario();
-		usuario.setNome("Jean Carlo");
-		usuario.setSobrenome("jjkj");
+		usuario.setNome("  Jean   Carlo");
+		usuario.setSobrenome("         jjkj");
 		usuario.setTelefone("(62)99115-3602");
 		usuario.setCpf("700.794.811-16");
 		usuario.setEmail("jeanbordori@gmail.com");
@@ -41,8 +41,9 @@ public class ServicoUsuarioTeste {
 		usuario.setComplemento("final da rua ");
 		usuario.setBairro("Vila Fabril");
 		usuario.setSexo(true);
-		usuario.setLogin("bordori");
-		usuario.setSenha("abrenhosa");
+		usuario.setLogin("bordori22");
+		usuario.setSenha("abrenhosa1");
+		usuario.setAtivo(true);
 		PermissaoDeAcesso permissaoDeAcesso = new PermissaoDeAcesso();
 		permissaoDeAcesso.setIdPermissao(new Long(1));
 		usuario.setPermissaoDeAcesso(permissaoDeAcesso);

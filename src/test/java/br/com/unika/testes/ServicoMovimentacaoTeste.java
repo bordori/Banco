@@ -38,9 +38,7 @@ public class ServicoMovimentacaoTeste {
 		movimentacao.setNumeroBancoFavorecido("1");
 		movimentacao.setNomeBancoFavorecido("Brasil");
 		movimentacao.setAgenciaFavorecido("0015");
-		movimentacao.setDigitoAgenciaFavorecido("");
 		movimentacao.setContaFavorecido("12345678");
-		movimentacao.setDigitoContaFavorecido("5");
 		movimentacao.setValor(55.15);
 		Calendar c = Calendar.getInstance();
 		movimentacao.setData(c);
@@ -63,9 +61,7 @@ public class ServicoMovimentacaoTeste {
 		movimentacao.setNumeroBancoFavorecido("1");
 		movimentacao.setNomeBancoFavorecido("Brasil");
 		movimentacao.setAgenciaFavorecido("0015");
-		movimentacao.setDigitoAgenciaFavorecido("");
 		movimentacao.setContaFavorecido("12345678");
-		movimentacao.setDigitoContaFavorecido("5");
 		movimentacao.setValor(100.15);
 		Calendar c = Calendar.getInstance();
 		movimentacao.setData(c);

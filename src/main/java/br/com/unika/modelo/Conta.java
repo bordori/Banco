@@ -27,17 +27,11 @@ public class Conta implements Serializable{
 	@Column(nullable = false, name = "ID_CONTA", unique = true)
 	private Long idConta;
 	
-	@Column(nullable = false, name = "CONTA",unique = true)
+	@Column(nullable = false, name = "CONTA")
 	private String conta;
-	
-	@Column(nullable = false, name = "DIGITO_CONTA")
-	private String digitoConta;
 	
 	@Column(nullable = false, name = "AGENCIA")
 	private String agencia;
-	
-	@Column( name = "DIGITO_AGENCIA")
-	private String digitoAgencia;
 	
 	@Column(nullable = false, name = "TIPO_CONTA")
 	private Integer tipoConta;
@@ -74,13 +68,7 @@ public class Conta implements Serializable{
 		this.conta = conta;
 	}
 
-	public String getDigitoConta() {
-		return digitoConta;
-	}
-
-	public void setDigitoConta(String digitoConta) {
-		this.digitoConta = digitoConta;
-	}
+	
 
 	public String getAgencia() {
 		return agencia;
@@ -90,13 +78,7 @@ public class Conta implements Serializable{
 		this.agencia = agencia;
 	}
 
-	public String getDigitoAgencia() {
-		return digitoAgencia;
-	}
-
-	public void setDigitoAgencia(String digitoAgencia) {
-		this.digitoAgencia = digitoAgencia;
-	}
+	
 
 	public Integer getTipoConta() {
 		return tipoConta;

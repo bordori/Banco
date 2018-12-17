@@ -30,19 +30,17 @@ public class ServicoContaTeste {
 	@Test
 	public void testIncluir() {
 		Conta conta = new Conta();
-		conta.setConta("51248475");
-		conta.setDigitoConta("5");
 		conta.setAgencia("0012");
-		conta.setDigitoAgencia("");
 		conta.setTipoConta(1);
 		conta.setAtivo(true);
 		conta.setSaldo(25.00);
 		Usuario usuario = new Usuario();
-		usuario.setIdUsuario(new Long(3));
+		usuario.setIdUsuario(new Long(1));
 		conta.setUsuario(usuario);
 		Banco banco = new Banco();
 		banco.setIdBanco(new Long(1));
 		conta.setBanco(banco);
+		conta.setConta(servicoConta.gerarConta(conta.getBanco().getIdBanco()));
 		
 		Retorno retorno = servicoConta.incluir(conta);
 		
@@ -54,9 +52,7 @@ public class ServicoContaTeste {
 		Conta conta = new Conta();
 		conta.setIdConta(new Long(1));
 		conta.setConta("51248475");
-		conta.setDigitoConta("5");
 		conta.setAgencia("0012");
-		conta.setDigitoAgencia("");
 		conta.setTipoConta(1);
 		conta.setAtivo(true);
 		conta.setSaldo(100.00);
@@ -109,6 +105,11 @@ public class ServicoContaTeste {
 		ArrayList<Conta> retorno = (ArrayList<Conta>) servicoConta.search(search);
 		
 		assertEquals(false, retorno.isEmpty());
+		
+	}
+	
+	@Test
+	public void testSearchConta() {
 		
 	}
 

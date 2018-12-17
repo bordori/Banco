@@ -18,18 +18,29 @@ public abstract class Reflexao {
 	
 	public static Object getValorDoObjeto(Field campo,Object entidade) {
 		String metaDado = Reflexao.obterGetSetDoCampo(campo,"get");
-		Object retorno = Reflexao.invocarMetodo(entidade,metaDado);
+		Object retorno = Reflexao.invocarMetodo(entidade,metaDado,null);
 		return retorno;
 	}
+	
+	public static void setValorDoObjeto(Field campo,Object entidade,String valor) {
+		String metaDado = Reflexao.obterGetSetDoCampo(campo,"set");
+		Object retorno = Reflexao.invocarMetodo(entidade,metaDado,valor);
+	}
+	
+	
 
-	private static Object invocarMetodo(Object entidade, String metaDado) {
+	private static Object invocarMetodo(Object entidade, String metaDado,String valor) {
 		Method meth = null;
 		Object retorno = null;
 		
-		meth = obterMetodo(entidade.getClass(), metaDado);
+		meth = obterMetodo(entidade.getClass(), metaDado,valor);
 		
 		try {
-			retorno = meth.invoke(entidade);
+			if(valor != null) {
+				retorno = meth.invoke(entidade, valor);
+			}else {
+				retorno = meth.invoke(entidade);
+			}
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -37,10 +48,15 @@ public abstract class Reflexao {
 		
 		return retorno;
 	}
-	private static Method obterMetodo(Class<?> cls, String nome) {
+	private static Method obterMetodo(Class<?> cls, String nome,String valor) {
 		Method meth = null;
 		try {
-			meth = cls.getMethod(nome);
+			if (valor != null) {
+				meth = cls.getDeclaredMethod(nome,String.class);
+			}else {
+				meth = cls.getMethod(nome);
+			}
+			
 		} catch (NoSuchMethodException | SecurityException e) {
 			throw new RuntimeException(e);
 		}

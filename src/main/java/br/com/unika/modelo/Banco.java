@@ -2,6 +2,7 @@ package br.com.unika.modelo;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -35,7 +36,10 @@ public class Banco implements Serializable{
 	private String nome;
 	
 	@OneToMany(mappedBy="banco", targetEntity = Conta.class,  fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-	private List<Conta> conta;
+	private Set<Conta> conta;
+	
+	@OneToMany(mappedBy="banco", targetEntity = Agencia.class,  fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	private Set<Agencia> agencia;
 	
 	
 	public Long getIdBanco() {
@@ -56,11 +60,17 @@ public class Banco implements Serializable{
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public List<Conta> getConta() {
+	public Set<Conta> getConta() {
 		return conta;
 	}
-	public void setConta(List<Conta> conta) {
+	public void setConta(Set<Conta> conta) {
 		this.conta = conta;
+	}
+	public Set<Agencia> getAgencia() {
+		return agencia;
+	}
+	public void setAgencia(Set<Agencia> agencia) {
+		this.agencia = agencia;
 	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
