@@ -4,7 +4,7 @@
 <html >
 
 <head>
-    <title>Revenue Banking Category Responsive website Template | Home :: w3layouts</title>
+    <title>Banco Revenue</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="keywords" content="Revenue Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
@@ -32,9 +32,13 @@
     <!-- web-fonts -->
     <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:200,200i,300,300i,400,400i,600,600i,700,700i,900,900i" rel="stylesheet">
     <!-- //web-fonts -->
+    
+    
 </head>
 
 <body>
+
+
     <div class="top-nav">
         <!--nav top-->
         <div class="container">
@@ -46,7 +50,7 @@
                             <a href="#" class="log" data-toggle="modal" data-target="#myModal">Logar</a>
                         </li>
                         <li>
-                            <a href="#" class="log" data-toggle="modal" data-target="#myModal">registro</a>
+                            <a  wicket:id="acaoRegistrar">registro</a>
                         </li>
                     </ul>
                 </div>
@@ -121,9 +125,8 @@
                     <div class="modal-body">
                         <div class="loginf_module">
                             <div class="module form-module">
-                                <div class="toggle">
-                                    <i class="fa fa-times fa-pencil"></i>
-                                    <div class="tooltip">Click Me</div>
+                                <div class="">
+                                   
                                 </div>
                                 <div class="form">
                                     <h3>Logar em sua conta!</h3>
@@ -132,20 +135,12 @@
                                         <input type="password" name="Password" placeholder="senha" required="">
                                         <input type="submit" value="Logar">
                                     </form>
-                                  <!--   <div class="cta">
-                                        <a href="#">Forgot password?</a>
-                                    </div> -->
+                                   <div class="cta">
+                                        <a href="#">Esqueceu a Senha?</a><BR>
+                                          <a href="#">Novo Registro</a>
+                                    </div> 
                                 </div>
-                                <div class="form">
-                                    <h3>Criar uma nova conta</h3>
-                                    <form  wicket:id="formCriarUsuario">
-                                        <input type="text" name="Username" wicket:id="login" placeholder="login" required="">
-                                        <input type="password" name="Password" wicket:id="senha" placeholder="senha" required="">
-                                        <input type="email" name="Email" wicket:id="email" placeholder="Email" required="">
-                                        <input type="text" name="Phone" wicket:id="telefone" placeholder="telefone" required="">
-                                        <input type="submit" value="Continuar Registro">
-                                    </form>
-                                </div>
+                                
 
                             </div>
                         </div>
@@ -281,6 +276,7 @@
     <!-- gallery smoothbox -->
     <script src="js/smoothbox.jquery2.js"></script>
     <script src="js/jquery.mask.js" type="text/javascript"></script>
+    <script src="js/app.js" type="text/javascript"></script>
     <!-- //gallery smoothbox -->
     <!-- Bootstrap core JavaScript
  ================================================== -->

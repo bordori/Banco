@@ -20,6 +20,7 @@ public interface IServico<Entidade,id extends Serializable>  {
 	public Retorno remover(Entidade ent);
 	
 	public List<Entidade> search(Search search);
-
+	
+	public int count(Search search);
 	
 }

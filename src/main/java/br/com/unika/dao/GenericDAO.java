@@ -4,38 +4,26 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Entity;
 import javax.persistence.NoResultException;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.stereotype.Repository;
 
 import com.googlecode.genericdao.dao.hibernate.GenericDAOImpl;
 import com.googlecode.genericdao.search.Search;
 
 import br.com.unika.util.Retorno;
 
-
-
-
 public class GenericDAO<Entidade, Id extends Serializable> extends GenericDAOImpl<Entidade, Id> {
 	public Session session;
-	
-	
-	
 
-	
 	@Override
 	public void setSessionFactory(SessionFactory sessionFactory) {
-	// TODO Auto-generated method stub
-	super.setSessionFactory(sessionFactory);
+		// TODO Auto-generated method stub
+		super.setSessionFactory(sessionFactory);
 	}
-	
-	
-	
-	
+
 	public Session getSession() {
 		return session;
 	}
@@ -44,19 +32,13 @@ public class GenericDAO<Entidade, Id extends Serializable> extends GenericDAOImp
 		this.session = session;
 	}
 
-	
-	
-	
-	
-
 	public Retorno salvarDAO(Entidade ent) {
 		Retorno retorno = new Retorno(true, null);
 		try {
-		
+
 			session = getSessionFactory().openSession();
 			session.beginTransaction();
 			this.save(ent);
-
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
@@ -97,15 +79,15 @@ public class GenericDAO<Entidade, Id extends Serializable> extends GenericDAOImp
 		return retorno;
 	}
 
-	public List<Entidade> listarDAO( ) {
+	public List<Entidade> listarDAO() {
 		ArrayList<Entidade> lista = new ArrayList<>();
-		
+
 		try {
 			session = getSessionFactory().openSession();
 			session.beginTransaction();
-			lista =  (ArrayList<Entidade>) this.findAll();
+			lista = (ArrayList<Entidade>) this.findAll();
 			session.close();
-			
+
 		} catch (NullPointerException e) {
 			System.out.println("Defina a tabela para usar Dao.listar");
 			return null;
@@ -138,36 +120,44 @@ public class GenericDAO<Entidade, Id extends Serializable> extends GenericDAOImp
 		return retorno;
 	}
 
-	public Entidade procurarDAO( Id pk) {
+	public Entidade procurarDAO(Id pk) {
 		Entidade ent = null;
 		try {
 			session = getSessionFactory().openSession();
 			session.beginTransaction();
-			ent =  this.find(pk);
+			ent = this.find(pk);
 			session.getTransaction().commit();
 			session.close();
 		} catch (HibernateException e) {
 			System.out.println("Nao foi encontrado na tabela" + e.getMessage());
 		} catch (NoResultException e) {
-			System.out.println("Nao foi encontrado nenhum dado "+e.getMessage());
+			System.out.println("Nao foi encontrado nenhum dado " + e.getMessage());
 
 		}
 		return ent;
 
 	}
-	
+
 	public List<Entidade> searchDAO(Search search) {
-		
+
 		session = getSessionFactory().openSession();
 		session.beginTransaction();
-		
+
 		ArrayList<Entidade> lista = new ArrayList<>();
-		lista =  (ArrayList<Entidade>) this.search(search);
-		
-		
+		lista = (ArrayList<Entidade>) this.search(search);
+
 		session.close();
 		return lista;
 	}
-	
-	
+
+	public int countDAO(Search search) {
+		session = getSessionFactory().openSession();
+		session.beginTransaction();
+
+		int count = this.count(search);
+
+		session.close();
+		return count;
+	}
+
 }

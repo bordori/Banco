@@ -14,6 +14,7 @@ import br.com.unika.interfaces.IServico;
 import br.com.unika.modelo.Movimentacao;
 import br.com.unika.modelo.Usuario;
 import br.com.unika.util.Retorno;
+import br.com.unika.util.Validacao;
 
 public class ServicoMovimentacao implements IServico<Movimentacao, Long>,Serializable {
 
@@ -29,6 +30,7 @@ public class ServicoMovimentacao implements IServico<Movimentacao, Long>,Seriali
 	public Retorno incluir(Movimentacao movimentacao) {
 
 		Retorno retorno = new Retorno(true, null);
+		movimentacao = (Movimentacao) Validacao.retiraEspacoDesnecessarios(movimentacao);
 		
 		
 		if (!retorno.isSucesso()) {
@@ -40,11 +42,12 @@ public class ServicoMovimentacao implements IServico<Movimentacao, Long>,Seriali
 		return retorno;
 	}
 
+
 	@Override
 	public Retorno alterar(Movimentacao movimentacao) {
 
 		Retorno retorno = new Retorno(true, null);
-		
+		movimentacao = (Movimentacao) Validacao.retiraEspacoDesnecessarios(movimentacao);
 		
 		if (!retorno.isSucesso()) {
 			return retorno;
@@ -98,6 +101,15 @@ public class ServicoMovimentacao implements IServico<Movimentacao, Long>,Seriali
 		
 		return lista;
 	}
+	
+	
+	@Override
+	public int count(Search search) {
+		return movimentacaoDAO.countDAO(search);
+	}
+	
+	
+	
 	
 	public void setMovimentacaoDAO(MovimentacaoDAO movimentacaoDAO) {
 		this.movimentacaoDAO = movimentacaoDAO;

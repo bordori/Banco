@@ -60,7 +60,7 @@ public class Usuario implements Serializable {
 	@Column(nullable = false, name = "NUMERO")
 	private String numero;
 	
-	@Column(nullable = false, name = "COMPLEMENTO")
+	@Column( name = "COMPLEMENTO")
 	private String complemento;
 	
 	@Column(nullable = false, name = "BAIRRO")

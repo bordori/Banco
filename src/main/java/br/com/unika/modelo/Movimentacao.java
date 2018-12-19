@@ -33,22 +33,22 @@ public class Movimentacao implements Serializable {
 	@JoinColumn(name = "USUARIO_ID", nullable = false)
 	private Usuario usuario;
 
-	@Column(nullable = false, name = "NOME_FAVORECIDO")
+	@Column( name = "NOME_FAVORECIDO")
 	private String nomeFavorecido;
 
-	@Column(nullable = false, name = "CPF_FAVORECIDO")
+	@Column( name = "CPF_FAVORECIDO")
 	private String cpfFavoracido;
 
-	@Column(nullable = false, name = "NUMERO_BANCO_FAVORECIDO")
+	@Column( name = "NUMERO_BANCO_FAVORECIDO")
 	private String numeroBancoFavorecido;
 
-	@Column(nullable = false, name = "NOME_BANCO_FAVORECIDO")
+	@Column( name = "NOME_BANCO_FAVORECIDO")
 	private String nomeBancoFavorecido;
 
-	@Column(nullable = false, name = "AGENCIA_FAVORECIDO")
+	@Column( name = "AGENCIA_FAVORECIDO")
 	private String agenciaFavorecido;
 
-	@Column(nullable = false, name = "CONTA_FAVORECIDO")
+	@Column(name = "CONTA_FAVORECIDO")
 	private String contaFavorecido;
 
 	@Column(nullable = false, name = "VALOR")

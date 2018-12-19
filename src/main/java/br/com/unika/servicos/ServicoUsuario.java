@@ -103,23 +103,32 @@ public class ServicoUsuario implements IServico<Usuario, Long>, Serializable {
 
 		return lista;
 	}
+	
+	
+	@Override
+	public int count(Search search) {
+		return usuarioDAO.countDAO(search);
+	}
+	
+	
+	
 
 	private Retorno validacaoDeNegocio(Usuario usuario) {
 		Retorno retorno = new Retorno(true, null);
 		
 		
 
-		if (usuario.getNome().length() < 3 || usuario.getNome().length() > 20) {
+		if (usuario.getNome() == null || usuario.getNome().length() < 3 || usuario.getNome().length() > 20) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Nome Deve Ter Entre 3 e 20 Digitos!");
 		}
 
-		if (usuario.getSobrenome().length() < 3 || usuario.getSobrenome().length() > 20) {
+		if (usuario.getSobrenome() == null || usuario.getSobrenome().length() < 3 || usuario.getSobrenome().length() > 20) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Sobrenome Deve Ter Entre 3 e 20 Digitos!");
 		}
 
-		if (usuario.getTelefone().length() < 13 || usuario.getTelefone().length() > 14 ) {
+		if (usuario.getTelefone() == null || usuario.getTelefone().length() < 13 || usuario.getTelefone().length() > 14 ) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Telefone Incorreto!");
 		}else if (!verificaSeCampoExiste("telefone", usuario.getTelefone())) {
@@ -127,10 +136,10 @@ public class ServicoUsuario implements IServico<Usuario, Long>, Serializable {
 			retorno.addMensagem("O Telefone "+usuario.getTelefone()+" Ja Esta Cadastrado!");
 		}
 
-		if (usuario.getCpf().length() != 14) {
+		if (usuario.getCpf() == null || usuario.getCpf().length() != 14) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("CPF Incorreto!");
-		} else if (!verificarCPF(usuario.getCpf())) {
+		} else if (!Validacao.validarCPF(usuario.getCpf())) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Digito Verificador do CPF Invalido!");
 		} else if(!verificaSeCampoExiste("cpf", usuario.getCpf())) {
@@ -138,7 +147,7 @@ public class ServicoUsuario implements IServico<Usuario, Long>, Serializable {
 			retorno.addMensagem("O CPF "+usuario.getCpf()+" Ja Esta Cadastrado!");
 		}
 		
-		if (!validarEmail(usuario.getEmail())) {
+		if (usuario.getEmail() == null || !validarEmail(usuario.getEmail())) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Email Invalido!");
 		}else if(!verificaSeCampoExiste("email", usuario.getEmail())){
@@ -146,24 +155,26 @@ public class ServicoUsuario implements IServico<Usuario, Long>, Serializable {
 			retorno.addMensagem("O Email "+usuario.getEmail()+" Ja Esta Cadastrado!");
 		}
 		
-		if (usuario.getCep().length() != 9) {
+		if (usuario.getCep() == null || usuario.getCep().length() != 9) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Cep Invalido!");
 		}
 		
-		if(usuario.getEndereco().length() < 5 || usuario.getEndereco().length() > 40) {
+		if(usuario.getEndereco() == null || usuario.getEndereco().length() < 5 || usuario.getEndereco().length() > 40) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Endereço Deve Ter Mais de 5 Digitos!");
 		}
 		
-		if(usuario.getNumero().length() > 6) {
+		if(usuario.getNumero() == null || usuario.getNumero().length() > 6) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Numero Deve Ter Menos de 6 Digitos!");
 		}
 		
-		if (usuario.getComplemento().length() < 3 || usuario.getComplemento().length() > 40) {
-			retorno.setSucesso(false);
-			retorno.addMensagem("Complemento Deve Ter Mais de 3 Digitos!");	
+		if (usuario.getComplemento() != null) {
+			if (usuario.getComplemento().length() < 3 || usuario.getComplemento().length() > 40) {
+				retorno.setSucesso(false);
+				retorno.addMensagem("Complemento Deve Ter Mais de 3 Digitos!");	
+			}
 		}
 		
 		if (usuario.getSexo() == null) {
@@ -171,11 +182,11 @@ public class ServicoUsuario implements IServico<Usuario, Long>, Serializable {
 			retorno.addMensagem("Sexo Não Esta Preechido!");	
 		}
 		
-		if(usuario.getBairro().length() < 4 || usuario.getBairro().length() > 20) {
+		if(usuario.getBairro() == null || usuario.getBairro().length() < 4 || usuario.getBairro().length() > 20) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Bairro Deve Ter Entre 4 e 20 Digitos!");
 		}
-		if(usuario.getLogin().length() < 4 || usuario.getLogin().length() > 12) {
+		if(usuario.getLogin() == null || usuario.getLogin().length() < 4 || usuario.getLogin().length() > 12) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Login Deve Ter Entre 4 e 12 Digitos!");
 		}else if(!verificaSeCampoExiste("login",usuario.getLogin())) {
@@ -186,7 +197,7 @@ public class ServicoUsuario implements IServico<Usuario, Long>, Serializable {
 			retorno.addMensagem("Login Não Deve Ter Espaço ou Acentos");
 		}
 		
-		if (usuario.getSenha().length() < 4 || usuario.getSenha().length() > 12) {
+		if (usuario.getSenha() == null || usuario.getSenha().length() < 4 || usuario.getSenha().length() > 12) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Senha Deve Ter Entre 4 e 12 Digitos!");
 		}else if (!Validacao.validaSeTemSoLetraENumeros(usuario.getSenha())) {
@@ -208,9 +219,9 @@ public class ServicoUsuario implements IServico<Usuario, Long>, Serializable {
 	private boolean verificaSeCampoExiste(String campo, String pesquisa) {
 		Search search = new Search(Usuario.class);
 		search.addFilterEqual(campo, pesquisa);
-		ArrayList<Usuario> lista = (ArrayList<Usuario>) search(search);
+		int count = count(search);
 		
-		if (lista.isEmpty()) {
+		if (count == 0) {
 			return true;
 		}
 		return false;
@@ -230,50 +241,11 @@ public class ServicoUsuario implements IServico<Usuario, Long>, Serializable {
         return false;
     }
 
-	private boolean verificarCPF(String cpf) {
-		cpf = cpf.replaceAll("[^0-9]", "");
-		int primeiroDigito = 0;
-		int segundoDigito = 0;
-		int aux = 0;
-		int j = 10;
-		
-		for (int i = 0; i < cpf.length() - 2; i++) {
-			int d = Integer.parseInt(cpf.substring(i, i + 1));
-			primeiroDigito = primeiroDigito + (d * j);
-			j--;
-		}
-		
-		aux = 11 - primeiroDigito % 11;
-		if (aux > 9) {
-			primeiroDigito = 0;
-		} else {
-			primeiroDigito = aux;
-		}
-		
-		j = 11;
-		for (int i = 0; i < cpf.length() - 1; i++) {
-			int d = Integer.parseInt(cpf.substring(i, i + 1));
-			segundoDigito = segundoDigito + (d * j);
-			j--;
-		}
-		
-		aux = 11 - segundoDigito % 11;
-		if (aux > 9) {
-			segundoDigito = 0;
-		} else {
-			segundoDigito = aux;
-		}
-		
 	
-		
-		if (cpf.substring(cpf.length()-2,cpf.length()).equals(""+primeiroDigito+segundoDigito)) {
-			return true;
-		}else {
-			return false;
-		}
-	}
 
 	public void setUsuarioDAO(UsuarioDAO usuarioDAO) {
 		this.usuarioDAO = usuarioDAO;
 	}
+
+	
 }

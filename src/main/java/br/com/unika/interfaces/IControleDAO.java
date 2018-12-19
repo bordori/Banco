@@ -19,5 +19,5 @@ public interface IControleDAO<Entidade,Id extends Serializable> {
 	public Retorno alterarDAO(Entidade ent);
 	public Entidade procurarDAO(Id pk);
 	public List<Entidade> searchDAO(Search search);
-	
+	public int countDAO(Search search);
 }

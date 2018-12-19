@@ -10,34 +10,24 @@ import javax.persistence.Id;
 
 public class Validacao {
 
-	/*public static Retorno verificarCamposObrigatorios(Object entidade) {
-		Retorno retorno = new Retorno(true, null);
-		Field[] campos = Reflexao.getCampos(entidade);
-		if (campos != null) {
-			for (Field campo : campos) {
-				if (campo.isAnnotationPresent(Column.class)) {
-					Boolean nullable = campo.getAnnotation(Column.class).nullable();
-					Object valor = Reflexao.getValorDoObjeto(campo, entidade);
-					if (valor == null && nullable == false && !campo.isAnnotationPresent(Id.class)) {
-						retorno.setSucesso(false);
-						retorno.addMensagem("O Campo " + campo.getName() + " Deve Ser Prencido!");
-					} else if (campo.getType() == String.class) {
-						String string = (String) valor;
-						if (valor == null || string.trim().isEmpty()) {
-							retorno.setSucesso(false);
-							retorno.addMensagem("O Campo " + campo.getName() + " Deve Ser Prencido!");
-						}
-					}
-
-				}
-			}
-		} else {
-			retorno.setSucesso(false);
-			return retorno;
-		}
-
-		return retorno;
-	}*/
+	/*
+	 * public static Retorno verificarCamposObrigatorios(Object entidade) { Retorno
+	 * retorno = new Retorno(true, null); Field[] campos =
+	 * Reflexao.getCampos(entidade); if (campos != null) { for (Field campo :
+	 * campos) { if (campo.isAnnotationPresent(Column.class)) { Boolean nullable =
+	 * campo.getAnnotation(Column.class).nullable(); Object valor =
+	 * Reflexao.getValorDoObjeto(campo, entidade); if (valor == null && nullable ==
+	 * false && !campo.isAnnotationPresent(Id.class)) { retorno.setSucesso(false);
+	 * retorno.addMensagem("O Campo " + campo.getName() + " Deve Ser Prencido!"); }
+	 * else if (campo.getType() == String.class) { String string = (String) valor;
+	 * if (valor == null || string.trim().isEmpty()) { retorno.setSucesso(false);
+	 * retorno.addMensagem("O Campo " + campo.getName() + " Deve Ser Prencido!"); }
+	 * }
+	 * 
+	 * } } } else { retorno.setSucesso(false); return retorno; }
+	 * 
+	 * return retorno; }
+	 */
 
 	public static Object retiraEspacoDesnecessarios(Object entidade) {
 		Field[] campos = Reflexao.getCampos(entidade);
@@ -46,7 +36,7 @@ public class Validacao {
 				if (!campo.isAnnotationPresent(Id.class) && campo.isAnnotationPresent(Column.class)) {
 					Object valor = Reflexao.getValorDoObjeto(campo, entidade);
 
-					if (campo.getType() == String.class) {
+					if (campo.getType() == String.class && valor != null) {
 						String string = (String) valor;
 
 						string = (String) valor;
@@ -62,35 +52,77 @@ public class Validacao {
 
 		return entidade;
 	}
-	
+
 	public static boolean validaSeTemSoLetraENumeros(String string) {
-        Pattern padrao = Pattern.compile("[a-z A-Z 0-9]*");
-        Matcher pesquisa = padrao.matcher(string);
-        if (pesquisa.matches()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-	
+		Pattern padrao = Pattern.compile("[a-z A-Z 0-9]*");
+		Matcher pesquisa = padrao.matcher(string);
+		if (pesquisa.matches()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public static boolean validaSeTemSoLetras(String string) {
-        Pattern padrao = Pattern.compile("[a-z A-Z]*");
-        Matcher pesquisa = padrao.matcher(string);
-        if (pesquisa.matches()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-	
+		Pattern padrao = Pattern.compile("[a-z A-Z]*");
+		Matcher pesquisa = padrao.matcher(string);
+		if (pesquisa.matches()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public static boolean validaSeTemSoNumeros(String string) {
-        Pattern padrao = Pattern.compile("[0-9]*"); 
-        Matcher pesquisa = padrao.matcher(string);
-        if (pesquisa.matches()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+		Pattern padrao = Pattern.compile("[0-9]*");
+		Matcher pesquisa = padrao.matcher(string);
+		if (pesquisa.matches()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	
+	public static boolean validarCPF(String cpf) {
+		cpf = cpf.replaceAll("[^0-9]", "");
+		int primeiroDigito = 0;
+		int segundoDigito = 0;
+		int aux = 0;
+		int j = 10;
+
+		for (int i = 0; i < cpf.length() - 2; i++) {
+			int d = Integer.parseInt(cpf.substring(i, i + 1));
+			primeiroDigito = primeiroDigito + (d * j);
+			j--;
+		}
+
+		aux = 11 - primeiroDigito % 11;
+		if (aux > 9) {
+			primeiroDigito = 0;
+		} else {
+			primeiroDigito = aux;
+		}
+
+		j = 11;
+		for (int i = 0; i < cpf.length() - 1; i++) {
+			int d = Integer.parseInt(cpf.substring(i, i + 1));
+			segundoDigito = segundoDigito + (d * j);
+			j--;
+		}
+
+		aux = 11 - segundoDigito % 11;
+		if (aux > 9) {
+			segundoDigito = 0;
+		} else {
+			segundoDigito = aux;
+		}
+
+		if (cpf.substring(cpf.length() - 2, cpf.length()).equals("" + primeiroDigito + segundoDigito)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 }

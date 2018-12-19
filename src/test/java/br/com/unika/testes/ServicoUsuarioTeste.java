@@ -8,6 +8,7 @@ import java.util.Calendar;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate3.support.OpenSessionInViewInterceptor;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -24,6 +25,9 @@ public class ServicoUsuarioTeste {
 
 	@Autowired
 	private ServicoUsuario servicoUsuario;
+	
+	
+	OpenSessionInViewInterceptor open;
 
 	@Test public void testIncluir() {
 		Usuario usuario = new Usuario();
@@ -96,7 +100,6 @@ public class ServicoUsuarioTeste {
 	public void testListar() {
 		ArrayList<Usuario> retorno = new ArrayList<>();
 		retorno = (ArrayList<Usuario>) servicoUsuario.listar();
-		
 		assertEquals(false, retorno.isEmpty());
 	}
 

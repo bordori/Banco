@@ -13,7 +13,9 @@ import com.googlecode.genericdao.search.Search;
 import br.com.unika.dao.PermissaoDeAcessoDAO;
 import br.com.unika.interfaces.IServico;
 import br.com.unika.modelo.PermissaoDeAcesso;
+import br.com.unika.modelo.Usuario;
 import br.com.unika.util.Retorno;
+import br.com.unika.util.Validacao;
 
 
 
@@ -33,7 +35,8 @@ public class ServicoPermissaoDeAcesso implements IServico<PermissaoDeAcesso,Long
 	public Retorno incluir(PermissaoDeAcesso permissao) {
 
 		Retorno retorno = new Retorno(true, null);
-		
+		permissao = (PermissaoDeAcesso) Validacao.retiraEspacoDesnecessarios(permissao);
+		retorno = validacaoDeNegocio(permissao);
 		
 		if (!retorno.isSucesso()) {
 			return retorno;
@@ -48,7 +51,8 @@ public class ServicoPermissaoDeAcesso implements IServico<PermissaoDeAcesso,Long
 	public Retorno alterar(PermissaoDeAcesso permissao) {
 
 		Retorno retorno = new Retorno(true, null);
-		
+		permissao = (PermissaoDeAcesso) Validacao.retiraEspacoDesnecessarios(permissao);
+		retorno = validacaoDeNegocio(permissao);
 		
 		if (!retorno.isSucesso()) {
 			return retorno;
@@ -111,6 +115,42 @@ public class ServicoPermissaoDeAcesso implements IServico<PermissaoDeAcesso,Long
 		
 		return lista;
 	}
+	
+	
+	@Override
+	public int count(Search search) {
+		return permissaoDeAcessoDAO.countDAO(search);
+	}
+	
+	
+	
+	private Retorno validacaoDeNegocio(PermissaoDeAcesso permissao) {
+		Retorno retorno = new Retorno(true,null);
+		
+		
+		if (permissao.getDescricao() == null || permissao.getDescricao().length() < 3 || permissao.getDescricao().length() > 15) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Descrição Deve Ter Entre 3 e 15 Digitos!");
+		}
+		
+		if(permissao.getAlterarBanco() == null) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Permissão de Alterar Banco Deve Ser Preenchida!");
+		}
+		
+		if(permissao.getAlterarConta() == null) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Permissão de Alterar Contas Deve Ser Preenchida!");
+		}
+		
+		if(permissao.getAlterarPermissoes() == null) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Permissão de Alterar Permissôes Deve Ser Preenchida!");
+		}
+		
+		return retorno;
+	}
+
 	
 	public void setPermissaoDeAcessoDAO(PermissaoDeAcessoDAO permissaoDeAcessoDAO) {
 		this.permissaoDeAcessoDAO = permissaoDeAcessoDAO;

@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.googlecode.genericdao.search.Search;
 
+import br.com.unika.modelo.Agencia;
 import br.com.unika.modelo.Banco;
 import br.com.unika.modelo.Conta;
 import br.com.unika.modelo.Usuario;
@@ -110,7 +111,14 @@ public class ServicoContaTeste {
 	
 	@Test
 	public void testSearchConta() {
+		Search search = new Search(Agencia.class);
 		
+		Banco banco = new Banco();
+		banco.setIdBanco(new Long(1));
+		search.addFilterEqual("numero",0012);
+		ArrayList<Conta> retorno = (ArrayList<Conta>) servicoConta.search(search);
+		
+		assertEquals(false, retorno.isEmpty());
 	}
 
 }

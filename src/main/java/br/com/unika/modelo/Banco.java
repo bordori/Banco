@@ -38,7 +38,7 @@ public class Banco implements Serializable{
 	@OneToMany(mappedBy="banco", targetEntity = Conta.class,  fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	private Set<Conta> conta;
 	
-	@OneToMany(mappedBy="banco", targetEntity = Agencia.class,  fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	@OneToMany(mappedBy="banco", targetEntity = Agencia.class,  fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
 	private Set<Agencia> agencia;
 	
 	

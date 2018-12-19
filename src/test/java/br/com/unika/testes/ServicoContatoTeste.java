@@ -29,10 +29,10 @@ public class ServicoContatoTeste {
 	@Test
 	public void testIncluir() {
 		Contato contato = new Contato();
-		contato.setApelido("Jão");
+		contato.setApelido("maria");
 		contato.setCpf("700.987.258-56");
 		Usuario usuario = new Usuario();
-		usuario.setIdUsuario(new Long(3));
+		usuario.setIdUsuario(new Long(1));
 		contato.setUsuario(usuario);
 		contato.setConta("56127486");
 		contato.setAgencia("0025");
