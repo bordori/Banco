@@ -118,14 +118,14 @@ public class ServicoUsuario implements IServico<Usuario, Long>, Serializable {
 		
 		
 
-		if (usuario.getNome() == null || usuario.getNome().length() < 3 || usuario.getNome().length() > 20) {
+		if (usuario.getNome() == null || usuario.getNome().length() < 3 || usuario.getNome().length() > 30) {
 			retorno.setSucesso(false);
-			retorno.addMensagem("Nome Deve Ter Entre 3 e 20 Digitos!");
+			retorno.addMensagem("Nome Deve Ter Entre 3 e 30 Digitos!");
 		}
 
-		if (usuario.getSobrenome() == null || usuario.getSobrenome().length() < 3 || usuario.getSobrenome().length() > 20) {
+		if (usuario.getSobrenome() == null || usuario.getSobrenome().length() < 3 || usuario.getSobrenome().length() > 30) {
 			retorno.setSucesso(false);
-			retorno.addMensagem("Sobrenome Deve Ter Entre 3 e 20 Digitos!");
+			retorno.addMensagem("Sobrenome Deve Ter Entre 3 e 30 Digitos!");
 		}
 
 		if (usuario.getTelefone() == null || usuario.getTelefone().length() < 13 || usuario.getTelefone().length() > 14 ) {
@@ -163,6 +163,16 @@ public class ServicoUsuario implements IServico<Usuario, Long>, Serializable {
 		if(usuario.getEndereco() == null || usuario.getEndereco().length() < 5 || usuario.getEndereco().length() > 40) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Endereço Deve Ter Mais de 5 Digitos!");
+		}
+		
+		if(usuario.getCidade() == null ){
+			retorno.setSucesso(false);
+			retorno.addMensagem("Cidade Deve Ser Preechido!");
+		}
+		
+		if(usuario.getEstado() == null ){
+			retorno.setSucesso(false);
+			retorno.addMensagem("Estado Deve Ser Preechido!");
 		}
 		
 		if(usuario.getNumero() == null || usuario.getNumero().length() > 6) {

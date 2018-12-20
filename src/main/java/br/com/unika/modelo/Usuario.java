@@ -57,6 +57,12 @@ public class Usuario implements Serializable {
 	@Column(nullable = false, name = "ENDERECO")
 	private String endereco;
 	
+	@Column(nullable = false, name = "CIDADE")
+	private String cidade;
+	
+	@Column(nullable = false, name = "ESTADO")
+	private String estado;
+	
 	@Column(nullable = false, name = "NUMERO")
 	private String numero;
 	
@@ -163,6 +169,22 @@ public class Usuario implements Serializable {
 
 	public void setEndereco(String endereco) {
 		this.endereco = endereco;
+	}
+
+	public String getCidade() {
+		return cidade;
+	}
+
+	public void setCidade(String cidade) {
+		this.cidade = cidade;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
 	}
 
 	public String getNumero() {
