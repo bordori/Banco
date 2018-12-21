@@ -113,7 +113,7 @@ public class ServicoUsuario implements IServico<Usuario, Long>, Serializable {
 	
 	
 
-	private Retorno validacaoDeNegocio(Usuario usuario) {
+	public Retorno validacaoDeNegocio(Usuario usuario) {
 		Retorno retorno = new Retorno(true, null);
 		
 		
@@ -217,7 +217,7 @@ public class ServicoUsuario implements IServico<Usuario, Long>, Serializable {
 		
 		if (usuario.getPermissaoDeAcesso() == null) {
 			retorno.setSucesso(false);
-			retorno.addMensagem("Permissão Não Esta Preechido!");	
+			retorno.addMensagem("Tipo De Usuário Não Esta Preechido!");	
 		}
 		return retorno;
 	}

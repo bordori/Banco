@@ -1,9 +1,11 @@
 package br.com.unika.paginas;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -12,33 +14,58 @@ import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.markup.html.form.select.Select;
 import org.apache.wicket.extensions.markup.html.form.select.SelectOption;
 import org.apache.wicket.extensions.yui.calendar.DatePicker;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.EmailTextField;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.form.validation.IFormValidator;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import br.com.unika.modelo.PermissaoDeAcesso;
 import br.com.unika.modelo.Usuario;
+import br.com.unika.servicos.ServicoPermissaoDeAcesso;
+import br.com.unika.servicos.ServicoUsuario;
+import br.com.unika.util.NotificationPanel;
+import br.com.unika.util.Retorno;
 import br.com.unika.util.ViaCepWs;
 
 public class CadastrarUsuario extends Panel {
 
+	private static final long serialVersionUID = 1L;
+
 	private Form<Usuario> formCriarUsuario;
 	private Usuario usuario;
 	private TextField<String> login, nome, sobrenome, cpf, cep, endereco, numero, complemento, bairro, cidade, estado;
-	private PasswordTextField senha;
+	private PasswordTextField senha, confirmarSenha;
 	private EmailTextField email;
 	private TextField<String> telefone;
 	private DateTextField dataNascimento;
 	private Select<Boolean> sexo;
+	private DropDownChoice<PermissaoDeAcesso> permissaoDeAcesso;
+	private WebMarkupContainer containerCep;
+	private String confirmacaoSenha;
+
+	private NotificationPanel notificationPanel;
+
+	@SpringBean(name = "servicoPermissaoDeAcesso")
+	private ServicoPermissaoDeAcesso servicoPermissaoDeAcesso;
+
+	@SpringBean(name = "servicoUsuario")
+	private ServicoUsuario servicoUsuario;
 
 	public CadastrarUsuario(String id) {
 		super(id);
-
+		notificationPanel = new NotificationPanel("feedBackPanel");
+		notificationPanel.setOutputMarkupId(true);
+		add(notificationPanel);
 		add(formCriarUsuario());
 
 	}
@@ -56,23 +83,48 @@ public class CadastrarUsuario extends Panel {
 		formCriarUsuario.add(campoCpf());
 		formCriarUsuario.add(campoEmail());
 		formCriarUsuario.add(campoDataNascimento());
-		formCriarUsuario.add(campoCep());
-		formCriarUsuario.add(campoEndereco());
-		formCriarUsuario.add(campoCidade());
-		formCriarUsuario.add(campoEstado());
-		formCriarUsuario.add(campoNumero());
-		formCriarUsuario.add(campoComplemento());
 		formCriarUsuario.add(campoSexo());
-		formCriarUsuario.add(campoBairro());
 		formCriarUsuario.add(campoLogin());
 		formCriarUsuario.add(campoSenha());
-
-		formCriarUsuario.add(acaoLocalizarCep());
+		formCriarUsuario.add(campoConfirmarSenha());
+		formCriarUsuario.add(campoPermissoesDeAcesso());
+		formCriarUsuario.add(criarContainer());
 
 		formCriarUsuario.add(acaoSubmitCriarUsuario());
 
 		return formCriarUsuario;
 
+	}
+
+	private WebMarkupContainer criarContainer() {
+		containerCep = new WebMarkupContainer("containerCep");
+		containerCep.setOutputMarkupId(true);
+		containerCep.add(acaoLocalizarCep());
+		containerCep.add(campoCep());
+		containerCep.add(campoEndereco());
+		containerCep.add(campoComplemento());
+		containerCep.add(campoNumero());
+		containerCep.add(campoBairro());
+		containerCep.add(campoCidade());
+		containerCep.add(campoEstado());
+		return containerCep;
+	}
+
+	private DropDownChoice<PermissaoDeAcesso> campoPermissoesDeAcesso() {
+		ChoiceRenderer<PermissaoDeAcesso> permissao = new ChoiceRenderer<PermissaoDeAcesso>("descricao", "idPermissao");
+		IModel<List<PermissaoDeAcesso>> model = new LoadableDetachableModel<List<PermissaoDeAcesso>>() {
+
+			@Override
+			protected List<PermissaoDeAcesso> load() {
+
+				return servicoPermissaoDeAcesso.listar();
+			}
+
+		};
+
+		permissaoDeAcesso = new DropDownChoice<>("permissaoDeAcesso", model, permissao);
+
+		return permissaoDeAcesso;
 	}
 
 	private AjaxLink<Void> acaoLocalizarCep() {
@@ -90,8 +142,7 @@ public class CadastrarUsuario extends Panel {
 					usuario.setCidade(mapa.get("localidade"));
 					usuario.setEstado(mapa.get("uf"));
 
-					formCriarUsuario.modelChanged();
-					target.add(formCriarUsuario);
+					target.add(containerCep);
 				}
 			}
 		};
@@ -128,12 +179,12 @@ public class CadastrarUsuario extends Panel {
 
 	private TextField<String> campoComplemento() {
 		complemento = new TextField<>("complemento");
-
 		return complemento;
 	}
 
 	private TextField<String> campoNumero() {
 		numero = new TextField<>("numero");
+		numero.add(new AttributeModifier("onfocus", "$(this).mask('999999');"));
 		numero.setRequired(true);
 		return numero;
 	}
@@ -146,14 +197,15 @@ public class CadastrarUsuario extends Panel {
 
 	private TextField<String> campoCep() {
 		cep = new TextField<>("cep");
-		cep.add((new AttributeModifier("onfocus", "$(this).mask('99999-999');")));
 		cep.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
 
 			}
 		});
+		cep.add((new AttributeModifier("onfocus", "$(this).mask('99999-999');")));
 		cep.setRequired(true);
 
 		return cep;
@@ -220,6 +272,12 @@ public class CadastrarUsuario extends Panel {
 		return senha;
 	}
 
+	private PasswordTextField campoConfirmarSenha() {
+		confirmarSenha = new PasswordTextField("confirmarSenha", new PropertyModel<String>(this, "confirmacaoSenha"));
+		confirmarSenha.setRequired(true);
+		return confirmarSenha;
+	}
+
 	private TextField<String> campoTelefone() {
 		telefone = new TextField<>("telefone");
 		telefone.add((new AttributeModifier("onfocus", "$(this).mask('(99)99999-9999');")));
@@ -234,17 +292,57 @@ public class CadastrarUsuario extends Panel {
 	}
 
 	private AjaxSubmitLink acaoSubmitCriarUsuario() {
-		AjaxSubmitLink ajaxSubmitLink = new AjaxSubmitLink("acaoNovoUsuario") {
+		AjaxSubmitLink ajaxSubmitLink = new AjaxSubmitLink("acaoNovoUsuario", formCriarUsuario) {
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-
 				super.onSubmit(target, form);
+				if (!usuario.getSenha().equals(confirmacaoSenha)) {
+					notificationPanel.mensagem("Senha e Confirmação da Senha Devem Ser Iguais!", "erro");
+					target.add(notificationPanel);
+
+				} else if (usuario.getIdUsuario() == null) {
+					usuario.setAtivo(true);
+					Retorno retorno = servicoUsuario.incluir(usuario);
+					if (retorno.isSucesso()) {
+						acaoSubmit(target);
+					} else {
+						notificationPanel.mensagem(retorno.getRetorno(), "erro");
+						target.add(notificationPanel);
+					}
+				} else {
+
+				}
+
 			}
+
+			@Override
+			protected void onError(AjaxRequestTarget target, Form<?> form) {
+				// TODO Auto-generated method stub
+				super.onError(target, form);
+
+				// Retorno retorno = servicoUsuario.validacaoDeNegocio(usuario);
+				notificationPanel.montarFeedBack();
+				target.add(notificationPanel);
+			}
+
 		};
 		return ajaxSubmitLink;
+	}
+
+	public void acaoSubmit(AjaxRequestTarget target) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public String getConfirmacaoSenha() {
+		return confirmacaoSenha;
+	}
+
+	public void setConfirmacaoSenha(String confirmacaoSenha) {
+		this.confirmacaoSenha = confirmacaoSenha;
 	}
 
 }

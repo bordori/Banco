@@ -7,7 +7,7 @@ public class Retorno {
 
 	boolean sucesso;
 	ArrayList<String> retorno = new ArrayList<>();
-	ArrayList<?> lista = new ArrayList<>();
+	
 	
 	public Retorno(boolean sucesso, String retorno ) {
 		setSucesso(sucesso);
@@ -43,13 +43,6 @@ public class Retorno {
 		return retorno;
 	}
 
-	public ArrayList<?> getLista() {
-		return lista;
-	}
-
-	public void setLista(ArrayList<?> lista) {
-		this.lista = lista;
-	}
 
 	
 	

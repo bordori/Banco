@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -80,6 +82,8 @@ public class ServicoPermissaoDeAcesso implements IServico<PermissaoDeAcesso,Long
 		
 
 	}
+	
+	
 
 	@Override
 	public Retorno remover(PermissaoDeAcesso permissao) {

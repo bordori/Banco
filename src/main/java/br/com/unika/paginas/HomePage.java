@@ -8,12 +8,19 @@ import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow.WindowClo
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.Form;
 
+import br.com.unika.util.NotificationPanel;
+
 public class HomePage extends WebPage {
 	private static final long serialVersionUID = 1L;
 
 	private ModalWindow janela;
 
+	private NotificationPanel notificationPanel;
+
 	public HomePage() {
+		notificationPanel = new NotificationPanel("feedBack");
+		notificationPanel.setOutputMarkupId(true);
+		add(notificationPanel);
 		add(initModal());
 		add(acaoResgistrar());
 	}
@@ -34,6 +41,7 @@ public class HomePage extends WebPage {
 	}
 	
 	
+	
 
 	private AjaxLink<Void> acaoResgistrar() {
 		AjaxLink<Void> ajaxSubmitLink = new AjaxLink<Void>("acaoRegistrar") {
@@ -47,7 +55,15 @@ public class HomePage extends WebPage {
 				janela.setInitialWidth(1200);
 				janela.setMinimalHeight(400);
 				janela.setInitialHeight(550);
-				CadastrarUsuario cadastrarUsuario = new CadastrarUsuario(janela.getContentId());
+				CadastrarUsuario cadastrarUsuario = new CadastrarUsuario(janela.getContentId()) {
+					@Override
+					public void acaoSubmit(AjaxRequestTarget target) {
+						janela.close(target);
+						notificationPanel.mensagem("O Usuario Foi Adicionado com sucesso", "sucesso");
+						target.add(notificationPanel);;
+						super.acaoSubmit(target);
+					}
+				};
 				janela.setContent(cadastrarUsuario);
 				janela.show(target);				
 			}

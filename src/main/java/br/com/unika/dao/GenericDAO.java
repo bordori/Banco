@@ -80,7 +80,7 @@ public class GenericDAO<Entidade, Id extends Serializable> extends GenericDAOImp
 	}
 
 	public List<Entidade> listarDAO() {
-		ArrayList<Entidade> lista = new ArrayList<>();
+		List<Entidade> lista = new ArrayList();
 
 		try {
 			session = getSessionFactory().openSession();

@@ -6,16 +6,6 @@ $(document).ready(function() {
 	});
 });
 
-$(document).on(
-		'submit',
-		function() {
-			if ($('.soNumeros').val().trim().length < 13
-					|| $('.soNumeros').val().trim().length > 13) {
-				alert('Codigo de barras deve conter 13 digitos');
-				return false;
-			}
-			return true;
-		});
 
 $(function() {
 	$('.monetario').maskMoney({
@@ -30,5 +20,7 @@ function alerta() {
 	document.getElementById("alerta").style.display = 'block';
 
 }
+
+
 
 
