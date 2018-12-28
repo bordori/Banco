@@ -11,6 +11,7 @@ import com.googlecode.genericdao.search.Search;
 import br.com.unika.dao.BancoDAO;
 import br.com.unika.dao.ContaDAO;
 import br.com.unika.interfaces.IServico;
+import br.com.unika.modelo.Agencia;
 import br.com.unika.modelo.Banco;
 import br.com.unika.modelo.Conta;
 import br.com.unika.modelo.Usuario;
@@ -88,16 +89,8 @@ public class ServicoBanco implements IServico<Banco, Long>,Serializable{
 	
 		
 		if (banco != null && banco.getIdBanco() != null) {
-			if (banco.getConta() != null && !banco.getConta().isEmpty()) {
-				System.out.println("O Banco não deve ter nenhuma Conta vinculado");
-				retorno.setSucesso(false);
-				retorno.addMensagem("O Banco não deve ter nenhuma Conta vinculado");
-				return retorno;
-			} else {
 				retorno = bancoDAO.removerDAO(banco);
-				
-			}
-			
+						
 		} else {
 			System.out.println("Nenhuma PK inserida ou com o valor null");
 			retorno.setSucesso(false);
@@ -127,7 +120,7 @@ public class ServicoBanco implements IServico<Banco, Long>,Serializable{
 		if(banco.getNome() == null || banco.getNome().length() < 3 || banco.getNome().length() > 20) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Nome do Banco Deve Ter Entre 3 e 20 Digitos");
-		}else if(!verificaSeCampoExiste("nome", banco.getNome())) {
+		}else if(!verificaSeCampoExiste("nome", banco.getNome(),banco.getIdBanco())) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("O Banco "+banco.getNome()+" Ja Esta Cadastrado!");
 		}
@@ -139,7 +132,7 @@ public class ServicoBanco implements IServico<Banco, Long>,Serializable{
 		} else if(!Validacao.validaSeTemSoNumeros(banco.getNumero())) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Numero do Banco Deve Ter Apenas Numeros!");
-		}else if(!verificaSeCampoExiste("numero", banco.getNumero())) {
+		}else if(!verificaSeCampoExiste("numero", banco.getNumero(),banco.getIdBanco())) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Existe um Banco com o Numero "+banco.getNumero()+" Cadastrado!");
 		}
@@ -148,9 +141,12 @@ public class ServicoBanco implements IServico<Banco, Long>,Serializable{
 		return retorno;
 	}
 	
-	private boolean verificaSeCampoExiste(String campo, String pesquisa) {
+	private boolean verificaSeCampoExiste(String campo, String pesquisa, Long id) {
 		Search search = new Search(Banco.class);
 		search.addFilterEqual(campo, pesquisa);
+		if (id != null ) {
+			search.addFilterNotEqual("idBanco", id);
+		}
 		int count = count(search);
 		
 		if (count == 0) {

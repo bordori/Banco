@@ -30,9 +30,6 @@ public class Conta implements Serializable{
 	@Column(nullable = false, name = "CONTA")
 	private String conta;
 	
-	@Column(nullable = false, name = "AGENCIA")
-	private String agencia;
-	
 	@Column(nullable = false, name = "TIPO_CONTA")
 	private Integer tipoConta;
 	
@@ -43,8 +40,8 @@ public class Conta implements Serializable{
 	private Double saldo;
 	
 	@ManyToOne
-	@JoinColumn(name = "BANCO_ID" , nullable=false)
-	private Banco banco;
+	@JoinColumn(name = "AGENCIA_ID" , nullable=false)
+	private Agencia agencia;
 	
 	@ManyToOne
 	@JoinColumn(name = "USUARIO_ID" , nullable=false)
@@ -67,18 +64,6 @@ public class Conta implements Serializable{
 	public void setConta(String conta) {
 		this.conta = conta;
 	}
-
-	
-
-	public String getAgencia() {
-		return agencia;
-	}
-
-	public void setAgencia(String agencia) {
-		this.agencia = agencia;
-	}
-
-	
 
 	public Integer getTipoConta() {
 		return tipoConta;
@@ -104,20 +89,20 @@ public class Conta implements Serializable{
 		this.saldo = saldo;
 	}
 
-	public Banco getBanco() {
-		return banco;
-	}
-
-	public void setBanco(Banco banco) {
-		this.banco = banco;
-	}
-
 	public Usuario getUsuario() {
 		return usuario;
 	}
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	public Agencia getAgencia() {
+		return agencia;
+	}
+
+	public void setAgencia(Agencia agencia) {
+		this.agencia = agencia;
 	}
 
 	public static long getSerialversionuid() {

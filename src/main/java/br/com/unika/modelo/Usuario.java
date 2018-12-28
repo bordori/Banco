@@ -99,6 +99,17 @@ public class Usuario implements Serializable {
 	
 	
 
+	
+	@Override
+	public String toString() {
+		return "Usuario [idUsuario=" + idUsuario + ", nome=" + nome + ", sobrenome=" + sobrenome + ", telefone="
+				+ telefone + ", cpf=" + cpf + ", email=" + email + ", dataNascimento=" + dataNascimento + ", cep=" + cep
+				+ ", endereco=" + endereco + ", cidade=" + cidade + ", estado=" + estado + ", numero=" + numero
+				+ ", complemento=" + complemento + ", bairro=" + bairro + ", sexo=" + sexo + ", permissaoDeAcesso="
+				+ permissaoDeAcesso + ", contas=" + contas + ", Movimentacoes=" + Movimentacoes + ", contatos="
+				+ contatos + ", ativo=" + ativo + ", login=" + login + ", senha=" + senha + "]";
+	}
+
 	public Long getIdUsuario() {
 		return idUsuario;
 	}

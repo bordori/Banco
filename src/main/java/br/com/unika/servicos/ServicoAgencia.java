@@ -108,7 +108,8 @@ public class ServicoAgencia implements IServico<Agencia, Long> {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Numero da Agecia Deve Ter Apenas Numeros!");
 		}else if (!verificaSeCampoExiste("numero", agencia.getNumero(),agencia.getBanco())) {
-			
+			retorno.setSucesso(false);
+			retorno.addMensagem("Agencia Ja Existe!");
 		}
 		
 		return retorno;

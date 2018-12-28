@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<body>
+	<wicket:extend>
+
+		<div wicket:id="janela"></div>
+		<div class=" limiter">
+			<div class="container-login100">
+				<div class="wrap-login100">
+					<span class="login100-form-title">Bancos</span>
+					<div class="table-responsive" wicket:id="containerListView"
+						style="margin-top: -200px">
+						<div wicket:id="feedBack"></div>
+						<table class=" table  table-striped">
+							<thead>
+								<tr style="text-align: center;">
+									<th scope="col">Número</th>
+									<th scope="col">Nome</th>
+									<th scope="col">Contas</th>
+									<th scope="col">Contas Ativas</th>
+									<th scope="col">Contas Inativas</th>
+									<th><button wicket:id="novoBanco"
+											title="Adcionar Novo Banco">
+											<img alt="Bolt" src="icons/plus-3x.png">
+										</button></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr style="text-align: center;" wicket:id="listaBancos">
+									<th wicket:id="numero" scope="row"></th>
+									<td wicket:id="nome"></td>
+									<td wicket:id="contas"></td>
+									<td wicket:id="contasAtivas"></td>
+									<td wicket:id="contasInativas"></td>
+									<td>
+										<button wicket:id="acaoAlterar" title="Alterar Banco"><img alt="Bolt" src="icons/pencil-2x.png"></button>
+										<button wicket:id="acaoDeletar" title="Deletar Banco"><img alt="Bolt" src="icons/trash-2x.png"></button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</wicket:extend>
+</body>
+</html>

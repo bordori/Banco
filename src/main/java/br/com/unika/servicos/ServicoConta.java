@@ -11,6 +11,7 @@ import com.googlecode.genericdao.search.Search;
 
 import br.com.unika.dao.ContaDAO;
 import br.com.unika.interfaces.IServico;
+import br.com.unika.modelo.Agencia;
 import br.com.unika.modelo.Banco;
 import br.com.unika.modelo.Conta;
 import br.com.unika.util.Retorno;
@@ -101,6 +102,8 @@ public class ServicoConta implements IServico<Conta, Long>, Serializable {
 	public int count(Search search) {
 		return contaDAO.countDAO(search);
 	}
+	
+	
 
 	private Retorno validacaoDeNegocio(Conta conta) {
 		Retorno retorno = new Retorno(true, null);
@@ -118,9 +121,9 @@ public class ServicoConta implements IServico<Conta, Long>, Serializable {
 			conta.setSaldo(0.0);
 		}
 		
-		if (conta.getBanco() == null) {
+		if (conta.getAgencia() == null) {
 			retorno.setSucesso(false);
-			retorno.addMensagem("Selecione um Banco!");
+			retorno.addMensagem("Selecione Uma Agencia!");
 		}
 		
 		if (conta.getUsuario() == null) {
@@ -131,10 +134,9 @@ public class ServicoConta implements IServico<Conta, Long>, Serializable {
 		return retorno;
 	}
 
-	public String gerarConta(Long idBanco) {
+	public String gerarConta(Banco banco,Agencia agencia) {
 		String conta = geradorDeConta();
-
-		while (!verificaSeContaExisteNoBanco(conta, idBanco)) {
+		while (!verificaSeContaExisteNoBanco(conta, banco,agencia)) {
 			conta = geradorDeConta();
 		}
 
@@ -152,17 +154,17 @@ public class ServicoConta implements IServico<Conta, Long>, Serializable {
 		return conta;
 	}
 
-	private boolean verificaSeContaExisteNoBanco(String conta, Long idBanco) {
-		Banco banco = new Banco();
-		banco.setIdBanco(idBanco);
+	private boolean verificaSeContaExisteNoBanco(String conta, Banco banco,Agencia agencia) {
+		
 
 		Search search = new Search(Conta.class);
 		search.addFilterEqual("conta", conta);
-		search.addFilterEqual("banco", banco);
+		search.addFilterEqual("agencia", agencia);
+		search.addFilterEqual("agencia.banco", banco);
 
-		ArrayList<Conta> lista = (ArrayList<Conta>) this.search(search);
+		int count =  this.count(search);
 
-		if (lista.isEmpty()) {
+		if (count == 0) {
 			return true;
 		}
 
@@ -172,5 +174,6 @@ public class ServicoConta implements IServico<Conta, Long>, Serializable {
 	public void setContaDAO(ContaDAO contaDAO) {
 		this.contaDAO = contaDAO;
 	}
-
+	
+	
 }

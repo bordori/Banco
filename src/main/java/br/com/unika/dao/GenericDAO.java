@@ -71,7 +71,7 @@ public class GenericDAO<Entidade, Id extends Serializable> extends GenericDAOImp
 			retorno = catchRetorno(retorno, "Defina a tabela para Dao.remover: " + e.getMessage());
 		} catch (HibernateException e) {
 			System.out.println("Nao foi encontrado na tabela " + e.getMessage());
-			retorno = catchRetorno(retorno, "Nao foi encontrado na tabela ");
+			retorno = catchRetorno(retorno, "O Banco Não Deve Ter Nenhuma Agencia Vinculada!");
 		} catch (Exception e) {
 			System.out.println("Erro no Dao.remover: " + e.getMessage());
 			retorno = catchRetorno(retorno, "Erro no Dao.remover: " + e.getMessage());

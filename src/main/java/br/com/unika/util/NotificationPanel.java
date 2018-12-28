@@ -31,13 +31,13 @@ public class NotificationPanel extends FeedbackPanel implements Serializable{
 					"position: absolute; top: 40px;height:auto; list-style-type: none; text-align: center;padding-top:20px; right: 0px; z-index: 999999; width: auto; left:70%;margin-right: 10px"));
 			if (tipoMensagem.equalsIgnoreCase("sucesso")) {
 				this.info(msg);
-				this.add(new AttributeModifier("class", "  alert-success shadow-lg hideMe "));
+				this.add(new AttributeModifier("class", "  alert-success  shadow-lg hideMe "));
 			} else if (tipoMensagem.equalsIgnoreCase("erro")) {
 				this.error(msg);
-				this.add(new AttributeModifier("class", "  alert-danger shadow-lg hideMe "));
+				this.add(new AttributeModifier("class", "  alert-danger  shadow-lg hideMe "));
 			} else {
 				this.info(msg);
-				this.add(new AttributeModifier("class", "  alert-success shadow-lg hideMe "));
+				this.add(new AttributeModifier("class", "  alert-success  shadow-lg hideMe "));
 			}
 
 		}
@@ -50,19 +50,19 @@ public class NotificationPanel extends FeedbackPanel implements Serializable{
 				for (String string : msg) {
 					this.info(string);
 				}
-				this.add(new AttributeModifier("class", "  alert-success shadow-lg hideMe "));
+				this.add(new AttributeModifier("class", "  alert-success  shadow-lg hideMe "));
 				
 			} else if (tipoMensagem.equalsIgnoreCase("erro")) {
 				for (String string : msg) {
 					this.error(string);
 				}
-				this.add(new AttributeModifier("class", "  alert-danger shadow-lg hideMe "));
+				this.add(new AttributeModifier("class", "  alert-danger  shadow-lg hideMe "));
 				
 			} else {
 				for (String string : msg) {
 					this.info(string);
 				}
-				this.add(new AttributeModifier("class", "  alert-success shadow-lg hideMe "));
+				this.add(new AttributeModifier("class", "  alert-success  shadow-lg hideMe "));
 			}
 
 		}

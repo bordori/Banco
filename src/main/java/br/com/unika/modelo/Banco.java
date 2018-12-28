@@ -35,10 +35,7 @@ public class Banco implements Serializable{
 	@Column(nullable = false, name = "NOME",unique=true)
 	private String nome;
 	
-	@OneToMany(mappedBy="banco", targetEntity = Conta.class,  fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-	private Set<Conta> conta;
-	
-	@OneToMany(mappedBy="banco", targetEntity = Agencia.class,  fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy="banco", targetEntity = Agencia.class,  fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	private Set<Agencia> agencia;
 	
 	
@@ -60,12 +57,7 @@ public class Banco implements Serializable{
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public Set<Conta> getConta() {
-		return conta;
-	}
-	public void setConta(Set<Conta> conta) {
-		this.conta = conta;
-	}
+	
 	public Set<Agencia> getAgencia() {
 		return agencia;
 	}

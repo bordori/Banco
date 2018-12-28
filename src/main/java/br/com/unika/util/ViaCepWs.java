@@ -28,7 +28,8 @@ public class ViaCepWs {
 			json = jsonSb.toString();
 
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			System.out.println(e.getMessage());
+			return null;
 		}
 
 		Map<String, String> mapa = new HashMap<>();

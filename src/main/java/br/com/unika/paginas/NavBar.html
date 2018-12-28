@@ -33,55 +33,60 @@
 
 </head>
 <body>
-
-	<div wicket:id="feedBack"></div>
-	<div wicket:id="janela"></div>
-	<div class="limiter">
-		<div class="container-login100">
-			<div class="wrap-login100">
-				<div class="login100-pic js-tilt" data-tilt>
-					<img src="images/img-01.png" alt="IMG">
+	<nav class="navbar navbar-expand-lg navbar-light bg-light "
+		style="background: linear-gradient(-135deg, #c850c0, #4158d0);">
+		<b class="navbar-brand" style="color: #ffffff">Internet Banking</b>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
+			aria-expanded="false" aria-label="Alterna navegação">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNavDropdown">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item dropdown"><a
+					class="nav-link dropdown-toggle" id="navbarDropdownMenuLink"
+					href="" style="color: #ffffff" role="button" data-toggle="dropdown"
+					aria-haspopup="true" aria-expanded="false"> Minha Conta </a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink"
+						style="background: linear-gradient(-135deg, #c850c0, #4158d0);">
+						<a class="dropdown-item" style="color: #ffffff" >Contas</a>
+						<a class="dropdown-item" style="color: #ffffff">Deposito</a>
+						<a class="dropdown-item" style="color: #ffffff">Saque</a>
+						<a class="dropdown-item" style="color: #ffffff">Transferência</a>
+						<a class="dropdown-item" style="color: #ffffff">Contatos</a>
+						<a class="dropdown-item" style="color: #ffffff">Movimentações</a>
+					</div></li>
+				<div wicket:id="alterarContas">
+					<li class="nav-item dropdown"><a
+						class="nav-link dropdown-toggle" id="navbarDropdownMenuLink"
+						href="" style="color: #ffffff" role="button" data-toggle="dropdown"
+						aria-haspopup="true" aria-expanded="false"> Gerenciar Contas </a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink"
+							style="background: linear-gradient(-135deg, #c850c0, #4158d0);">
+							<a class="dropdown-item" style="color: #ffffff">Contas</a>
+	
+						</div></li>
 				</div>
-
-				<form class="login100-form validate-form " wicket:id="formLogin">
-					<span class="login100-form-title"> Login Usuário </span>
-
-					<div class="wrap-input100 validate-input">
-						<input class="input100" type="text" name="email"
-							wicket:id="loginUsuario" placeholder="Login"> <span
-							class="focus-input100"></span> <span class="symbol-input100">
-							<i class="fa fa-envelope" aria-hidden="true"></i>
-						</span>
-					</div>
-
-					<div class="wrap-input100 validate-input">
-						<input class="input100" type="password" name="pass"
-							wicket:id="senhaUsuario" placeholder="Senha"> <span
-							class="focus-input100"></span> <span class="symbol-input100">
-							<i class="fa fa-lock" aria-hidden="true"></i>
-						</span>
-					</div>
-
-					<div class="container-login100-form-btn">
-						<button class="login100-form-btn" wicket:id="acaoLogin">Login</button>
-					</div>
-				</form>
-				<div class="text-center p-t-12">
-					<span class="txt1"> Esqueceu </span> <a class="txt2" href="#">
-						Login / Senha? </a>
+				<div wicket:id="alterarBancos">
+					<li class="nav-item dropdown"><a
+						class="nav-link dropdown-toggle" id="navbarDropdownMenuLink"
+						href="" style="color: #ffffff" role="button" data-toggle="dropdown"
+						aria-haspopup="true" aria-expanded="false"> Gerenciar Bancos </a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink"
+							style="background: linear-gradient(-135deg, #c850c0, #4158d0);">
+							<a class="dropdown-item" style="color: #ffffff" wicket:id="opcaoBancos" >Bancos</a>
+							<a class="dropdown-item" style="color: #ffffff" >Agencias</a>
+						</div></li>
 				</div>
-
-				<div class="text-center p-t-136">
-					<a class="txt2" wicket:id="acaoRegistrar"> Crie Sua Conta <i
-						class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
-					</a>
-				</div>
+			</ul>
+			<div class="navbar-text">
+				<span style="color: #ffffff" wicket:id="usuarioLogado"></span> <span><a
+					style="color: #ffffff; margin-left: 15px" wicket:id="sair" >Sair</a></span>
 			</div>
 		</div>
-	</div>
+	</nav>
 
-
-
+	<wicket:child />
 
 	<!--===============================================================================================-->
 	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>

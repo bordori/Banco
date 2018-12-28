@@ -90,7 +90,7 @@ public class CadastrarUsuario extends Panel {
 		formCriarUsuario.add(campoPermissoesDeAcesso());
 		formCriarUsuario.add(criarContainer());
 
-		formCriarUsuario.add(acaoSubmitCriarUsuario());
+		formCriarUsuario.add(acaoSubmit());
 
 		return formCriarUsuario;
 
@@ -136,13 +136,19 @@ public class CadastrarUsuario extends Panel {
 				if (cepConsulta != null && !cepConsulta.equals("") && cepConsulta.length() == 9) {
 					Map<String, String> mapa = new HashMap<>();
 					mapa = ViaCepWs.buscarCep(cepConsulta);
-					usuario.setComplemento(mapa.get("complemento"));
-					usuario.setEndereco(mapa.get("logradouro"));
-					usuario.setBairro(mapa.get("bairro"));
-					usuario.setCidade(mapa.get("localidade"));
-					usuario.setEstado(mapa.get("uf"));
+					if (mapa != null && !mapa.isEmpty()) {
+						usuario.setComplemento(mapa.get("complemento"));
+						usuario.setEndereco(mapa.get("logradouro"));
+						usuario.setBairro(mapa.get("bairro"));
+						usuario.setCidade(mapa.get("localidade"));
+						usuario.setEstado(mapa.get("uf"));
 
-					target.add(containerCep);
+						target.add(containerCep);
+					} else {
+						notificationPanel.mensagem("Não foi encontrado esse cep!", "erro");
+						target.add(notificationPanel);
+					}
+					
 				}
 			}
 		};
@@ -291,7 +297,7 @@ public class CadastrarUsuario extends Panel {
 		return email;
 	}
 
-	private AjaxSubmitLink acaoSubmitCriarUsuario() {
+	private AjaxSubmitLink acaoSubmit() {
 		AjaxSubmitLink ajaxSubmitLink = new AjaxSubmitLink("acaoNovoUsuario", formCriarUsuario) {
 
 			private static final long serialVersionUID = 1L;
@@ -307,7 +313,7 @@ public class CadastrarUsuario extends Panel {
 					usuario.setAtivo(true);
 					Retorno retorno = servicoUsuario.incluir(usuario);
 					if (retorno.isSucesso()) {
-						acaoSubmit(target);
+						acaoSubmitCriarUsuario(target);
 					} else {
 						notificationPanel.mensagem(retorno.getRetorno(), "erro");
 						target.add(notificationPanel);
@@ -332,16 +338,15 @@ public class CadastrarUsuario extends Panel {
 		return ajaxSubmitLink;
 	}
 
-	public void acaoSubmit(AjaxRequestTarget target) {
-		// TODO Auto-generated method stub
-
+	public void acaoSubmitCriarUsuario(AjaxRequestTarget target) {
+		
 	}
 
-	public String getConfirmacaoSenha() {
+	private String getConfirmacaoSenha() {
 		return confirmacaoSenha;
 	}
 
-	public void setConfirmacaoSenha(String confirmacaoSenha) {
+	private void setConfirmacaoSenha(String confirmacaoSenha) {
 		this.confirmacaoSenha = confirmacaoSenha;
 	}
 
