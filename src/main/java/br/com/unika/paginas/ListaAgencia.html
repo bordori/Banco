@@ -13,74 +13,76 @@
 
 		<div wicket:id="janela"></div>
 		<div class=" limiter">
-			<div class="container-login100">
-				<div class="wrap-login100">
-					<span class="login100-form-title">Bancos</span>
-					<div style="width: 100%;">
-
+			<div class="container-login100 ">
+				<div class="wrap-login100 ">
+					<div class="" style="width: 100%;">
+						<span class="login100-form-title">Agencias</span>
 						<form wicket:id="formFiltro">
-							<div class="form-row form-group"
-								style="justify-content: left; margin-left: 5px">
+							<div class="form-row form-group ">
 								<div class="col-md-6">
-									<label for="nome">Nome Banco</label> <input type="text"
+									<label for="nome">Nome Agencia</label> <input type="text"
 										wicket:id="nome" maxlength="30" class="form-control "
-										placeholder="nome do banco para procurar" id="nome">
+										placeholder="nome da Agencia para procurar" id="nome">
 								</div>
-								<div class="col-md-4">
-									<label for="numero">Número Banco</label> <input
+								<div class="col-md-3">
+									<label for="numero">Número Agencia</label> <input
 										wicket:id="numero" type="text" maxlength="4"
-										class="form-control" placeholder="numero do banco" id="numero">
+										class="form-control" placeholder="numero da Agencia"
+										id="numero">
+								</div>
+								<div class="col-md-3">
+									<label for="banco">Banco</label> <select class="custom-select"
+										id="banco" wicket:id="banco">
+
+									</select>
 								</div>
 							</div>
 							<div class="form-row form-group"
-								style="justify-content: flex-end; margin-right: 5px">
+								style="justify-content: flex-end">
 								<input type="submit" class="btn btn-info"
 									wicket:id="acaoProcurar" value="Filtrar">
 							</div>
 						</form>
-						<div class=" form-row form-group table-responsive"" wicket:id="containerListView"">
-							<div wicket:id="feedBack"></div>
 
+						<div class=" form-row form-group table-responsive"
+							wicket:id="containerListView">
+							<div wicket:id="feedBack"></div>
 							<table class=" table  table-striped">
 								<thead>
 									<tr style="text-align: center;">
 										<th scope="col">Número</th>
 										<th scope="col">Nome</th>
-										<th scope="col">Agências</th>
 										<th scope="col">Contas</th>
-										<th scope="col">Contas Ativas</th>
-										<th scope="col">Contas Inativas</th>
-										<th><button wicket:id="novoBanco"
-												title="Adcionar Novo Banco">
+										<th scope="col">Banco</th>
+										<th><button wicket:id="novaAgencia"
+												title="Adcionar Nova Agencia">
 												<img alt="Bolt" src="icons/plus-3x.png">
 											</button></th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr style="text-align: center;" wicket:id="listaBancos">
+									<tr style="text-align: center;" wicket:id="listaAgencias">
 										<th wicket:id="numero" scope="row"></th>
 										<td wicket:id="nome"></td>
-										<td wicket:id="agencias"></td>
-										<td wicket:id="contas"></td>
-										<td wicket:id="contasAtivas"></td>
-										<td wicket:id="contasInativas"></td>
+										<td wicket:id="numeroContas"></td>
+										<td wicket:id="nomeBanco"></td>
 										<td>
-											<button wicket:id="acaoAlterar" title="Alterar Banco">
+											<button wicket:id="alterarAgencia" title="Alterar Agencia">
 												<img alt="Bolt" src="icons/pencil-2x.png">
 											</button>
-											<button wicket:id="acaoDeletar" title="Deletar Banco">
+											<button wicket:id="deletarAgencia" title="Deletar Agencia">
 												<img alt="Bolt" src="icons/trash-2x.png">
 											</button>
 										</td>
 									</tr>
 								</tbody>
 							</table>
+
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		
 	</wicket:extend>
 </body>
 </html>

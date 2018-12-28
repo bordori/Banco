@@ -20,11 +20,11 @@ public class Confirmacao extends Panel {
 	private Form<String> formConfirmacao;
 	  
 	
-	public Confirmacao(String id) {
+	public Confirmacao(String id, String string) {
 
 		super(id);
 		add(new Label("titulo", "Exclusão"));
-		add(new Label("mensagem", "Esta operação não pode ser desfeita. Confirmar exclusão do Banco?"));
+		add(new Label("mensagem", "Esta operação não pode ser desfeita. Confirmar exclusão "+string+"?"));
 		add(formConfirmacao());
 
 	}

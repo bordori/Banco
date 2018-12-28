@@ -2,6 +2,8 @@ package br.com.unika.dao;
 
 import java.io.Serializable;
 
+import com.googlecode.genericdao.search.Search;
+
 import br.com.unika.interfaces.IControleDAO;
 import br.com.unika.modelo.Agencia;
 
@@ -12,6 +14,7 @@ public class AgenciaDAO extends GenericDAO<Agencia, Long> implements IControleDA
 	 */
 	private static final long serialVersionUID = 1L;
 
+	
 	
 
 }

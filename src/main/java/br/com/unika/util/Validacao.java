@@ -8,6 +8,8 @@ import java.util.regex.Pattern;
 import javax.persistence.Column;
 import javax.persistence.Id;
 
+import br.com.unika.enums.EnumTipoConta;
+
 public class Validacao {
 
 	/*
@@ -53,6 +55,37 @@ public class Validacao {
 		return entidade;
 	}
 
+	public static String retiraEspacoDesnecessarios(String texto) {
+		if (texto != null) {
+			texto = texto.trim();
+			while (texto.contains("  ")) {
+				texto = texto.replaceAll("  ", " ");
+			}
+		}
+
+		return texto;
+	}
+
+	public static String tipoConta(Integer numero) {
+		switch (numero) {
+		case 1:
+			return EnumTipoConta.CORRENTE.getDescricao();
+			
+		case 2:
+			return EnumTipoConta.POUPANCA.getDescricao();
+		
+		}
+		return null;
+	}
+	
+	public static String converterBoolean(Boolean booleano) {
+		if (booleano == true) {
+			return "Sim";
+		}else {
+			return "Não";
+		}
+	}
+
 	public static boolean validaSeTemSoLetraENumeros(String string) {
 		Pattern padrao = Pattern.compile("[a-z A-Z 0-9]*");
 		Matcher pesquisa = padrao.matcher(string);
@@ -83,7 +116,6 @@ public class Validacao {
 		}
 	}
 
-	
 	public static boolean validarCPF(String cpf) {
 		cpf = cpf.replaceAll("[^0-9]", "");
 		int primeiroDigito = 0;

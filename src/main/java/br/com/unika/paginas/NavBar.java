@@ -24,6 +24,7 @@ public class NavBar extends WebPage {
 		add(sairSession());
 		add(alterarContas());
 		add(alterarBancos());
+		
 	}
 
 	private AjaxLink<Void> opcaoBancos() {
@@ -38,12 +39,26 @@ public class NavBar extends WebPage {
 		};
 		return opcaoBancos;
 	}
+	
+	private AjaxLink<Void> opcaoAgencia() {
+		AjaxLink<Void> opcaoAgencia = new AjaxLink<Void>("opcaoAgencia") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				setResponsePage(ListaAgencia.class);
+				
+			}
+		};
+		return opcaoAgencia;
+	}
 
 	private WebMarkupContainer alterarBancos() {
 		alterarBancos = new WebMarkupContainer("alterarBancos");
 		alterarBancos.setOutputMarkupId(true);
 		
 		alterarBancos.add(opcaoBancos());
+		alterarBancos.add(opcaoAgencia());
 		
 		if(usuario.getPermissaoDeAcesso().getAlterarBanco() == false) {
 			alterarBancos.setVisible(false);
@@ -54,10 +69,26 @@ public class NavBar extends WebPage {
 	private WebMarkupContainer alterarContas() {
 		alterarContas = new WebMarkupContainer("alterarContas");
 		alterarContas.setOutputMarkupId(true);
+		
+		alterarContas.add(opcaoConta());
+		
 		if(usuario.getPermissaoDeAcesso().getAlterarConta() == false) {
 			alterarContas.setVisible(false);
 		}
 		return alterarContas;
+	}
+
+	private AjaxLink<Void> opcaoConta() {
+		AjaxLink<Void> opcaoConta = new AjaxLink<Void>("opcaoConta") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				setResponsePage(ListaContas.class);
+				
+			}
+		};
+		return opcaoConta;
 	}
 
 	private AjaxLink<Void> sairSession() {

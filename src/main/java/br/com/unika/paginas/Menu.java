@@ -1,11 +1,11 @@
 package br.com.unika.paginas;
 
-import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 
 public class Menu extends NavBar {
 	
-	private Label label;
+	private static final long serialVersionUID = 1L;
+	
 	
 	public Menu() {
 		

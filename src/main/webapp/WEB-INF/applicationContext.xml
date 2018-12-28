@@ -78,6 +78,8 @@ http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 		class="br.com.unika.servicos.ServicoBanco">
 		<property name="bancoDAO"
 			ref="bancoDAO" />
+			<property name="servicoAgencia"
+			ref="servicoAgencia" />
 	</bean>
 
 	<bean id="bancoDAO"
@@ -131,6 +133,8 @@ http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 		class="br.com.unika.servicos.ServicoAgencia">
 		<property name="agenciaDAO"
 			ref="agenciaDAO" />
+			<property name="servicoConta"
+			ref="servicoConta" />
 	</bean>
 
 	<bean id="agenciaDAO"

@@ -31,6 +31,9 @@ public class Agencia implements Serializable{
 
 	@Column(nullable = false, name = "NUMERO")
 	private String numero;
+	
+	@Column(nullable = false, name = "NOME")
+	private String nome;
 
 	@ManyToOne
 	@JoinColumn(name = "BANCO_ID", nullable = false)
@@ -69,6 +72,14 @@ public class Agencia implements Serializable{
 
 	public void setConta(Set<Conta> conta) {
 		this.conta = conta;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 	public static long getSerialversionuid() {

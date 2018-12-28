@@ -18,13 +18,15 @@ import br.com.unika.modelo.Usuario;
 import br.com.unika.util.Retorno;
 import br.com.unika.util.Validacao;
 
-public class ServicoBanco implements IServico<Banco, Long>,Serializable{
+public class ServicoBanco implements IServico<Banco, Long>, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@SpringBean(name="bancoDAO")
+	@SpringBean(name = "bancoDAO")
 	private BancoDAO bancoDAO;
-	
+
+	@SpringBean(name = "servicoAgencia")
+	private ServicoAgencia servicoAgencia;
 
 	@Override
 	public Retorno incluir(Banco banco) {
@@ -32,13 +34,13 @@ public class ServicoBanco implements IServico<Banco, Long>,Serializable{
 		Retorno retorno = new Retorno(true, null);
 		banco = (Banco) Validacao.retiraEspacoDesnecessarios(banco);
 		retorno = validacaoDeNegocio(banco);
-		
+
 		if (!retorno.isSucesso()) {
 			return retorno;
-		} 
-	
+		}
+
 		retorno = bancoDAO.salvarDAO(banco);
-	
+
 		return retorno;
 	}
 
@@ -48,18 +50,16 @@ public class ServicoBanco implements IServico<Banco, Long>,Serializable{
 		Retorno retorno = new Retorno(true, null);
 		banco = (Banco) Validacao.retiraEspacoDesnecessarios(banco);
 		retorno = validacaoDeNegocio(banco);
-		
-		
+
 		if (!retorno.isSucesso()) {
 			return retorno;
-		} 
+		}
 		if (banco.getIdBanco() != null) {
 			retorno = bancoDAO.alterarDAO(banco);
-		}else {
+		} else {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Nenhum Id Informado");
 		}
-		
 
 		return retorno;
 
@@ -68,29 +68,31 @@ public class ServicoBanco implements IServico<Banco, Long>,Serializable{
 	@Override
 	public Banco procurar(Banco banco) {
 		if (banco != null && banco.getIdBanco() != null) {
-			
+
 			return bancoDAO.procurarDAO(banco.getIdBanco());
-			
-		} 
+
+		}
 		return null;
 	}
 
 	@Override
 	public List<Banco> listar() {
 		return bancoDAO.listarDAO();
-		
 
 	}
 
 	@Override
 	public Retorno remover(Banco banco) {
-		
+
 		Retorno retorno = new Retorno(true, null);
-	
-		
+
 		if (banco != null && banco.getIdBanco() != null) {
+			if (verificaSeTemAgencias(banco) == 0) {
 				retorno = bancoDAO.removerDAO(banco);
-						
+			} else {
+				retorno.setSucesso(false);
+				retorno.addMensagem("O Banco Não Deve Ter Agências Para a Exclusão!");
+			}
 		} else {
 			System.out.println("Nenhuma PK inserida ou com o valor null");
 			retorno.setSucesso(false);
@@ -99,63 +101,70 @@ public class ServicoBanco implements IServico<Banco, Long>,Serializable{
 		return retorno;
 	}
 
+	public int verificaSeTemAgencias(Banco banco) {
+		Search search = new Search(Agencia.class);
+		search.addFilterEqual("banco", banco);
+		return servicoAgencia.count(search);
+	}
+
 	@Override
 	public List<Banco> search(Search search) {
 		ArrayList<Banco> lista = new ArrayList<>();
 		lista = (ArrayList<Banco>) bancoDAO.searchDAO(search);
-		
+
 		return lista;
 	}
-	
+
 	@Override
 	public int count(Search search) {
 		return bancoDAO.countDAO(search);
 	}
-	
-	
-	
+
 	private Retorno validacaoDeNegocio(Banco banco) {
 		Retorno retorno = new Retorno(true, null);
-		
-		if(banco.getNome() == null || banco.getNome().length() < 3 || banco.getNome().length() > 20) {
+
+		if (banco.getNome() == null || banco.getNome().length() < 3 || banco.getNome().length() > 20) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Nome do Banco Deve Ter Entre 3 e 20 Digitos");
-		}else if(!verificaSeCampoExiste("nome", banco.getNome(),banco.getIdBanco())) {
+		} else if (!verificaSeCampoExiste("nome", banco.getNome(), banco.getIdBanco())) {
 			retorno.setSucesso(false);
-			retorno.addMensagem("O Banco "+banco.getNome()+" Ja Esta Cadastrado!");
+			retorno.addMensagem("O Banco " + banco.getNome() + " Ja Esta Cadastrado!");
 		}
-		
+
 		if (banco.getNumero() == null) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Numero Não Esta Preenchido!");
-			
-		} else if(!Validacao.validaSeTemSoNumeros(banco.getNumero())) {
+
+		} else if (!Validacao.validaSeTemSoNumeros(banco.getNumero())) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Numero do Banco Deve Ter Apenas Numeros!");
-		}else if(!verificaSeCampoExiste("numero", banco.getNumero(),banco.getIdBanco())) {
+		} else if (!verificaSeCampoExiste("numero", banco.getNumero(), banco.getIdBanco())) {
 			retorno.setSucesso(false);
-			retorno.addMensagem("Existe um Banco com o Numero "+banco.getNumero()+" Cadastrado!");
+			retorno.addMensagem("Existe um Banco com o Numero " + banco.getNumero() + " Cadastrado!");
 		}
-		
-		
+
 		return retorno;
 	}
-	
+
 	private boolean verificaSeCampoExiste(String campo, String pesquisa, Long id) {
 		Search search = new Search(Banco.class);
 		search.addFilterEqual(campo, pesquisa);
-		if (id != null ) {
+		if (id != null) {
 			search.addFilterNotEqual("idBanco", id);
 		}
 		int count = count(search);
-		
+
 		if (count == 0) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	public void setBancoDAO(BancoDAO bancoDAO) {
 		this.bancoDAO = bancoDAO;
+	}
+	
+	public void setServicoAgencia(ServicoAgencia servicoAgencia) {
+		this.servicoAgencia = servicoAgencia;
 	}
 }

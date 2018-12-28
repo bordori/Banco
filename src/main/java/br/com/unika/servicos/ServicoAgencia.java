@@ -11,6 +11,7 @@ import br.com.unika.dao.AgenciaDAO;
 import br.com.unika.interfaces.IServico;
 import br.com.unika.modelo.Agencia;
 import br.com.unika.modelo.Banco;
+import br.com.unika.modelo.Conta;
 import br.com.unika.util.Retorno;
 import br.com.unika.util.Validacao;
 
@@ -18,6 +19,9 @@ public class ServicoAgencia implements IServico<Agencia, Long> {
 
 	@SpringBean(name = "agenciaDAO")
 	private AgenciaDAO agenciaDAO;
+	
+	@SpringBean(name="servicoConta")
+	private ServicoConta ServicoConta;
 
 	@Override
 	public Retorno incluir(Agencia agencia) {
@@ -39,7 +43,9 @@ public class ServicoAgencia implements IServico<Agencia, Long> {
 	public Retorno alterar(Agencia agencia) {
 
 		Retorno retorno = new Retorno(true, null);
-
+		agencia = (Agencia) Validacao.retiraEspacoDesnecessarios(agencia);
+		retorno =  validacaoDeNegocio(agencia);
+		
 		if (!retorno.isSucesso()) {
 			return retorno;
 		}
@@ -72,8 +78,13 @@ public class ServicoAgencia implements IServico<Agencia, Long> {
 		Retorno retorno = new Retorno(true, null);
 
 		if (agencia != null && agencia.getIdAgencia() != null) {
+			if(verificaSeTemContas(agencia) == 0) {
+				retorno = agenciaDAO.removerDAO(agencia);
 
-			retorno = agenciaDAO.removerDAO(agencia);
+			}else {
+				retorno.setSucesso(false);
+				retorno.addMensagem("A Agência Não Deve Ter Contas Para Exclusão");	
+			}
 
 		} else {
 			System.out.println("Nenhuma PK inserida ou com o valor null");
@@ -107,18 +118,37 @@ public class ServicoAgencia implements IServico<Agencia, Long> {
 		}else if (!Validacao.validaSeTemSoNumeros(agencia.getNumero())) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Numero da Agecia Deve Ter Apenas Numeros!");
-		}else if (!verificaSeCampoExiste("numero", agencia.getNumero(),agencia.getBanco())) {
+		}else if (!verificaSeCampoExiste("numero", agencia.getNumero(),agencia.getBanco(),agencia.getIdAgencia())) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Agencia Ja Existe!");
+		}
+		
+		if(agencia.getNome() == null || agencia.getNome().length() < 4 || agencia.getNome().length() > 30) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Nome da Agencia Deve Ter Entre 4 e 30 Digitos!");
+		}
+		if (agencia.getBanco() == null) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Nenhum Banco Selecionado!");
 		}
 		
 		return retorno;
 	}
 	
-	private boolean verificaSeCampoExiste(String campo, String pesquisa, Banco banco) {
+	public int verificaSeTemContas(Agencia agencia) {
+		Search search = new Search(Conta.class);
+		search.addFetch("agencia");
+		search.addFilterEqual("agencia", agencia);
+		return ServicoConta.count(search);
+	}
+	
+	private boolean verificaSeCampoExiste(String campo, String pesquisa, Banco banco, Long id) {
 		Search search = new Search(Agencia.class);
 		search.addFilterEqual(campo, pesquisa);
 		search.addFilterEqual("banco", banco);
+		if (id != null) {
+			search.addFilterNotEqual("idAgencia", id);
+		}
 		int count = count(search);
 		
 		if (count == 0) {
@@ -129,5 +159,9 @@ public class ServicoAgencia implements IServico<Agencia, Long> {
 	
 	public void setAgenciaDAO(AgenciaDAO agenciaDAO) {
 		this.agenciaDAO = agenciaDAO;
+	}
+	
+	public void setServicoConta(ServicoConta servicoConta) {
+		ServicoConta = servicoConta;
 	}
 }

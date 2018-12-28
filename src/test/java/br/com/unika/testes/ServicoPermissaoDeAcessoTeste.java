@@ -29,12 +29,24 @@ public class ServicoPermissaoDeAcessoTeste {
 	@Test
 	public void testIncluir() {
 		PermissaoDeAcesso permissao = new PermissaoDeAcesso();
-		permissao.setDescricao("cliente");
+		permissao.setDescricao("Cliente");
 		permissao.setAlterarPermissoes(false);
 		permissao.setAlterarBanco(false);
 		permissao.setAlterarConta(false);
 
 		Retorno retorno = servicoPermissaoDeAcesso.incluir(permissao);
+		permissao.setDescricao("Caixa");
+		permissao.setAlterarPermissoes(false);
+		permissao.setAlterarBanco(false);
+		permissao.setAlterarConta(true);
+
+		 retorno = servicoPermissaoDeAcesso.incluir(permissao);
+		permissao.setDescricao("Gerente");
+		permissao.setAlterarPermissoes(true);
+		permissao.setAlterarBanco(true);
+		permissao.setAlterarConta(true);
+
+		 retorno = servicoPermissaoDeAcesso.incluir(permissao);
 
 		assertEquals(true, retorno.isSucesso());
 	}

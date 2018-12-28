@@ -5,6 +5,7 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 
 import br.com.unika.paginas.HomePage;
+import br.com.unika.paginas.ListaAgencia;
 import br.com.unika.paginas.ListaBancos;
 import br.com.unika.paginas.Menu;
 
@@ -35,7 +36,8 @@ public class WicketApplication extends WebApplication
 		super.init();
 		
 		mountPage("menu", Menu.class);
-		mountPage("bancos", ListaBancos.class);
+		mountPage("menu/banco", ListaBancos.class);
+		mountPage("menu/agencia", ListaAgencia.class);
 		
 		getComponentInstantiationListeners().add(new SpringComponentInjector(this));
 		// add your configuration here

@@ -1,0 +1,63 @@
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Revenue Banking Category Responsive website Template |
+	Home :: w3layouts</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords"
+	content="Revenue Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
+	SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony Ericsson, Motorola web design" />
+	
+<script src="js/app.js" type="text/javascript"></script>
+
+
+</head>
+
+<body>
+	<wicket:panel>
+	<div wicket:id="feedBackPanel"></div>
+	<form wicket:id="formCriarUsuario">
+		<div class="border rounded " style="margin: 20px;background:  #F9F9F9">
+			<div class="border-bottom " style="padding: 5px;padding-left: 20px;background:   #F5F5F5 ">
+				<span><img alt="" src="icons/lock-locked-2x.png" style="margin-right: 2px">Incluindo Novo Usuário</span>
+			</div>
+			<div style="padding: 20px">
+				<div class="form-row form-group">
+					<div class="col-md-5">
+						<label for="nome">Nome*</label>
+						<input type="text" maxlength="30" class="form-control " id="nome"  wicket:id="nome"  >
+					</div>
+					<div class="col-md-5">
+						<label for="Sobrenome">Sobrenome*</label>
+						<input type="text" maxlength="30" class="form-control" id="Sobrenome" wicket:id="sobrenome"  >
+					</div>
+					<div class="col-md-2">
+						<label for="sexo">Sexo*</label>
+						<select class="custom-select" id="sexo" wicket:id="sexo">
+							<optgroup label="Sexo">
+								<option wicket:id="escolhaSexo" >Escolha</option>
+								<option wicket:id="masculino">Masculino</option>
+								<option wicket:id="feminino">Feminino</option>
+							</optgroup>
+						</select>
+					</div>
+				</div>
+				
+				
+				
+				<BR/><div class="form-row form-group">
+					<input type="submit"  class="btn btn-primary" wicket:id="acaoNovoUsuario" value="Salvar">
+				</div>
+			</div>	
+		</div>	
+	</form>
+
+
+	</wicket:panel>
+</body>
+
+</html>
