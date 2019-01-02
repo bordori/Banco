@@ -117,8 +117,16 @@ public class ServicoConta implements IServico<Conta, Long>, Serializable {
 			conta.setAtivo(true);
 		}
 		
+		if (conta.getConta() == null || conta.getConta().length() != 6) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Selecione o Banco e Agência para Gerar uma Conta!");
+		}
+		
 		if(conta.getSaldo() == null) {
 			conta.setSaldo(0.0);
+		}else if (conta.getSaldo() != 0 && conta.getAtivo() == false) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Para Desativar uma Conta ela não Deve ter Saldo!");
 		}
 		
 		if (conta.getAgencia() == null) {

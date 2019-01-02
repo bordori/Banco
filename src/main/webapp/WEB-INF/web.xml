@@ -37,7 +37,7 @@
 	</listener>
 	
 	 <session-config>
-        <session-timeout>3</session-timeout>
+        <session-timeout>5</session-timeout>
     </session-config>
 	
 </web-app>

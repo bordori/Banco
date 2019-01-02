@@ -11,50 +11,69 @@
 <meta name="keywords"
 	content="Revenue Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
 	SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony Ericsson, Motorola web design" />
-	
-<script src="js/app.js" type="text/javascript"></script>
+
+
 
 
 </head>
 
 <body>
 	<wicket:panel>
-	<div wicket:id="feedBackPanel"></div>
-	<form wicket:id="formCriarUsuario">
-		<div class="border rounded " style="margin: 20px;background:  #F9F9F9">
-			<div class="border-bottom " style="padding: 5px;padding-left: 20px;background:   #F5F5F5 ">
-				<span><img alt="" src="icons/lock-locked-2x.png" style="margin-right: 2px">Incluindo Novo Usuário</span>
+		<div wicket:id="feedBackPanel"></div>
+		<form wicket:id="formCriarConta">
+			<div class="border rounded "
+				style="margin: 20px; background: #F9F9F9">
+				<div class="border-bottom "
+					style="padding: 5px; padding-left: 20px; background: #F5F5F5">
+					<span><img alt="" src="icons/lock-locked-2x.png"
+						style="margin-right: 2px">Incluindo Nova Conta</span>
+				</div>
+				<div style="padding: 20px">
+					<div class="form-row form-group">
+						<div class="col-sm-6">
+							<label for="banco">Banco*</label> <select class="custom-select"
+								id="banco" wicket:id="banco">
+							</select>
+						</div>
+						<div class="col-sm-6">
+							<label for="tipoConta">Tipo de Conta*</label> <select
+								class="custom-select" id="tipoConta" wicket:id="tipoConta">
+							</select>
+						</div>
+
+					</div>
+
+					<div class="form-row form-group">
+						<div class="col-sm-6">
+							<label for="agencia">Agencia*</label> <select
+								class="custom-select" id="agencia" wicket:id="agencia">
+							</select>
+						</div>
+						<div class="col-sm-6">
+							<label for="conta">Conta*</label> <input type="text"
+								maxlength="6" class="form-control" id="conta" wicket:id="conta">
+						</div>
+					</div>
+					<div class="form-row form-group">
+					<label for="conta">Ativo*</label>
+						<p class="btn-switch">					
+						  <input type="radio" id="yes" name="switch" class="btn-switch__radio btn-switch__radio_yes" />
+						  <input type="radio" checked id="no" name="switch" class="btn-switch__radio btn-switch__radio_no" />		
+						  <label for="yes" class="btn-switch__label btn-switch__label_yes"><span class="btn-switch__txt">Sim</span></label>								  
+						  <label for="no" class="btn-switch__label btn-switch__label_no"><span class="btn-switch__txt">Não</span></label>							
+						</p>
+					</div>
+
+
+
+					<BR />
+					<div class="form-row form-group">
+						<input type="submit" class="btn btn-primary"
+							wicket:id="acaoSubmit" value="Salvar">
+					</div>
+				</div>
 			</div>
-			<div style="padding: 20px">
-				<div class="form-row form-group">
-					<div class="col-md-5">
-						<label for="nome">Nome*</label>
-						<input type="text" maxlength="30" class="form-control " id="nome"  wicket:id="nome"  >
-					</div>
-					<div class="col-md-5">
-						<label for="Sobrenome">Sobrenome*</label>
-						<input type="text" maxlength="30" class="form-control" id="Sobrenome" wicket:id="sobrenome"  >
-					</div>
-					<div class="col-md-2">
-						<label for="sexo">Sexo*</label>
-						<select class="custom-select" id="sexo" wicket:id="sexo">
-							<optgroup label="Sexo">
-								<option wicket:id="escolhaSexo" >Escolha</option>
-								<option wicket:id="masculino">Masculino</option>
-								<option wicket:id="feminino">Feminino</option>
-							</optgroup>
-						</select>
-					</div>
-				</div>
-				
-				
-				
-				<BR/><div class="form-row form-group">
-					<input type="submit"  class="btn btn-primary" wicket:id="acaoNovoUsuario" value="Salvar">
-				</div>
-			</div>	
-		</div>	
-	</form>
+		</form>
 
 
 	</wicket:panel>

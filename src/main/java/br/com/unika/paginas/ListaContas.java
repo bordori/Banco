@@ -14,6 +14,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.unika.modelo.Conta;
+import br.com.unika.modelo.Usuario;
 import br.com.unika.servicos.ServicoConta;
 import br.com.unika.util.NotificationPanel;
 import br.com.unika.util.Validacao;
@@ -64,7 +65,7 @@ public class ListaContas extends NavBar{
 		notificationPanel.setOutputMarkupId(true);
 		containerListView.add(notificationPanel);
 		containerListView.add(polularTabelaContas());
-		//containerListView.add(acaoNovaAgencia());
+		containerListView.add(acaoNovaAgencia());
 		
 		return containerListView;
 	}
@@ -101,19 +102,28 @@ public class ListaContas extends NavBar{
 	}
 	
 	private AjaxLink<Void> acaoNovaAgencia() {
-		AjaxLink<Void> acaoNovaAgencia = new AjaxLink<Void>("novaAgencia") {
+		AjaxLink<Void> acaoNovaAgencia = new AjaxLink<Void>("novaConta") {
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-
-				janela.setMinimalWidth(500);
-				janela.setInitialWidth(600);
-				janela.setMinimalHeight(350);
-				janela.setInitialHeight(400);
-				
-				janela.setContent(cadastrarAgencia);
+				janela.setMinimalWidth(600);
+				janela.setInitialWidth(700);
+				janela.setMinimalHeight(400);
+				janela.setInitialHeight(550);
+				Usuario usuario = (Usuario) getSession().getAttribute("usuarioLogado");
+				CadastrarConta cadastrarConta = new CadastrarConta(janela.getContentId(),usuario) {
+					@Override
+					protected void acaoSubmitCriarConta(AjaxRequestTarget target) {
+						super.acaoSubmitCriarConta(target);
+						janela.close(target);
+						preencherListView();
+						notificationPanel.mensagem("Conta Criada com Sucesso!", "sucesso");
+						target.add(containerListView);
+					}
+				};
+				janela.setContent(cadastrarConta);
 				janela.show(target);
 			}
 
