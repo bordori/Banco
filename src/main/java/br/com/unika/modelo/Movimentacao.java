@@ -30,25 +30,25 @@ public class Movimentacao implements Serializable {
 	private Integer tipoMovimentacao;
 
 	@ManyToOne
-	@JoinColumn(name = "USUARIO_ID", nullable = false)
-	private Usuario usuario;
+	@JoinColumn(name = "ID_CONTA", nullable = false)
+	private Conta conta;
 
-	@Column( name = "NOME_FAVORECIDO")
+	@Column(name = "NOME_FAVORECIDO", nullable = false)
 	private String nomeFavorecido;
 
-	@Column( name = "CPF_FAVORECIDO")
+	@Column(name = "CPF_FAVORECIDO", nullable = false)
 	private String cpfFavoracido;
 
-	@Column( name = "NUMERO_BANCO_FAVORECIDO")
+	@Column(name = "NUMERO_BANCO_FAVORECIDO", nullable = false)
 	private String numeroBancoFavorecido;
 
-	@Column( name = "NOME_BANCO_FAVORECIDO")
+	@Column(name = "NOME_BANCO_FAVORECIDO", nullable = false)
 	private String nomeBancoFavorecido;
 
-	@Column( name = "AGENCIA_FAVORECIDO")
+	@Column(name = "AGENCIA_FAVORECIDO", nullable = false)
 	private String agenciaFavorecido;
 
-	@Column(name = "CONTA_FAVORECIDO")
+	@Column(name = "CONTA_FAVORECIDO", nullable = false)
 	private String contaFavorecido;
 
 	@Column(nullable = false, name = "VALOR")
@@ -57,7 +57,6 @@ public class Movimentacao implements Serializable {
 	@Column(nullable = false, name = "DATA")
 	private Calendar data;
 
-	
 	public Long getIdMovimentacao() {
 		return idMovimentacao;
 	}
@@ -74,12 +73,12 @@ public class Movimentacao implements Serializable {
 		this.tipoMovimentacao = tipoMovimentacao;
 	}
 
-	public Usuario getUsuario() {
-		return usuario;
+	public Conta getConta() {
+		return conta;
 	}
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
+	public void setConta(Conta conta) {
+		this.conta = conta;
 	}
 
 	public Double getValor() {
@@ -145,7 +144,6 @@ public class Movimentacao implements Serializable {
 	public void setData(Calendar data) {
 		this.data = data;
 	}
-
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;

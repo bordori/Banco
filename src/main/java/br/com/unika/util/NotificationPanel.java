@@ -23,7 +23,7 @@ public class NotificationPanel extends FeedbackPanel implements Serializable{
 			this.add(new AttributeModifier("style",
 					"position: absolute; top: 40px;height:auto; list-style-type: none; text-align: center;padding-top:20px; right: 0px; z-index: 999999; width: auto; left:70%;margin-right: 10px"));
 			this.add(new AttributeModifier("class", "  alert-danger shadow-lg hideMe "));
-		}
+		} 
 
 		public void mensagem(String msg, String tipoMensagem) {
 			

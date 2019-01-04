@@ -54,7 +54,7 @@ public class ListaBancos extends NavBar {
 
 	public ListaBancos() {
 
-		verificarPermissao();
+		verificarPermissaoBanco();
 		preencherListaBancos();
 		add(containerListView());
 		add(initModal());

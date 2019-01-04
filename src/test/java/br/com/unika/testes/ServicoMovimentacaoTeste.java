@@ -32,7 +32,6 @@ public class ServicoMovimentacaoTeste {
 		movimentacao.setTipoMovimentacao(2);
 		Usuario usuario = new Usuario();
 		usuario.setIdUsuario(new Long(3));
-		movimentacao.setUsuario(usuario);
 		movimentacao.setNomeFavorecido("Thor Filho de Odin");
 		movimentacao.setCpfFavoracido("545.578.457-85");
 		movimentacao.setNumeroBancoFavorecido("1");
@@ -55,7 +54,6 @@ public class ServicoMovimentacaoTeste {
 		movimentacao.setTipoMovimentacao(2);
 		Usuario usuario = new Usuario();
 		usuario.setIdUsuario(new Long(3));
-		movimentacao.setUsuario(usuario);
 		movimentacao.setNomeFavorecido("Thor Filho de Odin");
 		movimentacao.setCpfFavoracido("545.578.457-85");
 		movimentacao.setNumeroBancoFavorecido("1");

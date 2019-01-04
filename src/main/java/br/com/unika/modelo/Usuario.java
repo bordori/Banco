@@ -2,8 +2,6 @@ package br.com.unika.modelo;
 
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -19,95 +17,91 @@ import javax.persistence.Table;
 
 import org.springframework.stereotype.Component;
 
-
 @Entity
 @Table(name = "usuario")
 @Component
 public class Usuario implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
-		
+
 	@Id
 	@GeneratedValue
 	@Column(nullable = false, name = "ID_USUARIO", unique = true)
 	private Long idUsuario;
-	
+
 	@Column(nullable = false, name = "NOME")
 	private String nome;
-	
+
 	@Column(nullable = false, name = "SOBRENOME")
 	private String sobrenome;
-	
+
 	@Column(nullable = false, name = "TELEFONE", unique = true)
 	private String telefone;
-	
+
 	@Column(nullable = false, name = "CPF", unique = true)
 	private String cpf;
-	
+
 	@Column(nullable = false, name = "EMAIL", unique = true)
 	private String email;
-	
+
 	@Column(nullable = false, name = "DATA_NASCIMENTO")
 	private Calendar dataNascimento;
-	
+
 	@Column(nullable = false, name = "CEP")
 	private String cep;
-	
+
 	@Column(nullable = false, name = "ENDERECO")
 	private String endereco;
-	
+
 	@Column(nullable = false, name = "CIDADE")
 	private String cidade;
-	
+
 	@Column(nullable = false, name = "ESTADO")
 	private String estado;
-	
+
 	@Column(nullable = false, name = "NUMERO")
 	private String numero;
-	
-	@Column( name = "COMPLEMENTO")
+
+	@Column(name = "COMPLEMENTO")
 	private String complemento;
-	
+
 	@Column(nullable = false, name = "BAIRRO")
 	private String bairro;
-	
+
 	@Column(nullable = false, name = "SEXO")
 	private Boolean sexo; // true masculino false feminino
-	
+
 	@ManyToOne
-	@JoinColumn(name="PERMISSAO_DE_ACESSO_ID", nullable= false)
+	@JoinColumn(name = "PERMISSAO_DE_ACESSO_ID", nullable = false)
 	private PermissaoDeAcesso permissaoDeAcesso;
-	
+
 	@OneToMany(mappedBy = "usuario", targetEntity = Conta.class, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	private Set<Conta> contas;
-	
-	@OneToMany(mappedBy = "usuario", targetEntity = Movimentacao.class, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-	private Set<Movimentacao> Movimentacoes;
-	
+
 	@OneToMany(mappedBy = "usuario", targetEntity = Contato.class, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	private Set<Contato> contatos;
-	
-	@Column(name="ATIVO",nullable=false)
+
+	@Column(name = "ATIVO", nullable = false)
 	private Boolean ativo;
-	
+
 	@Column(nullable = false, name = "LOGIN", unique = true)
 	private String login;
-	
+
 	@Column(nullable = false, name = "SENHA")
 	private String senha;
-	
-	
 
-	
 	@Override
 	public String toString() {
 		return "Usuario [idUsuario=" + idUsuario + ", nome=" + nome + ", sobrenome=" + sobrenome + ", telefone="
 				+ telefone + ", cpf=" + cpf + ", email=" + email + ", dataNascimento=" + dataNascimento + ", cep=" + cep
 				+ ", endereco=" + endereco + ", cidade=" + cidade + ", estado=" + estado + ", numero=" + numero
 				+ ", complemento=" + complemento + ", bairro=" + bairro + ", sexo=" + sexo + ", permissaoDeAcesso="
-				+ permissaoDeAcesso + ", contas=" + contas + ", Movimentacoes=" + Movimentacoes + ", contatos="
-				+ contatos + ", ativo=" + ativo + ", login=" + login + ", senha=" + senha + "]";
+				+ permissaoDeAcesso + ", contas=" + contas + ", contatos=" + contatos + ", ativo=" + ativo + ", login="
+				+ login + ", senha=" + senha + "]";
+	}
+	
+	public String getNomeCompleto() {
+		return getNome()+" "+getSobrenome();
 	}
 
 	public Long getIdUsuario() {
@@ -246,14 +240,6 @@ public class Usuario implements Serializable {
 		this.contas = contas;
 	}
 
-	public Set<Movimentacao> getMovimentacoes() {
-		return Movimentacoes;
-	}
-
-	public void setMovimentacoes(Set<Movimentacao> movimentacoes) {
-		Movimentacoes = movimentacoes;
-	}
-
 	public Set<Contato> getContatos() {
 		return contatos;
 	}
@@ -289,12 +275,5 @@ public class Usuario implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	
-	
 
-	
-
-		
-	
-	
 }

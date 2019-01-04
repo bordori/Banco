@@ -66,7 +66,6 @@ public class CadastrarConta extends Panel {
 
 	public CadastrarConta(String id, Conta contaAlterar) {
 		super(id);
-
 		conta = contaAlterar;
 		montarTela();
 	}

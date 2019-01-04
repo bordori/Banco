@@ -16,9 +16,9 @@
 			<div class="container-login100 ">
 				<div class="wrap-login100 ">
 					<div class="" style="width: 100%;">
-						<span class="login100-form-title">Contas</span>
+						<span class="login100-form-title">Minha Conta</span>
 
-						<form wicket:id="formFiltro">
+						<!-- <form wicket:id="formFiltro">
 							<div class="form-row form-group ">
 								<div class="col-md-4">
 									<label for="usuario.nome">Cliente</label> <input type="text"
@@ -49,7 +49,7 @@
 								<input type="submit" class="btn btn-info"
 									wicket:id="acaoProcurar" value="Filtrar">
 							</div>
-						</form> 
+						</form>  -->
 
 						<div class=" form-row form-group table-responsive"
 							wicket:id="containerListView">
@@ -57,27 +57,42 @@
 							<table class=" table  table-striped">
 								<thead>
 									<tr style="text-align: center;">
-										<th scope="col">Cliente</th>
-										<th scope="col">Conta</th>
-										<th scope="col">Agência</th>
 										<th scope="col">Banco</th>
-										<th scope="col">Tipo De Conta</th>
+										<th scope="col">Agência</th>
+										<th scope="col">Conta</th>
+										<th scope="col">Tipo de Conta</th>
+										<th scope="col">Saldo</th>
 										<th scope="col">Ativo</th>
-										<th scope="col">Ações</th>
-
+										<th scope="col">Operação</th>
+										<th><button wicket:id="novaConta"
+												title="Adcionar Nova Conta">
+												<img alt="Bolt" src="icons/plus-3x.png">
+											</button></th>
 									</tr>
 								</thead>
-								<tbody>
+								<tbody style="font-size: 13px;">
 									<tr style="text-align: center;" wicket:id="listaContas">
-										<td wicket:id="nomeUsuario" scope="row"></td>
-										<td wicket:id="conta"></td>
+										<td wicket:id="banco" scope="row"></td>
 										<td wicket:id="agencia"></td>
-										<td wicket:id="nomeBanco"></td>
-										<td wicket:id="tipoConta"></td>
-										<td>
-											<a wicket:id="ativo" ></a>
+										<td wicket:id="conta"></td>
+										<td wicket:id="Tipoconta"></td>
+										<td wicket:id="saldo"></td>
+										<td><a title="Ativar/Desativar Conta" wicket:id="ativo"></a></td>
+										<td><div class="btn-group" >
+											<button class="btn  btn-primary  btn-sm dropdown-toggle"
+												type="button" data-toggle="dropdown" aria-haspopup="true"
+												aria-expanded="false" style="background-color: transparent;color: black;border-color: black" >Operações</button>
+											<div class="dropdown-menu">
+												<a class="dropdown-item" >Deposito</a>
+												<a class="dropdown-item" >Saque</a>
+												<a class="dropdown-item" >Transferência</a>
+											</div>
+											</div>
 										</td>
 										<td>
+											<button title="Movimentações">
+												<img alt="Bolt" src="icons/book-2x.png">
+											</button>
 											<button title="Deletar Conta" wicket:id="acaoDeletar">
 												<img alt="Bolt" src="icons/trash-2x.png">
 											</button>

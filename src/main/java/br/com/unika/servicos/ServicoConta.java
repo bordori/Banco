@@ -45,8 +45,7 @@ public class ServicoConta implements IServico<Conta, Long>, Serializable {
 		Retorno retorno = new Retorno(true, null);
 		conta = (Conta) Validacao.retiraEspacoDesnecessarios(conta);
 		retorno = validacaoDeNegocio(conta);
-		
-		
+
 		if (!retorno.isSucesso()) {
 			return retorno;
 		}
@@ -79,8 +78,12 @@ public class ServicoConta implements IServico<Conta, Long>, Serializable {
 		Retorno retorno = new Retorno(true, null);
 
 		if (conta != null && conta.getIdConta() != null) {
-
-			retorno = contaDAO.removerDAO(conta);
+			if(conta.getSaldo() == 0) {
+				retorno = contaDAO.removerDAO(conta);
+			}else {
+				retorno.setSucesso(false);
+				retorno.addMensagem("A Conta não Deve Ter Saldo!");
+			}
 
 		} else {
 			System.out.println("Nenhuma PK inserida ou com o valor null");
@@ -102,49 +105,67 @@ public class ServicoConta implements IServico<Conta, Long>, Serializable {
 	public int count(Search search) {
 		return contaDAO.countDAO(search);
 	}
-	
-	
+
+	public Retorno ativarDesativarConta(Conta conta) {
+		Retorno retorno = new Retorno(true, null);
+
+		if (conta.getSaldo() == 0) {
+			if (conta.getAtivo()) {
+				conta.setAtivo(false);
+			} else {
+				conta.setAtivo(true);
+			}
+			retorno = contaDAO.alterarDAO(conta);
+		} else {
+			retorno.setSucesso(false);
+			retorno.addMensagem("O Conta não Deve ter Saldo Para Desativa-la!");
+		}
+		return retorno;
+	}
 
 	private Retorno validacaoDeNegocio(Conta conta) {
 		Retorno retorno = new Retorno(true, null);
-			
+
 		if (conta.getTipoConta() == null) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Selecione um Tipo de Conta!");
 		}
-		
-		if(conta.getAtivo() == null) {
+
+		if (conta.getAtivo() == null) {
 			conta.setAtivo(true);
 		}
-		
+
 		if (conta.getConta() == null || conta.getConta().length() != 6) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Selecione o Banco e Agência para Gerar uma Conta!");
 		}
-		
-		if(conta.getSaldo() == null) {
+
+		if (conta.getSaldo() == null) {
 			conta.setSaldo(0.0);
-		}else if (conta.getSaldo() != 0 && conta.getAtivo() == false) {
+		} else if (conta.getSaldo() != 0 && conta.getAtivo() == false) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Para Desativar uma Conta ela não Deve ter Saldo!");
 		}
-		
+
 		if (conta.getAgencia() == null) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Selecione Uma Agencia!");
 		}
-		
+
 		if (conta.getUsuario() == null) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Selecione um Usuario!");
+		}else if (conta.getUsuario().getAtivo() == false) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Essa Cliente Esta Desativado!");
 		}
-		
+
 		return retorno;
 	}
 
-	public String gerarConta(Banco banco,Agencia agencia) {
+	public String gerarConta(Banco banco, Agencia agencia) {
 		String conta = geradorDeConta();
-		while (!verificaSeContaExisteNoBanco(conta, banco,agencia)) {
+		while (!verificaSeContaExisteNoBanco(conta, banco, agencia)) {
 			conta = geradorDeConta();
 		}
 
@@ -162,15 +183,14 @@ public class ServicoConta implements IServico<Conta, Long>, Serializable {
 		return conta;
 	}
 
-	private boolean verificaSeContaExisteNoBanco(String conta, Banco banco,Agencia agencia) {
-		
+	private boolean verificaSeContaExisteNoBanco(String conta, Banco banco, Agencia agencia) {
 
 		Search search = new Search(Conta.class);
 		search.addFilterEqual("conta", conta);
 		search.addFilterEqual("agencia", agencia);
 		search.addFilterEqual("agencia.banco", banco);
 
-		int count =  this.count(search);
+		int count = this.count(search);
 
 		if (count == 0) {
 			return true;
@@ -182,6 +202,5 @@ public class ServicoConta implements IServico<Conta, Long>, Serializable {
 	public void setContaDAO(ContaDAO contaDAO) {
 		this.contaDAO = contaDAO;
 	}
-	
-	
+
 }

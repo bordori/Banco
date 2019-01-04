@@ -10,26 +10,40 @@ import org.apache.wicket.markup.html.basic.Label;
 import br.com.unika.modelo.Usuario;
 
 public class NavBar extends WebPage {
-	
+
 	private Label usuarioLogado;
-	private WebMarkupContainer alterarContas,alterarBancos;
+	private WebMarkupContainer alterarContas, alterarBancos;
 	private Usuario usuario;
-	
+
 	public NavBar() {
-		if(getSession().getAttribute("usuarioLogado") == null) {
+		if (getSession().getAttribute("usuarioLogado") == null) {
 			redirectToInterceptPage(new HomePage());
 		}
-		
+
 		add(usuarioLogado());
 		add(sairSession());
 		add(alterarContas());
 		add(alterarBancos());
-		
+		add(contas());
+
 	}
 
-	private AjaxLink<Void> opcaoBancos() {
+	private AjaxLink<Void> contas() {
+		AjaxLink<Void> contas = new AjaxLink<Void>("contas") {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				setResponsePage(ClienteConta.class);
+			}
+		};
+		return contas;
+	}
+
+	private AjaxLink<Void> opcaoGerenciarBancos() {
 		AjaxLink<Void> opcaoBancos = new AjaxLink<Void>("opcaoBancos") {
-			
+
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -39,15 +53,15 @@ public class NavBar extends WebPage {
 		};
 		return opcaoBancos;
 	}
-	
-	private AjaxLink<Void> opcaoAgencia() {
+
+	private AjaxLink<Void> opcaoGerenciarAgencia() {
 		AjaxLink<Void> opcaoAgencia = new AjaxLink<Void>("opcaoAgencia") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				setResponsePage(ListaAgencia.class);
-				
+
 			}
 		};
 		return opcaoAgencia;
@@ -56,11 +70,11 @@ public class NavBar extends WebPage {
 	private WebMarkupContainer alterarBancos() {
 		alterarBancos = new WebMarkupContainer("alterarBancos");
 		alterarBancos.setOutputMarkupId(true);
-		
-		alterarBancos.add(opcaoBancos());
-		alterarBancos.add(opcaoAgencia());
-		
-		if(usuario.getPermissaoDeAcesso().getAlterarBanco() == false) {
+
+		alterarBancos.add(opcaoGerenciarBancos());
+		alterarBancos.add(opcaoGerenciarAgencia());
+
+		if (usuario.getPermissaoDeAcesso().getAlterarBanco() == false) {
 			alterarBancos.setVisible(false);
 		}
 		return alterarBancos;
@@ -69,23 +83,37 @@ public class NavBar extends WebPage {
 	private WebMarkupContainer alterarContas() {
 		alterarContas = new WebMarkupContainer("alterarContas");
 		alterarContas.setOutputMarkupId(true);
-		
-		alterarContas.add(opcaoConta());
-		
-		if(usuario.getPermissaoDeAcesso().getAlterarConta() == false) {
+
+		alterarContas.add(opcaoGerenciarConta());
+		alterarContas.add(opcaoGerenciarClientes());
+
+		if (usuario.getPermissaoDeAcesso().getAlterarConta() == false) {
 			alterarContas.setVisible(false);
 		}
 		return alterarContas;
 	}
 
-	private AjaxLink<Void> opcaoConta() {
+	private AjaxLink<Void> opcaoGerenciarClientes() {
+		AjaxLink<Void> opcaoClientes = new AjaxLink<Void>("opcaoClientes") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				setResponsePage(ListaClientes.class);
+
+			}
+		};
+		return opcaoClientes;
+	}
+
+	private AjaxLink<Void> opcaoGerenciarConta() {
 		AjaxLink<Void> opcaoConta = new AjaxLink<Void>("opcaoConta") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				setResponsePage(ListaContas.class);
-				
+
 			}
 		};
 		return opcaoConta;
@@ -93,11 +121,11 @@ public class NavBar extends WebPage {
 
 	private AjaxLink<Void> sairSession() {
 		AjaxLink<Void> sair = new AjaxLink<Void>("sair") {
-			
+
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				getSession().invalidate();
-				setResponsePage(HomePage.class);				
+				setResponsePage(HomePage.class);
 			}
 		};
 		return sair;
@@ -105,13 +133,20 @@ public class NavBar extends WebPage {
 
 	private Label usuarioLogado() {
 		usuario = (Usuario) getSession().getAttribute("usuarioLogado");
-		usuarioLogado = new Label("usuarioLogado","Olá, "+usuario.getNome()+".");
+		usuarioLogado = new Label("usuarioLogado", "Olá, " + usuario.getNome() + ".");
 		return usuarioLogado;
 	}
-	
-	public void verificarPermissao() {
+
+	public void verificarPermissaoBanco() {
 		Usuario usuario = (Usuario) getSession().getAttribute("usuarioLogado");
 		if (usuario.getPermissaoDeAcesso().getAlterarBanco() != true) {
+			setResponsePage(Menu.class);
+		}
+	}
+
+	public void verificarPermissaoConta() {
+		Usuario usuario = (Usuario) getSession().getAttribute("usuarioLogado");
+		if (usuario.getPermissaoDeAcesso().getAlterarConta() != true) {
 			setResponsePage(Menu.class);
 		}
 	}

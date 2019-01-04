@@ -1,6 +1,9 @@
 package br.com.unika.util;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -65,6 +68,14 @@ public class Validacao {
 
 		return texto;
 	}
+	
+	public static String FormatarSaldo(double value) {
+		Locale localeBR = new Locale("pt","BR");
+		BigDecimal bd1 = new BigDecimal(value).setScale(2,BigDecimal.ROUND_HALF_UP);
+	    String valorReplace =  NumberFormat.getCurrencyInstance(localeBR).format(bd1).toString();
+	    //valorReplace = valorReplace.replace(".", ",");
+	    return valorReplace;
+	}
 
 	public static String tipoConta(Integer numero) {
 		switch (numero) {
@@ -83,6 +94,14 @@ public class Validacao {
 			return "Sim";
 		}else {
 			return "Não";
+		}
+	}
+	
+	public static String converterBooleanAtivo(Boolean booleano) {
+		if (booleano == true) {
+			return "Ativada";
+		}else {
+			return "Desativada";
 		}
 	}
 

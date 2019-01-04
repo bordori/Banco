@@ -63,15 +63,25 @@ public class CadastrarUsuario extends Panel {
 
 	public CadastrarUsuario(String id) {
 		super(id);
+		usuario = new Usuario();
+		montarTela();
+
+	}
+	public CadastrarUsuario(String id,Usuario usuarioAlterar) {
+		super(id);
+		this.usuario = usuarioAlterar;
+		montarTela();
+	}
+	
+	private void montarTela() {
 		notificationPanel = new NotificationPanel("feedBackPanel");
 		notificationPanel.setOutputMarkupId(true);
 		add(notificationPanel);
 		add(formCriarUsuario());
-
 	}
 
 	private Form<Usuario> formCriarUsuario() {
-		usuario = new Usuario();
+	
 		formCriarUsuario = new Form<Usuario>("formCriarUsuario", new CompoundPropertyModel<Usuario>(usuario));
 		formCriarUsuario.setOutputMarkupId(true);
 

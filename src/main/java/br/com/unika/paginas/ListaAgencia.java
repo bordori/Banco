@@ -59,7 +59,7 @@ public class ListaAgencia extends NavBar {
 	private ServicoBanco servicoBanco;
 
 	public ListaAgencia() {
-		verificarPermissao();
+		verificarPermissaoBanco();
 		preencherListView();
 		add(containerListView());
 		add(initModal());

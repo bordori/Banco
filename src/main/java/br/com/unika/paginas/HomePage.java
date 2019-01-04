@@ -42,7 +42,7 @@ public class HomePage extends WebPage {
 	private ServicoUsuario servicoUsuario;
 
 	public HomePage() {
-		if(getSession().getAttribute("usuarioLogado") != null) {
+		if (getSession().getAttribute("usuarioLogado") != null) {
 			setResponsePage(Menu.class);
 		}
 		notificationPanel = new NotificationPanel("feedBack");
@@ -64,13 +64,13 @@ public class HomePage extends WebPage {
 	}
 
 	private AjaxSubmitLink acaoLogin() {
-		acaoLogin = new AjaxSubmitLink("acaoLogin",formLogin) {
+		acaoLogin = new AjaxSubmitLink("acaoLogin", formLogin) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				super.onSubmit(target, form);
-				logar(getSession(),target);
+				logar(getSession(), target);
 			}
 		};
 		return acaoLogin;
@@ -79,17 +79,23 @@ public class HomePage extends WebPage {
 	private void logar(Session session, AjaxRequestTarget target) {
 		Search search = new Search(Usuario.class);
 		search.addFilterEqual("login", getLoginUsuario());
-		search.addFilterEqual("senha",getSenhaUsuario());
+		search.addFilterEqual("senha", getSenhaUsuario());
 		List<Usuario> lista = servicoUsuario.search(search);
 		if (!lista.isEmpty()) {
 			Usuario usuario = lista.get(0);
-			session.setAttribute("usuarioLogado", usuario);
-			setResponsePage(Menu.class);
-		}else {
+			if (usuario.getAtivo() == false) {
+				notificationPanel.mensagem("Usuario Desativado!", "erro");
+				target.add(notificationPanel);
+			} else {
+				session.setAttribute("usuarioLogado", usuario);
+				setResponsePage(Menu.class);
+			}
+
+		} else {
 			notificationPanel.mensagem("Login ou Senha Esta Incorreto!", "erro");
 			target.add(notificationPanel);
 		}
-		
+
 	}
 
 	private PasswordTextField campoSenha() {

@@ -257,5 +257,22 @@ public class ServicoUsuario implements IServico<Usuario, Long>, Serializable {
 		this.usuarioDAO = usuarioDAO;
 	}
 
+	public Retorno ativarDesativarConta(Usuario usuario, int contasAtivas) {
+		Retorno retorno = new Retorno(true, null);
+
+		if (contasAtivas == 0) {
+			if (usuario.getAtivo()) {
+				usuario.setAtivo(false);
+			} else {
+				usuario.setAtivo(true);
+			}
+			retorno = usuarioDAO.alterarDAO(usuario);
+		} else {
+			retorno.setSucesso(false);
+			retorno.addMensagem("O Cliente não Deve ter Contas Ativas Para Desativa-lo!");
+		}
+		return retorno;
+	}
+
 	
 }

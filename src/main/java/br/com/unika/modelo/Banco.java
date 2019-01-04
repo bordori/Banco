@@ -39,6 +39,10 @@ public class Banco implements Serializable{
 	private Set<Agencia> agencia;
 	
 	
+	public String getNumeroNomeBanco() {
+		return getNumero()+"-"+getNome();
+	}
+	
 	public Long getIdBanco() {
 		return idBanco;
 	}

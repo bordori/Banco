@@ -42,6 +42,10 @@ public class Agencia implements Serializable{
 	@OneToMany(mappedBy = "agencia", targetEntity = Conta.class, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	private Set<Conta> conta;
 
+	public String getNumeroNomeAgencia() {
+		return getNumero()+"-"+getNome();
+	}
+	
 	public Long getIdAgencia() {
 		return idAgencia;
 	}

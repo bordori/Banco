@@ -4,9 +4,11 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 
+import br.com.unika.paginas.ClienteConta;
 import br.com.unika.paginas.HomePage;
 import br.com.unika.paginas.ListaAgencia;
 import br.com.unika.paginas.ListaBancos;
+import br.com.unika.paginas.ListaClientes;
 import br.com.unika.paginas.ListaContas;
 import br.com.unika.paginas.Menu;
 
@@ -37,10 +39,13 @@ public class WicketApplication extends WebApplication
 		super.init();
 		
 		mountPage("menu", Menu.class);
-		mountPage("menu/banco", ListaBancos.class);
-		mountPage("menu/agencia", ListaAgencia.class);
-		mountPage("menu/conta", ListaContas.class);
+		mountPage("menu/gerenciarbancos/bancos", ListaBancos.class);
+		mountPage("menu/gerenciarbancos/agencias", ListaAgencia.class);
+		mountPage("menu/gerenciarcliente/contas", ListaContas.class);
+		mountPage("menu/gerenciarcliente/clientes", ListaClientes.class);
+		mountPage("menu/minhaconta/contas", ClienteConta.class);
 
+		
 		getComponentInstantiationListeners().add(new SpringComponentInjector(this));
 		// add your configuration here
 	}
