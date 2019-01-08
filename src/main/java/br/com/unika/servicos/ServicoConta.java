@@ -122,6 +122,46 @@ public class ServicoConta implements IServico<Conta, Long>, Serializable {
 		}
 		return retorno;
 	}
+	
+	public Retorno Deposito(Conta conta, Double valorDeposito) {
+		Retorno retorno = new Retorno(true, null);
+		if (valorDeposito < 2) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Valor Mínimo para Deposito é R$ 2,00");
+		}else if (valorDeposito > 1000000) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Valor Máximo para Deposito é R$ 1.000.000,00");
+		} 
+		
+		if (retorno.isSucesso()) {
+			conta.setSaldo(conta.getSaldo()+valorDeposito);
+			retorno = contaDAO.alterarDAO(conta);
+		}
+		
+		return retorno;
+	}
+	
+	public Retorno Saque(Conta conta, Double valorSaque) {
+		Retorno retorno = new Retorno(true, null);
+		
+		if (conta.getSaldo() < valorSaque) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Saldo Insuficiente Para Realizar o Saque!");
+		}else if (valorSaque < 2) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Saque Mínimo é de R$ 2,00!");
+		}else if (valorSaque > 100000) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Saque Máximo é de R$ 100.000,00!");
+		}
+		
+		if (retorno.isSucesso()) {
+			conta.setSaldo(conta.getSaldo() - valorSaque);
+			contaDAO.alterarDAO(conta);
+		}
+		
+		return retorno;
+	}
 
 	private Retorno validacaoDeNegocio(Conta conta) {
 		Retorno retorno = new Retorno(true, null);
@@ -202,5 +242,7 @@ public class ServicoConta implements IServico<Conta, Long>, Serializable {
 	public void setContaDAO(ContaDAO contaDAO) {
 		this.contaDAO = contaDAO;
 	}
+
+	
 
 }

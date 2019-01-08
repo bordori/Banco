@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Movimentacoes" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2f6e4db4-9f8f-4ffe-9759-6e1fd142f492">
+	<property name="template.type" value="columnar"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<style name="Title" forecolor="#000000" fontName="Times New Roman" fontSize="50" isBold="false"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Times New Roman" fontSize="18" isBold="false"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="conta" class="br.com.unika.modelo.Conta"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="tipoMovimentacao" class="java.lang.Integer"/>
+	<field name="data" class="java.util.Calendar"/>
+	<field name="valor" class="java.lang.String"/>
+	<field name="conta" class="br.com.unika.modelo.Conta"/>
+	<field name="nomeFavorecido" class="java.lang.String"/>
+	<field name="cpfFavoracido" class="java.lang.String"/>
+	<field name="numeroBancoFavorecido" class="java.lang.String"/>
+	<field name="nomeBancoFavorecido" class="java.lang.String"/>
+	<field name="nomeAgenciaFavorecido" class="java.lang.String"/>
+	<field name="numeroAgenciaFavorecido" class="java.lang.String"/>
+	<field name="contaFavorecido" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="103" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="0" y="10" width="553" height="93" uuid="f49d68fd-a2c7-44ec-a5fc-9300d10c85a1"/>
+				<textElement textAlignment="Center">
+					<font size="72" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Movimentações]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="72">
+			<textField>
+				<reportElement x="0" y="10" width="201" height="30" uuid="2318988c-4d29-4990-a369-c830a7eb0bb6"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Nome: "+$P{conta}.getUsuario().getNome()+" "+$P{conta}.getUsuario().getSobrenome()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="210" y="10" width="110" height="30" uuid="bce634ae-3500-48f3-a71a-680acd8b6704"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA["CPF: "+$P{conta}.getUsuario().getCpf()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="330" y="10" width="90" height="30" uuid="3c1add00-a027-4e2c-b1c2-517281900b7f"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Conta :"+$P{conta}.getConta()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="429" y="10" width="133" height="30" uuid="9cf7dae8-1b71-412a-9345-21d82cf4969d"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Tipo de Conta: "+($P{conta}.getTipoConta().intValue() == 1 ? "Conta Corrente" : $P{conta}.getTipoConta().intValue() == 2 ? "Conta Poupança" : "")]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="30">
+			<staticText>
+				<reportElement x="440" y="0" width="116" height="30" uuid="cff2ff64-375a-4569-b945-cb2c76f6bb97"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="18" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Agência]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="220" y="0" width="110" height="30" uuid="119ecbbc-08a1-46c9-b7b9-3ea64021783b"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="18" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Valor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="0" width="110" height="30" uuid="ee5820fe-91f2-4763-8f61-815a3c341141"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="18" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Data]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="330" y="0" width="110" height="30" uuid="92a6785e-a3e2-4391-9daa-34e9d4fc3c22"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="18" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Banco]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="110" height="30" uuid="258721b6-9a18-4086-9dc2-3335e3920c70"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="18" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Operação]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="106" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="80" y="105" width="400" height="1" uuid="5e41185f-9c90-45ca-839b-e28b308c1430"/>
+			</line>
+			<textField>
+				<reportElement x="0" y="5" width="110" height="30" uuid="a0022a5e-578f-441b-9d46-0d7ee4029f00">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="3cf7c164-4f1e-40ba-b141-8d86318875c3"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="11" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tipoMovimentacao}.intValue() == 1 ? "Saque" : $F{tipoMovimentacao}.intValue() == 2 ?  "Deposito" : $F{tipoMovimentacao}.intValue() == 3 ? "Transferencia" :""]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="110" y="5" width="110" height="30" uuid="ead60382-662c-4c1f-875e-e547b3b60a3d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f2b1ffc4-c4c1-47eb-9317-4795076b9ac9"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="11" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{data}.getTime()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="330" y="5" width="110" height="30" uuid="9b5e1570-85fa-4d16-897a-fdf648358a26">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b4e69e4d-f45c-40b8-82fb-bd1f2cb800af"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="11" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{conta}.getAgencia().getBanco().getNumero()+"-"+$F{conta}.getAgencia().getBanco().getNome()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="440" y="5" width="116" height="30" uuid="7c7d56e2-6b19-4509-a19f-89a0726589f8">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="4aafd3cb-8170-4c55-9748-a7511dde189a"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="11" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{conta}.getAgencia().getNumero()+"-"+$F{conta}.getAgencia().getNome()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="220" y="5" width="110" height="30" uuid="9d0d03c9-7130-4d54-becf-523da05e2c25">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="187d171b-7db4-4acc-ac28-d498035833ed"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="11" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="70" width="140" height="30" isRemoveLineWhenBlank="true" uuid="5e649303-1cb5-4020-9933-fdf15690766d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="49845576-2de7-4e7e-9aba-1486366a365c"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[ ($F{nomeFavorecido} == null ? "" : "Nome: "+$F{nomeFavorecido})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="140" y="70" width="115" height="30" isRemoveLineWhenBlank="true" uuid="34d22eef-249f-4af0-a437-b898aa8c9260">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="12c75e4e-70d1-4764-b84d-0cd17cc66d83"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{cpfFavoracido} == null ? "" : "CPF: "+$F{cpfFavoracido})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="45" width="100" height="20" isRemoveLineWhenBlank="true" uuid="01ec66ba-01d2-41b1-ae57-536238d07e09">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8bf8a3ad-1aa4-4370-a1cc-773cc308ce47"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="14" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomeFavorecido} == null ? "" : "Favorecido"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="256" y="70" width="100" height="30" isRemoveLineWhenBlank="true" uuid="3c9bd085-f9e9-43ea-a248-8c298de51f77">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="68b6ab05-667d-47dc-b246-1ceed68e2ff3"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{numeroBancoFavorecido} == null ? "" : "Banco: "+ $F{numeroBancoFavorecido}+"-"+$F{nomeBancoFavorecido})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="356" y="70" width="114" height="30" isRemoveLineWhenBlank="true" uuid="2a26bda2-8459-4786-84cb-6d82ebe1762f">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="fcd21b7f-219c-4ca5-83e7-1e5f0d974323"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{nomeAgenciaFavorecido} == null ? "" : "Agência: "+$F{numeroAgenciaFavorecido}+"-"+$F{nomeAgenciaFavorecido})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="470" y="70" width="85" height="30" isRemoveLineWhenBlank="true" uuid="cb2c1b23-a8ed-492c-b36a-5a2a263a963f">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d5fc152e-7e3b-4b8d-976d-7612adfde20d"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{contaFavorecido} == null ? "" : "Conta: "+$F{contaFavorecido})]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="13" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="2" y="0" width="555" height="13" forecolor="#D0B48E" backcolor="#9DB1B8" uuid="bfdca178-800d-445c-9a31-bb616a00e8ce"/>
+				<textField evaluationTime="Report">
+					<reportElement style="Column header" x="513" y="0" width="40" height="13" forecolor="#FFFFFF" uuid="2fba0f87-635e-476d-858f-d102b26146fe"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Column header" mode="Transparent" x="433" y="0" width="80" height="13" forecolor="#FFFFFF" uuid="e454d23d-bcfc-4c79-a399-0ef520a3150a"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				</textField>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement style="Column header" x="2" y="0" width="197" height="13" forecolor="#FFFFFF" uuid="14d8de1e-8695-4078-a67f-0e69172574d5"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

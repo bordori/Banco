@@ -11,7 +11,9 @@ $(function() {
 	$('.monetario').maskMoney({
 
 		decimal : ",",
-		thousands : "."
+		thousands : ".",
+		showSymbol:true,
+		symbol:"R$"
 	});
 });
 

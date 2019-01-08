@@ -2,6 +2,7 @@ package br.com.unika.servicos;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -10,7 +11,9 @@ import com.googlecode.genericdao.search.Search;
 
 import br.com.unika.dao.MovimentacaoDAO;
 import br.com.unika.dao.UsuarioDAO;
+import br.com.unika.enums.EnumTipoMovimentacao;
 import br.com.unika.interfaces.IServico;
+import br.com.unika.modelo.Conta;
 import br.com.unika.modelo.Movimentacao;
 import br.com.unika.modelo.Usuario;
 import br.com.unika.util.Retorno;
@@ -108,6 +111,17 @@ public class ServicoMovimentacao implements IServico<Movimentacao, Long>,Seriali
 		return movimentacaoDAO.countDAO(search);
 	}
 	
+	public void comprovanteDepositoSaque(Conta conta,EnumTipoMovimentacao tipoMovimentacao,Double valor) {
+		Movimentacao movimentacao = new Movimentacao();
+		movimentacao.setTipoMovimentacao(tipoMovimentacao.getValor());
+		movimentacao.setConta(conta);
+		movimentacao.setValor(Validacao.FormatarSaldo(valor));
+		Calendar data = Calendar.getInstance();
+		movimentacao.setData(data);
+		
+		incluir(movimentacao);
+		
+	}
 	
 	
 	

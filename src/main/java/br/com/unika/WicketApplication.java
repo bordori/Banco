@@ -10,6 +10,7 @@ import br.com.unika.paginas.ListaAgencia;
 import br.com.unika.paginas.ListaBancos;
 import br.com.unika.paginas.ListaClientes;
 import br.com.unika.paginas.ListaContas;
+import br.com.unika.paginas.ListaContatos;
 import br.com.unika.paginas.Menu;
 
 
@@ -44,6 +45,7 @@ public class WicketApplication extends WebApplication
 		mountPage("menu/gerenciarcliente/contas", ListaContas.class);
 		mountPage("menu/gerenciarcliente/clientes", ListaClientes.class);
 		mountPage("menu/minhaconta/contas", ClienteConta.class);
+		mountPage("menu/minhaconta/contatos", ListaContatos.class);
 
 		
 		getComponentInstantiationListeners().add(new SpringComponentInjector(this));

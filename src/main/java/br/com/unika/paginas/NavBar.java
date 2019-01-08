@@ -25,6 +25,7 @@ public class NavBar extends WebPage {
 		add(alterarContas());
 		add(alterarBancos());
 		add(contas());
+		add(contatos());
 
 	}
 
@@ -39,6 +40,17 @@ public class NavBar extends WebPage {
 			}
 		};
 		return contas;
+	}
+	
+	private AjaxLink<Void> contatos(){
+		AjaxLink<Void> contatos = new AjaxLink<Void>("contatos") {
+			
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				setResponsePage(ListaContatos.class);				
+			}
+		};
+		return contatos;
 	}
 
 	private AjaxLink<Void> opcaoGerenciarBancos() {

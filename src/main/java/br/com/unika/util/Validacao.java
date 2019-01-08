@@ -1,8 +1,14 @@
 package br.com.unika.util;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
@@ -11,7 +17,14 @@ import java.util.regex.Pattern;
 import javax.persistence.Column;
 import javax.persistence.Id;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
+import org.apache.wicket.request.resource.ContentDisposition;
+import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
+
 import br.com.unika.enums.EnumTipoConta;
+import br.com.unika.modelo.Conta;
+import br.com.unika.modelo.Movimentacao;
 
 public class Validacao {
 
@@ -57,6 +70,8 @@ public class Validacao {
 
 		return entidade;
 	}
+	
+	
 
 	public static String retiraEspacoDesnecessarios(String texto) {
 		if (texto != null) {
@@ -175,5 +190,9 @@ public class Validacao {
 			return false;
 		}
 	}
+
+
+
+	
 
 }

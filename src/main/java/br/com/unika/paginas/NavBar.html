@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
+<wicket:head>
 <title>Login</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -31,7 +31,7 @@
 
 
 
-</head>
+</wicket:head>
 <body>
 	<nav class="navbar navbar-expand-lg navbar-light bg-light "
 		style="background: linear-gradient(-135deg, #c850c0, #4158d0);">
@@ -50,8 +50,7 @@
 					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink"
 						style="background: linear-gradient(-135deg, #c850c0, #4158d0);">
 						<a class="dropdown-item" wicket:id="contas" style="color: #ffffff" >Contas</a>
-						<a class="dropdown-item" style="color: #ffffff">Contatos</a>
-						<a class="dropdown-item" style="color: #ffffff">Todas Movimentações</a>
+						<a class="dropdown-item" style="color: #ffffff" wicket:id="contatos">Contatos</a>
 					</div></li>
 				<div wicket:id="alterarContas">
 					<li class="nav-item dropdown"><a
@@ -103,6 +102,7 @@
 	<script src="js/main.js"></script>
 	<script src="js/jquery.mask.js" type="text/javascript"></script>
 	<script src="js/app.js" type="text/javascript"></script>
+	<script src="js/jquery.maskMoney.js" type="text/javascript"></script>
 
 
 </body>

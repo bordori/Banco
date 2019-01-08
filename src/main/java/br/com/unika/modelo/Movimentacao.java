@@ -33,29 +33,48 @@ public class Movimentacao implements Serializable {
 	@JoinColumn(name = "ID_CONTA", nullable = false)
 	private Conta conta;
 
-	@Column(name = "NOME_FAVORECIDO", nullable = false)
+	@Column(name = "NOME_FAVORECIDO")
 	private String nomeFavorecido;
 
-	@Column(name = "CPF_FAVORECIDO", nullable = false)
+	@Column(name = "CPF_FAVORECIDO")
 	private String cpfFavoracido;
 
-	@Column(name = "NUMERO_BANCO_FAVORECIDO", nullable = false)
+	@Column(name = "NUMERO_BANCO_FAVORECIDO")
 	private String numeroBancoFavorecido;
 
-	@Column(name = "NOME_BANCO_FAVORECIDO", nullable = false)
+	@Column(name = "NOME_BANCO_FAVORECIDO")
 	private String nomeBancoFavorecido;
 
-	@Column(name = "AGENCIA_FAVORECIDO", nullable = false)
-	private String agenciaFavorecido;
+	@Column(name = "NOME_AGENCIA_FAVORECIDO")
+	private String nomeAgenciaFavorecido;
 
-	@Column(name = "CONTA_FAVORECIDO", nullable = false)
+	@Column(name = "NUMERO_AGENCIA_FAVORECIDO")
+	private String numeroAgenciaFavorecido;
+
+	@Column(name = "CONTA_FAVORECIDO")
 	private String contaFavorecido;
 
 	@Column(nullable = false, name = "VALOR")
-	private Double Valor;
+	private String Valor;
 
 	@Column(nullable = false, name = "DATA")
 	private Calendar data;
+
+	public String getNomeAgenciaFavorecido() {
+		return nomeAgenciaFavorecido;
+	}
+
+	public void setNomeAgenciaFavorecido(String nomeAgenciaFavorecido) {
+		this.nomeAgenciaFavorecido = nomeAgenciaFavorecido;
+	}
+
+	public String getNumeroAgenciaFavorecido() {
+		return numeroAgenciaFavorecido;
+	}
+
+	public void setNumeroAgenciaFavorecido(String numeroAgenciaFavorecido) {
+		this.numeroAgenciaFavorecido = numeroAgenciaFavorecido;
+	}
 
 	public Long getIdMovimentacao() {
 		return idMovimentacao;
@@ -81,11 +100,11 @@ public class Movimentacao implements Serializable {
 		this.conta = conta;
 	}
 
-	public Double getValor() {
+	public String getValor() {
 		return Valor;
 	}
 
-	public void setValor(Double valor) {
+	public void setValor(String valor) {
 		Valor = valor;
 	}
 
@@ -119,14 +138,6 @@ public class Movimentacao implements Serializable {
 
 	public void setNomeBancoFavorecido(String nomeBancoFavorecido) {
 		this.nomeBancoFavorecido = nomeBancoFavorecido;
-	}
-
-	public String getAgenciaFavorecido() {
-		return agenciaFavorecido;
-	}
-
-	public void setAgenciaFavorecido(String agenciaFavorecido) {
-		this.agenciaFavorecido = agenciaFavorecido;
 	}
 
 	public String getContaFavorecido() {

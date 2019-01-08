@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<wicket:head>
+	<title>Revenue Banking Category Responsive website Template |
+		Home :: w3layouts</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="keywords"
+		content="Revenue Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
+	SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony Ericsson, Motorola web design" />
+
+
+
+</wicket:head>
+
+<body>
+	<wicket:panel>
+		<div class="border" style="margin: 3%">
+			<div class="row border"
+				style="margin: auto; background-color: #eeeeee; text-align: left; padding: 1%">
+				<img width="15" style="margin-right: 5px; margin-top: 2px"
+					height="15" src="icons/warning-2x.png"> </img>
+				<div style="font-size: 12px;" wicket:id="titulo"></div>
+			</div>
+			<div style="font-size: 14px; margin-left: 10px; margin-top: 10px"
+				wicket:id="mensagem"></div>
+			<div style="margin-top: 25px; margin-bottom: 25px; margin-left: 10px">
+
+				<form wicket:id="formDeposito">
+					<div class="col-sm-6">
+						<label for="valor">Valor</label> 
+						<input type="text" maxlength="11" class="form-control monetario"
+							id="valor" wicket:id="valor">
+
+					</div>
+					<div class="col-sm-8">
+						<small id="passwordHelpBlock" class="form-text text-muted"
+							wicket:id="valorMinMax"></small> <BR>
+							<small id="passwordHelpBlock" class="form-text text-muted" ><b style="color: green;" wicket:id="saldoDisponivel"></b></small>
+					</div>
+					<br>
+					<button type="button" wicket:id="sim"
+						class="btn btn-success btn-sm">Confirmar</button>
+					<button type="button" style="background-color: #eeeeee"
+						wicket:id="cancelar" class="btn btn-light btn-sm">Cancelar</button>
+				</form>
+
+			</div>
+		</div>
+
+		<script src="js/app.js" type="text/javascript"></script>
+		<script src="js/jquery.maskMoney.js" type="text/javascript"></script>
+
+	</wicket:panel>
+</body>
+</html>

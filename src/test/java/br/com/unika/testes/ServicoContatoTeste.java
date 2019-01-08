@@ -35,7 +35,7 @@ public class ServicoContatoTeste {
 		usuario.setIdUsuario(new Long(1));
 		contato.setUsuario(usuario);
 		contato.setConta("56127486");
-		contato.setAgencia("0025");
+//		contato.setAgencia("0025");
 		contato.setNumeroBanco("104");
 		contato.setNomeBanco("Caixa");
 		
@@ -54,7 +54,7 @@ public class ServicoContatoTeste {
 		usuario.setIdUsuario(new Long(3));
 		contato.setUsuario(usuario);
 		contato.setConta("56127486");
-		contato.setAgencia("0025");
+//		contato.setAgencia("0025");
 		contato.setNumeroBanco("1");
 		contato.setNomeBanco("Brasil");
 		

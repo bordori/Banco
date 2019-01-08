@@ -1,5 +1,6 @@
 package br.com.unika.paginas;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +53,7 @@ public class CadastrarUsuario extends Panel {
 	private DropDownChoice<PermissaoDeAcesso> permissaoDeAcesso;
 	private WebMarkupContainer containerCep;
 	private String confirmacaoSenha;
+	private String alterarSenha;
 
 	private NotificationPanel notificationPanel;
 
@@ -67,12 +69,31 @@ public class CadastrarUsuario extends Panel {
 		montarTela();
 
 	}
-	public CadastrarUsuario(String id,Usuario usuarioAlterar) {
+
+	public CadastrarUsuario(String id, Usuario usuarioAlterar) {
 		super(id);
 		this.usuario = usuarioAlterar;
 		montarTela();
+		cpf.setEnabled(false);
+		login.setEnabled(false);
+		senha.setRequired(false);
+		confirmarSenha.setRequired(false);
+		alterarSenha = usuario.getSenha();
+
+		if (!alterarPermissaoDeAcesso()) {
+			permissaoDeAcesso.setEnabled(false);
+		}
+
 	}
-	
+
+	private Boolean alterarPermissaoDeAcesso() {
+		Usuario usuarioLogado = (Usuario) getSession().getAttribute("usuarioLogado");
+		if (usuarioLogado.getPermissaoDeAcesso().getAlterarPermissoes()) {
+			return true;
+		}
+		return false;
+	}
+
 	private void montarTela() {
 		notificationPanel = new NotificationPanel("feedBackPanel");
 		notificationPanel.setOutputMarkupId(true);
@@ -81,7 +102,7 @@ public class CadastrarUsuario extends Panel {
 	}
 
 	private Form<Usuario> formCriarUsuario() {
-	
+
 		formCriarUsuario = new Form<Usuario>("formCriarUsuario", new CompoundPropertyModel<Usuario>(usuario));
 		formCriarUsuario.setOutputMarkupId(true);
 
@@ -101,6 +122,12 @@ public class CadastrarUsuario extends Panel {
 		formCriarUsuario.add(criarContainer());
 
 		formCriarUsuario.add(acaoSubmit());
+
+		if (usuario.getDataNascimento() != null) {
+			Date date = usuario.getDataNascimento().getTime();
+			dataNascimento.setModel(new Model<Date>(date));
+			dataNascimento.setModelObject(date);
+		}
 
 		return formCriarUsuario;
 
@@ -158,7 +185,7 @@ public class CadastrarUsuario extends Panel {
 						notificationPanel.mensagem("Não foi encontrado esse cep!", "erro");
 						target.add(notificationPanel);
 					}
-					
+
 				}
 			}
 		};
@@ -254,6 +281,7 @@ public class CadastrarUsuario extends Panel {
 		dataNascimento.add(datePicker);
 		dataNascimento.setOutputMarkupId(true);
 		dataNascimento.setRequired(true);
+
 		return dataNascimento;
 	}
 
@@ -315,11 +343,16 @@ public class CadastrarUsuario extends Panel {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				super.onSubmit(target, form);
+				if (alterarSenha != null && usuario.getSexo() == null) {
+					usuario.setSenha(alterarSenha);
+					setConfirmacaoSenha(alterarSenha);
+				}
+				
 				if (!usuario.getSenha().equals(confirmacaoSenha)) {
 					notificationPanel.mensagem("Senha e Confirmação da Senha Devem Ser Iguais!", "erro");
 					target.add(notificationPanel);
 
-				} else if (usuario.getIdUsuario() == null) {
+				}else if (usuario.getIdUsuario() == null) {
 					usuario.setAtivo(true);
 					Retorno retorno = servicoUsuario.incluir(usuario);
 					if (retorno.isSucesso()) {
@@ -329,7 +362,13 @@ public class CadastrarUsuario extends Panel {
 						target.add(notificationPanel);
 					}
 				} else {
-
+					Retorno retorno = servicoUsuario.alterar(usuario);
+					if (retorno.isSucesso()) {
+						acaoSubmitCriarUsuario(target);
+					} else {
+						notificationPanel.mensagem(retorno.getRetorno(), "erro");
+						target.add(notificationPanel);
+					}
 				}
 
 			}
@@ -349,7 +388,7 @@ public class CadastrarUsuario extends Panel {
 	}
 
 	public void acaoSubmitCriarUsuario(AjaxRequestTarget target) {
-		
+
 	}
 
 	private String getConfirmacaoSenha() {

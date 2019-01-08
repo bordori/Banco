@@ -131,7 +131,7 @@ public class ListaClientes extends NavBar{
 					public void acaoSubmitCriarUsuario(AjaxRequestTarget target) {
 						janela.close(target);
 						notificationPanel.mensagem("O Usuario Foi Alterado com sucesso", "sucesso");
-						target.add(notificationPanel);
+						target.add(containerListView);
 						super.acaoSubmitCriarUsuario(target);
 					}
 				};

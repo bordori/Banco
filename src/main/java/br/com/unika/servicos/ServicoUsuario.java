@@ -2,7 +2,6 @@ package br.com.unika.servicos;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,7 +13,6 @@ import com.googlecode.genericdao.search.Search;
 import br.com.unika.dao.UsuarioDAO;
 import br.com.unika.interfaces.IServico;
 import br.com.unika.modelo.Usuario;
-import br.com.unika.util.Reflexao;
 import br.com.unika.util.Retorno;
 import br.com.unika.util.Validacao;
 
@@ -131,7 +129,7 @@ public class ServicoUsuario implements IServico<Usuario, Long>, Serializable {
 		if (usuario.getTelefone() == null || usuario.getTelefone().length() < 13 || usuario.getTelefone().length() > 14 ) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Telefone Incorreto!");
-		}else if (!verificaSeCampoExiste("telefone", usuario.getTelefone())) {
+		}else if (!verificaSeCampoExiste("telefone", usuario.getTelefone(),usuario.getIdUsuario())) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("O Telefone "+usuario.getTelefone()+" Ja Esta Cadastrado!");
 		}
@@ -142,7 +140,7 @@ public class ServicoUsuario implements IServico<Usuario, Long>, Serializable {
 		} else if (!Validacao.validarCPF(usuario.getCpf())) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Digito Verificador do CPF Invalido!");
-		} else if(!verificaSeCampoExiste("cpf", usuario.getCpf())) {
+		} else if(!verificaSeCampoExiste("cpf", usuario.getCpf(),usuario.getIdUsuario())) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("O CPF "+usuario.getCpf()+" Ja Esta Cadastrado!");
 		}
@@ -150,7 +148,7 @@ public class ServicoUsuario implements IServico<Usuario, Long>, Serializable {
 		if (usuario.getEmail() == null || !validarEmail(usuario.getEmail())) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Email Invalido!");
-		}else if(!verificaSeCampoExiste("email", usuario.getEmail())){
+		}else if(!verificaSeCampoExiste("email", usuario.getEmail(),usuario.getIdUsuario())){
 			retorno.setSucesso(false);
 			retorno.addMensagem("O Email "+usuario.getEmail()+" Ja Esta Cadastrado!");
 		}
@@ -199,7 +197,7 @@ public class ServicoUsuario implements IServico<Usuario, Long>, Serializable {
 		if(usuario.getLogin() == null || usuario.getLogin().length() < 4 || usuario.getLogin().length() > 12) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Login Deve Ter Entre 4 e 12 Digitos!");
-		}else if(!verificaSeCampoExiste("login",usuario.getLogin())) {
+		}else if(!verificaSeCampoExiste("login",usuario.getLogin(),usuario.getIdUsuario())) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("O Usuario "+usuario.getLogin()+" Ja Esta Cadastrado!");
 		}else if (!Validacao.validaSeTemSoLetraENumeros(usuario.getLogin())) {
@@ -222,13 +220,13 @@ public class ServicoUsuario implements IServico<Usuario, Long>, Serializable {
 		return retorno;
 	}
 	
-	
-
-	
-
-	private boolean verificaSeCampoExiste(String campo, String pesquisa) {
+	private boolean verificaSeCampoExiste(String campo, String pesquisa, Long idUsuario) {
 		Search search = new Search(Usuario.class);
 		search.addFilterEqual(campo, pesquisa);
+		if (idUsuario != null) {
+			search.addFilterNotEqual("idUsuario", idUsuario);
+		}
+		
 		int count = count(search);
 		
 		if (count == 0) {

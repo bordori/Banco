@@ -131,9 +131,9 @@ public class ServicoBanco implements IServico<Banco, Long>, Serializable {
 			retorno.addMensagem("O Banco " + banco.getNome() + " Ja Esta Cadastrado!");
 		}
 
-		if (banco.getNumero() == null) {
+		if (banco.getNumero() == null || banco.getNumero().length() < 1 || banco.getNumero().length() > 4) {
 			retorno.setSucesso(false);
-			retorno.addMensagem("Numero Não Esta Preenchido!");
+			retorno.addMensagem("Número do Banco Deve Ter Entre 1 e 4 Digitos");
 
 		} else if (!Validacao.validaSeTemSoNumeros(banco.getNumero())) {
 			retorno.setSucesso(false);
