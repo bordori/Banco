@@ -343,7 +343,7 @@ public class CadastrarUsuario extends Panel {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				super.onSubmit(target, form);
-				if (alterarSenha != null && usuario.getSexo() == null) {
+				if (alterarSenha != null && usuario.getSenha() == null) {
 					usuario.setSenha(alterarSenha);
 					setConfirmacaoSenha(alterarSenha);
 				}

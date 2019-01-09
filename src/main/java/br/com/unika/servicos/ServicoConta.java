@@ -14,6 +14,7 @@ import br.com.unika.interfaces.IServico;
 import br.com.unika.modelo.Agencia;
 import br.com.unika.modelo.Banco;
 import br.com.unika.modelo.Conta;
+import br.com.unika.modelo.Contato;
 import br.com.unika.util.Retorno;
 import br.com.unika.util.Validacao;
 
@@ -78,9 +79,9 @@ public class ServicoConta implements IServico<Conta, Long>, Serializable {
 		Retorno retorno = new Retorno(true, null);
 
 		if (conta != null && conta.getIdConta() != null) {
-			if(conta.getSaldo() == 0) {
+			if (conta.getSaldo() == 0) {
 				retorno = contaDAO.removerDAO(conta);
-			}else {
+			} else {
 				retorno.setSucesso(false);
 				retorno.addMensagem("A Conta não Deve Ter Saldo!");
 			}
@@ -122,43 +123,93 @@ public class ServicoConta implements IServico<Conta, Long>, Serializable {
 		}
 		return retorno;
 	}
-	
+
 	public Retorno Deposito(Conta conta, Double valorDeposito) {
 		Retorno retorno = new Retorno(true, null);
 		if (valorDeposito < 2) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Valor Mínimo para Deposito é R$ 2,00");
-		}else if (valorDeposito > 1000000) {
+		} else if (valorDeposito > 1000000) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Valor Máximo para Deposito é R$ 1.000.000,00");
-		} 
-		
+		}
+
 		if (retorno.isSucesso()) {
-			conta.setSaldo(conta.getSaldo()+valorDeposito);
+			conta.setSaldo(conta.getSaldo() + valorDeposito);
 			retorno = contaDAO.alterarDAO(conta);
 		}
-		
+
 		return retorno;
 	}
-	
+
 	public Retorno Saque(Conta conta, Double valorSaque) {
 		Retorno retorno = new Retorno(true, null);
-		
+
 		if (conta.getSaldo() < valorSaque) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Saldo Insuficiente Para Realizar o Saque!");
-		}else if (valorSaque < 2) {
+		} else if (valorSaque < 2) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Saque Mínimo é de R$ 2,00!");
-		}else if (valorSaque > 100000) {
+		} else if (valorSaque > 100000) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Saque Máximo é de R$ 100.000,00!");
 		}
-		
+
 		if (retorno.isSucesso()) {
 			conta.setSaldo(conta.getSaldo() - valorSaque);
 			contaDAO.alterarDAO(conta);
 		}
+
+		return retorno;
+	}
+
+	public Retorno transferencia(Contato contato, Double valorTransferencia, Conta conta,Double taxa) {
+		Retorno retorno = new Retorno(true, null);
+
+		if (conta.getSaldo() < (valorTransferencia+taxa)) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Saldo Insuficiente Para Realizar a Transferencia!");
+		} else if (valorTransferencia < 1) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Valor Mínimo é de R$ 1,00!");
+		} else if (valorTransferencia > 1000000) {
+			retorno.setSucesso(false);
+			retorno.addMensagem("Valor Máximo é de R$ 1.000.000,00!");
+		}
+		if (retorno.isSucesso()) {
+			Search search = new Search(Conta.class);
+			search.addFilterEqual("conta", contato.getConta());
+			search.addFilterEqual("agencia.numero", contato.getNumeroAgencia());
+			search.addFilterEqual("agencia.banco.numero", contato.getNumeroBanco());
+			search.addFilterEqual("usuario.cpf", contato.getCpf());
+			List<Conta> contaLista = search(search); 
+			if ( contaLista.size() == 1) {
+				Conta contaFavorecido = contaLista.get(0);
+				if (contaFavorecido.getAtivo() == true) {
+					this.transferir(contaFavorecido,conta,valorTransferencia,taxa);
+				}else {
+					retorno.setSucesso(false);
+					retorno.addMensagem("Essa Conta Está Desativada!");
+				}
+			}else {
+				retorno.setSucesso(false);
+				retorno.addMensagem("A Conta não Existe!");
+			}
+		}
+
+		return retorno;
+	}
+
+	private Retorno transferir(Conta contaFavorecido, Conta conta,Double valorTrasferencia,Double taxa) {
+		Retorno retorno = new Retorno(true, null);
+		
+		contaFavorecido.setSaldo(contaFavorecido.getSaldo()+valorTrasferencia);
+		conta.setSaldo(conta.getSaldo()-valorTrasferencia);
+		if (!conta.getAgencia().getBanco().getNumero().equals(contaFavorecido.getAgencia().getBanco().getNumero())){
+			conta.setSaldo(conta.getSaldo()-taxa);
+		}
+		retorno = contaDAO.transferir(contaFavorecido,conta);
 		
 		return retorno;
 	}
@@ -195,7 +246,7 @@ public class ServicoConta implements IServico<Conta, Long>, Serializable {
 		if (conta.getUsuario() == null) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Selecione um Usuario!");
-		}else if (conta.getUsuario().getAtivo() == false) {
+		} else if (conta.getUsuario().getAtivo() == false) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Essa Cliente Esta Desativado!");
 		}
@@ -242,7 +293,5 @@ public class ServicoConta implements IServico<Conta, Long>, Serializable {
 	public void setContaDAO(ContaDAO contaDAO) {
 		this.contaDAO = contaDAO;
 	}
-
-	
 
 }

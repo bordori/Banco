@@ -24,6 +24,7 @@ import com.googlecode.genericdao.search.Search;
 
 import br.com.unika.enums.EnumTipoMovimentacao;
 import br.com.unika.modelo.Conta;
+import br.com.unika.modelo.Contato;
 import br.com.unika.modelo.Movimentacao;
 import br.com.unika.modelo.Usuario;
 import br.com.unika.servicos.ServicoConta;
@@ -203,6 +204,7 @@ public class ClienteConta extends NavBar {
 				item.add(AtivarDesativarConta(conta));
 				item.add(acaoDeposito(conta));
 				item.add(acaoSaque(conta));
+				item.add(acaoTransferencia(conta));
 				item.add(acaoMovimentacao(conta));
 
 				item.add(acaoDeletar(conta));
@@ -210,6 +212,46 @@ public class ClienteConta extends NavBar {
 		};
 		listaConta.setOutputMarkupId(true);
 		return listaConta;
+	}
+
+	protected AjaxLink<Void> acaoTransferencia(Conta conta) {
+		AjaxLink<Void> acaoTransferencia = new AjaxLink<Void>("acaoTransferencia") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				janela.setMinimalWidth(600);
+				janela.setInitialWidth(700);
+				janela.setMinimalHeight(500);
+				janela.setInitialHeight(520);
+				OperacaoTransferencia operacaoTransferencia = new OperacaoTransferencia(janela.getContentId(), conta) {
+					@Override
+					public void acaoSubmitTrasferencia(AjaxRequestTarget target, Boolean tecla, Conta conta,
+							Double valorTransferencia, Contato contato,Double taxa) {
+						Retorno retorno = new Retorno(true, null);
+						if (tecla) {
+							retorno = servicoConta.transferencia(contato,valorTransferencia,conta,taxa);
+							
+							if (!retorno.isSucesso()) {
+								notificationPanel.mensagem(retorno.getRetorno(), "erro");
+							}else {
+								notificationPanel.mensagem("Transferencia Concluida com Sucesso!","sucesso");
+								janela.close(target);
+								servicoMovimentacao.comprovanteTransferencia(conta,valorTransferencia,contato,taxa);
+							}
+						} else {
+							janela.close(target);
+						}
+						target.add(containerListView);
+						super.acaoSubmitTrasferencia(target, tecla, conta, valorTransferencia,contato,taxa);
+					}
+				};
+
+				janela.setContent(operacaoTransferencia);
+				janela.show(target);
+			}
+		};
+		return acaoTransferencia;
 	}
 
 	private AjaxLink<Void> acaoMovimentacao(Conta conta) {
@@ -269,7 +311,7 @@ public class ClienteConta extends NavBar {
 
 		final byte[] bytes = RelatorioJasper.gerarRelatorioMovimentacoes(hash, "Movimentacoes", listaMovimentacoes);
 
-		final AJAXDownload download = new AJAXDownload( "Movimentacao.pdf") {
+		final AJAXDownload download = new AJAXDownload("Movimentacao.pdf") {
 			private static final long serialVersionUID = 1L;
 
 			@Override

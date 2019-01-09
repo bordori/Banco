@@ -3,14 +3,16 @@ package br.com.unika.paginas;
 import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.form.validation.IFormValidator;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -30,28 +32,30 @@ import br.com.unika.servicos.ServicoBanco;
 import br.com.unika.servicos.ServicoContato;
 import br.com.unika.util.NotificationPanel;
 import br.com.unika.util.Retorno;
+import br.com.unika.util.Validacao;
 
 public class CadastrarContato extends Panel {
 	private static final long serialVersionUID = 1L;
 
-	private Contato contato;
-	private Form<Contato> formCriarContato;
+	protected Contato contato;
+	protected Form<Contato> formCriarContato;
 	private NotificationPanel notificationPanel;
-	private TextField<String> apelido,cpf,conta;
+	private TextField<String> apelido, cpf, conta;
 	private DropDownChoice<Banco> dropBanco;
-	private DropDownChoice<Agencia> dropAgencia;
+	protected DropDownChoice<Agencia> dropAgencia;
 	private DropDownChoice<EnumTipoConta> dropTipoConta;
-	private Banco bancoSelecionado;
+	protected Banco bancoSelecionado;
 	private Agencia agenciaSelecionado;
 	private EnumTipoConta tipoDeContaEnum;
-	
-	@SpringBean(name="servicoBanco")
+	protected WebMarkupContainer container;
+
+	@SpringBean(name = "servicoBanco")
 	private ServicoBanco servicoBanco;
-	
-	@SpringBean(name="servicoAgencia")
+
+	@SpringBean(name = "servicoAgencia")
 	private ServicoAgencia servicoAgencia;
-	
-	@SpringBean(name="servicoContato")
+
+	@SpringBean(name = "servicoContato")
 	private ServicoContato servicoContato;
 
 	public CadastrarContato(String id) {
@@ -61,34 +65,46 @@ public class CadastrarContato extends Panel {
 		montarTela();
 	}
 
-	
-
 	public CadastrarContato(String id, Contato contatoAlterar) {
 		super(id);
 		contato = contatoAlterar;
+		
+		montarTela();
+		dropAgencia.setEnabled(true);
+	}
+
+	protected void preencherDropDown() {
 		Search search = new Search(Banco.class);
 		search.addFilterEqual("numero", contato.getNumeroBanco());
 		bancoSelecionado = servicoBanco.search(search).get(0);
-		
+
 		search = new Search(Agencia.class);
 		search.addFilterEqual("numero", contato.getNumeroAgencia());
 		search.addFilterEqual("banco", bancoSelecionado);
 		agenciaSelecionado = servicoAgencia.search(search).get(0);
-		montarTela();
-		dropAgencia.setEnabled(true);
+		tipoDeContaEnum = Validacao.tipoContaEnum(contato.getTipoConta());
 	}
 	
 	private void montarTela() {
 		notificationPanel = new NotificationPanel("feedBackPanel");
 		notificationPanel.setOutputMarkupId(true);
-		add(notificationPanel);
-		add(montarForm());
+		add(montarContainer());
+		
+	}
+
+	private WebMarkupContainer montarContainer() {
+		container = new WebMarkupContainer("webContainer");
+		container.setOutputMarkupId(true);
+		
+		container.add(notificationPanel);
+		container.add(montarForm());
+		return container;
 	}
 
 	private Form<Contato> montarForm() {
-		formCriarContato = new Form<Contato>("formCriarContato",new CompoundPropertyModel<Contato>(contato));
+		formCriarContato = new Form<Contato>("formCriarContato", new CompoundPropertyModel<Contato>(contato));
 		formCriarContato.setOutputMarkupId(true);
-		
+
 		formCriarContato.add(campoApelido());
 		formCriarContato.add(campoCpf());
 		formCriarContato.add(campoConta());
@@ -96,12 +112,14 @@ public class CadastrarContato extends Panel {
 		formCriarContato.add(campoDropAgencia());
 		formCriarContato.add(campoDropTipoConta());
 		formCriarContato.add(acaoSubmit());
-		
+		formCriarContato.add(cancelar());
+
 		return formCriarContato;
 	}
 
 	private TextField<String> campoConta() {
 		conta = new TextField<>("conta");
+		conta.setOutputMarkupId(true);
 		conta.add((new AttributeModifier("onfocus", "$(this).mask('999999');")));
 		conta.setRequired(true);
 		return conta;
@@ -116,20 +134,25 @@ public class CadastrarContato extends Panel {
 
 	private TextField<String> campoApelido() {
 		apelido = new TextField<String>("apelido");
-		apelido.setRequired(true);		
-		
+		apelido.setRequired(true);
+
 		return apelido;
 	}
-	
+
 	private AjaxSubmitLink acaoSubmit() {
-		AjaxSubmitLink acaoSubmit = new AjaxSubmitLink("acaoNovoContato", formCriarContato) {
+		AjaxSubmitLink acaoSubmit = new AjaxSubmitLink("sim", formCriarContato) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				Retorno retorno = new Retorno(true, null);
+
 				contato.setNomeBanco(bancoSelecionado.getNome());
 				contato.setNumeroBanco(bancoSelecionado.getNumero());
+
+				contato.setNumeroAgencia(agenciaSelecionado.getNumero());
+				contato.setNomeAgencia(agenciaSelecionado.getNome());
+
 				if (contato.getIdContato() == null) {
 					retorno = servicoContato.incluir(contato);
 				} else {
@@ -137,7 +160,7 @@ public class CadastrarContato extends Panel {
 				}
 
 				if (retorno.isSucesso()) {
-					acaoSubmitCriarConta(target);
+					acaoSubmitCriarConta(target,true);
 				} else {
 					notificationPanel.mensagem(retorno.getRetorno(), "erro");
 					target.add(notificationPanel);
@@ -154,12 +177,24 @@ public class CadastrarContato extends Panel {
 		};
 		return acaoSubmit;
 	}
+	private AjaxLink<Void> cancelar() {
+		AjaxLink<Void> acaoSubmit = new AjaxLink<Void>("nao") {
+			private static final long serialVersionUID = 1L;
 
-	protected void acaoSubmitCriarConta(AjaxRequestTarget target) {
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				acaoSubmitCriarConta(target, false);
+				
+			}
+		};
+		return acaoSubmit;
+	}
+
+	protected void acaoSubmitCriarConta(AjaxRequestTarget target,Boolean tecla) {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	private DropDownChoice<EnumTipoConta> campoDropTipoConta() {
 		ChoiceRenderer<EnumTipoConta> tipoConta = new ChoiceRenderer<EnumTipoConta>("descricao", "valor") {
 			private static final long serialVersionUID = 1L;
@@ -181,20 +216,26 @@ public class CadastrarContato extends Panel {
 		};
 
 		dropTipoConta = new DropDownChoice<EnumTipoConta>("tipoConta", new PropertyModel<>(this, "tipoDeContaEnum"),
-				model, tipoConta);
+				model, tipoConta) {
+			@Override
+			protected String getNullValidDisplayValue() {
+				// TODO Auto-generated method stub
+				return "Escolha";
+			}
+		};
 		dropTipoConta.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-			
+
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
 				contato.setTipoConta(tipoDeContaEnum.getValor());
-				
+
 			}
 		});
 		dropTipoConta.setOutputMarkupId(true);
 
 		return dropTipoConta;
 	}
-	
+
 	private DropDownChoice<Banco> campoDropBanco() {
 		ChoiceRenderer<Banco> banco = new ChoiceRenderer<Banco>("nome", "idBanco") {
 			private static final long serialVersionUID = 1L;
@@ -215,9 +256,15 @@ public class CadastrarContato extends Panel {
 
 		};
 
-		dropBanco = new DropDownChoice<>("banco", new PropertyModel<Banco>(this, "bancoSelecionado"), model, banco);
-//		dropBanco.setOutputMarkupId(true);
-		bancoSelecionado = null;
+		dropBanco = new DropDownChoice<Banco>("banco", new PropertyModel<Banco>(this, "bancoSelecionado"), model, banco) {
+			@Override
+			protected String getNullValidDisplayValue() {
+				// TODO Auto-generated method stub
+				return "Escolha";
+			}
+		};
+		dropBanco.setOutputMarkupId(true);
+		dropBanco.setNullValid(true);
 		dropBanco.add(new AjaxFormComponentUpdatingBehavior("onchange") {
 			private static final long serialVersionUID = 1L;
 
@@ -245,7 +292,7 @@ public class CadastrarContato extends Panel {
 				agenciaSelecionado = null;
 				dropAgencia.setChoiceRenderer(agencia);
 				dropAgencia.setChoices(model);
-				
+
 				if (bancoSelecionado == null) {
 					dropAgencia.setEnabled(false);
 				} else {
@@ -257,7 +304,7 @@ public class CadastrarContato extends Panel {
 		});
 		return dropBanco;
 	}
-	
+
 	private DropDownChoice<Agencia> campoDropAgencia() {
 		ChoiceRenderer<Agencia> agencia = new ChoiceRenderer<Agencia>("nome", "idAgencia") {
 			private static final long serialVersionUID = 1L;
@@ -272,22 +319,22 @@ public class CadastrarContato extends Panel {
 
 			@Override
 			protected List<Agencia> load() {
-				
+
 				return servicoAgencia.listar();
 			}
 
 		};
-		dropAgencia = new DropDownChoice<Agencia>("agencia",new PropertyModel<Agencia>(this, "agenciaSelecionado"),model,agencia);
-		dropAgencia.setOutputMarkupId(true);
-		dropAgencia.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-			private static final long serialVersionUID = 1L;
-
+		dropAgencia = new DropDownChoice<Agencia>("agencia", new PropertyModel<Agencia>(this, "agenciaSelecionado"),
+				model, agencia) {
 			@Override
-			protected void onUpdate(AjaxRequestTarget target) {
-				contato.setNumeroAgencia(agenciaSelecionado.getNumero());
-				contato.setNomeAgencia(agenciaSelecionado.getNome());
+			protected String getNullValidDisplayValue() {
+				// TODO Auto-generated method stub
+				return "Escolha";
 			}
-		});
+		};
+		dropAgencia.setOutputMarkupId(true);
+		dropAgencia.setNullValid(true);
+
 		dropAgencia.setEnabled(false);
 
 		return dropAgencia;

@@ -104,6 +104,18 @@ public class Validacao {
 		return null;
 	}
 	
+	public static EnumTipoConta tipoContaEnum(Integer numero) {
+		switch (numero) {
+		case 1:
+			return EnumTipoConta.CORRENTE;
+			
+		case 2:
+			return EnumTipoConta.POUPANCA;
+		
+		}
+		return null;
+	}
+	
 	public static String converterBoolean(Boolean booleano) {
 		if (booleano == true) {
 			return "Sim";

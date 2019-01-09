@@ -123,12 +123,17 @@ public class ListaContatos extends NavBar {
 				janela.setInitialHeight(400);
 				CadastrarContato cadastrarContato = new CadastrarContato(janela.getContentId(),contatos) {
 					@Override
-					protected void acaoSubmitCriarConta(AjaxRequestTarget target) {
-						janela.close(target);
-						preencherListView();
-						notificationPanel.mensagem("Contato Alterado Com Sucesso!", "sucesso");
+					protected void acaoSubmitCriarConta(AjaxRequestTarget target,Boolean tecla) {
+						if (tecla) {
+							janela.close(target);
+							preencherListView();
+							notificationPanel.mensagem("Contato Alterado Com Sucesso!", "sucesso");
+						}else {
+							janela.close(target);
+						}
+						
 						target.add(containerListView);
-						super.acaoSubmitCriarConta(target);
+						super.acaoSubmitCriarConta(target,tecla);
 					}
 				};
 
@@ -201,13 +206,19 @@ public class ListaContatos extends NavBar {
 				janela.setInitialHeight(400);
 				CadastrarContato cadastrarContato = new CadastrarContato(janela.getContentId()) {
 					@Override
-					protected void acaoSubmitCriarConta(AjaxRequestTarget target) {
-						janela.close(target);
-						preencherListView();
-						notificationPanel.mensagem("Contato Adicionado Com Sucesso!", "sucesso");
+					protected void acaoSubmitCriarConta(AjaxRequestTarget target,Boolean tecla) {
+						if (tecla) {
+							janela.close(target);
+							preencherListView();
+							notificationPanel.mensagem("Contato Adicionado Com Sucesso!", "sucesso");
 
+						}else {
+							janela.close(target);
+
+						}
+						
 						target.add(containerListView);
-						super.acaoSubmitCriarConta(target);
+						super.acaoSubmitCriarConta(target,tecla);
 					}
 				};
 

@@ -13,6 +13,11 @@
 			<style mode="Opaque" backcolor="#F0EFEF"/>
 		</conditionalStyle>
 	</style>
+	<subDataset name="Dataset1" uuid="342c4195-7bb4-445d-bcbf-212d0abf70c8">
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+	</subDataset>
 	<parameter name="conta" class="br.com.unika.modelo.Conta"/>
 	<queryString>
 		<![CDATA[]]>
@@ -114,9 +119,9 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="106" splitType="Stretch">
+		<band height="91" splitType="Stretch">
 			<line>
-				<reportElement positionType="FixRelativeToBottom" x="80" y="105" width="400" height="1" uuid="5e41185f-9c90-45ca-839b-e28b308c1430"/>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="90" width="555" height="1" uuid="5e41185f-9c90-45ca-839b-e28b308c1430"/>
 			</line>
 			<textField>
 				<reportElement x="0" y="5" width="110" height="30" uuid="a0022a5e-578f-441b-9d46-0d7ee4029f00">
@@ -164,16 +169,16 @@
 				<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="70" width="140" height="30" isRemoveLineWhenBlank="true" uuid="5e649303-1cb5-4020-9933-fdf15690766d">
+				<reportElement x="0" y="55" width="130" height="30" isRemoveLineWhenBlank="true" uuid="5e649303-1cb5-4020-9933-fdf15690766d">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="49845576-2de7-4e7e-9aba-1486366a365c"/>
 				</reportElement>
 				<textElement>
 					<font fontName="Times New Roman" size="11"/>
 				</textElement>
-				<textFieldExpression><![CDATA[ ($F{nomeFavorecido} == null ? "" : "Nome: "+$F{nomeFavorecido})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{nomeFavorecido} == null ? "" : "Nome: "+$F{nomeFavorecido})]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="140" y="70" width="115" height="30" isRemoveLineWhenBlank="true" uuid="34d22eef-249f-4af0-a437-b898aa8c9260">
+				<reportElement x="140" y="55" width="115" height="30" isRemoveLineWhenBlank="true" uuid="34d22eef-249f-4af0-a437-b898aa8c9260">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="12c75e4e-70d1-4764-b84d-0cd17cc66d83"/>
 				</reportElement>
 				<textElement>
@@ -182,7 +187,7 @@
 				<textFieldExpression><![CDATA[($F{cpfFavoracido} == null ? "" : "CPF: "+$F{cpfFavoracido})]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="45" width="100" height="20" isRemoveLineWhenBlank="true" uuid="01ec66ba-01d2-41b1-ae57-536238d07e09">
+				<reportElement x="0" y="35" width="100" height="20" isRemoveLineWhenBlank="true" uuid="01ec66ba-01d2-41b1-ae57-536238d07e09">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8bf8a3ad-1aa4-4370-a1cc-773cc308ce47"/>
 				</reportElement>
 				<textElement>
@@ -191,7 +196,7 @@
 				<textFieldExpression><![CDATA[$F{nomeFavorecido} == null ? "" : "Favorecido"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="256" y="70" width="100" height="30" isRemoveLineWhenBlank="true" uuid="3c9bd085-f9e9-43ea-a248-8c298de51f77">
+				<reportElement x="256" y="55" width="100" height="30" isRemoveLineWhenBlank="true" uuid="3c9bd085-f9e9-43ea-a248-8c298de51f77">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="68b6ab05-667d-47dc-b246-1ceed68e2ff3"/>
 				</reportElement>
 				<textElement>
@@ -200,7 +205,7 @@
 				<textFieldExpression><![CDATA[($F{numeroBancoFavorecido} == null ? "" : "Banco: "+ $F{numeroBancoFavorecido}+"-"+$F{nomeBancoFavorecido})]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="356" y="70" width="114" height="30" isRemoveLineWhenBlank="true" uuid="2a26bda2-8459-4786-84cb-6d82ebe1762f">
+				<reportElement x="356" y="55" width="114" height="30" isRemoveLineWhenBlank="true" uuid="2a26bda2-8459-4786-84cb-6d82ebe1762f">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="fcd21b7f-219c-4ca5-83e7-1e5f0d974323"/>
 				</reportElement>
 				<textElement>
@@ -209,7 +214,7 @@
 				<textFieldExpression><![CDATA[($F{nomeAgenciaFavorecido} == null ? "" : "Agência: "+$F{numeroAgenciaFavorecido}+"-"+$F{nomeAgenciaFavorecido})]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="470" y="70" width="85" height="30" isRemoveLineWhenBlank="true" uuid="cb2c1b23-a8ed-492c-b36a-5a2a263a963f">
+				<reportElement x="470" y="55" width="85" height="30" isRemoveLineWhenBlank="true" uuid="cb2c1b23-a8ed-492c-b36a-5a2a263a963f">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d5fc152e-7e3b-4b8d-976d-7612adfde20d"/>
 				</reportElement>
 				<textElement>
@@ -222,7 +227,7 @@
 	<pageFooter>
 		<band height="13" splitType="Stretch">
 			<frame>
-				<reportElement mode="Opaque" x="2" y="0" width="555" height="13" forecolor="#D0B48E" backcolor="#9DB1B8" uuid="bfdca178-800d-445c-9a31-bb616a00e8ce"/>
+				<reportElement mode="Opaque" x="0" y="0" width="555" height="13" forecolor="#D0B48E" backcolor="#9DB1B8" uuid="bfdca178-800d-445c-9a31-bb616a00e8ce"/>
 				<textField evaluationTime="Report">
 					<reportElement style="Column header" x="513" y="0" width="40" height="13" forecolor="#FFFFFF" uuid="2fba0f87-635e-476d-858f-d102b26146fe"/>
 					<textElement verticalAlignment="Middle">
