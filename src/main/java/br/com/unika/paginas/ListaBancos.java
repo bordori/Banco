@@ -73,7 +73,7 @@ public class ListaBancos extends NavBar {
 		notificationPanel.setOutputMarkupId(true);
 		containerListView.add(notificationPanel);
 		containerListView.add(polularTabelaBancos());
-		containerListView.add(acaoNovoBanco());
+		
 
 		return containerListView;
 	}
@@ -85,6 +85,7 @@ public class ListaBancos extends NavBar {
 		formFiltro.add(filtroNome());
 		formFiltro.add(filtroNumero());
 		formFiltro.add(acaoProcurar());
+		formFiltro.add(acaoNovoBanco());
 		return formFiltro;
 	}
 
@@ -217,12 +218,15 @@ public class ListaBancos extends NavBar {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					public void acaoSubmitCriarBanco(AjaxRequestTarget target) {
+					public void acaoSalvarCancelarBanco(AjaxRequestTarget target,boolean tecla) {
+						if (tecla) {
+							notificationPanel.mensagem("Banco foi Alterado Com Sucesso!", "sucesso");
+							preencherListaBancos();
+							target.add(containerListView);
+
+						}
 						janela.close(target);
-						notificationPanel.mensagem("Banco foi Alterado Com Sucesso!", "sucesso");
-						preencherListaBancos();
-						target.add(containerListView);
-						super.acaoSubmitCriarBanco(target);
+						super.acaoSalvarCancelarBanco(target,tecla);
 					}
 				};
 				janela.setContent(cadastrarBanco);
@@ -259,12 +263,15 @@ public class ListaBancos extends NavBar {
 				janela.setInitialHeight(350);
 				CadastrarBanco cadastrarBanco = new CadastrarBanco(janela.getContentId()) {
 					@Override
-					public void acaoSubmitCriarBanco(AjaxRequestTarget target) {
+					public void acaoSalvarCancelarBanco(AjaxRequestTarget target,boolean tecla) {
+						if (tecla) {
+							notificationPanel.mensagem("Banco Adicionado Com Sucesso!", "sucesso");
+							preencherListaBancos();
+							target.add(containerListView);
+						}
 						janela.close(target);
-						notificationPanel.mensagem("Banco Adicionado Com Sucesso!", "sucesso");
-						preencherListaBancos();
-						target.add(containerListView);
-						super.acaoSubmitCriarBanco(target);
+						
+						super.acaoSalvarCancelarBanco(target,tecla);
 					}
 				};
 				janela.setContent(cadastrarBanco);

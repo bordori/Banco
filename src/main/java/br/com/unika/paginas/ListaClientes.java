@@ -128,11 +128,14 @@ public class ListaClientes extends NavBar{
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					public void acaoSubmitCriarUsuario(AjaxRequestTarget target) {
+					public void acaoSalvarCancelarUsuario(AjaxRequestTarget target,boolean tecla) {
+						if (tecla) {
+							notificationPanel.mensagem("O Usuario Foi Alterado com sucesso", "sucesso");
+							
+						}
 						janela.close(target);
-						notificationPanel.mensagem("O Usuario Foi Alterado com sucesso", "sucesso");
 						target.add(containerListView);
-						super.acaoSubmitCriarUsuario(target);
+						super.acaoSalvarCancelarUsuario(target,tecla);
 					}
 				};
 				janela.setContent(cadastrarUsuario);

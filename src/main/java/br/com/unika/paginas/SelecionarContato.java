@@ -3,7 +3,6 @@ package br.com.unika.paginas;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -13,6 +12,8 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import com.googlecode.genericdao.search.Search;
 
 import br.com.unika.modelo.Contato;
 import br.com.unika.servicos.ServicoContato;
@@ -36,7 +37,9 @@ public class SelecionarContato extends Panel {
 	
 	private void preencherLista() {
 		listaContatos = new ArrayList<>();
-		listaContatos = servicoContato.listar();
+		Search search = new Search(Contato.class);
+		search.addFilterEqual("usuario", getSession().getAttribute("usuarioLogado"));
+		listaContatos = servicoContato.search(search);
 	}
 
 	private WebMarkupContainer montarContainer() {
@@ -64,7 +67,7 @@ public class SelecionarContato extends Panel {
 				Contato contato = item.getModelObject();
 
 				item.add(new Label("apelido", contato.getApelido()).setOutputMarkupId(true));
-				item.add(new Label("banco", contato.getNumeroBanco() + "-" + contato.getNomeBanco())
+				item.add(new Label("banco", contato.getAgencia().getBanco().getNumeroNomeBanco())
 						.setOutputMarkupId(true));
 				item.add(new Label("conta", contato.getConta()).setOutputMarkupId(true));
 

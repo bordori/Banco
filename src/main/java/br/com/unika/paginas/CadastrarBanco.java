@@ -2,7 +2,9 @@ package br.com.unika.paginas;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.validation.IFormValidator;
@@ -50,14 +52,29 @@ public class CadastrarBanco extends Panel {
 	private Form<Banco> formCriarBanco() {
 		formCriarBanco = new Form<Banco>("formCriarBanco", new CompoundPropertyModel<Banco>(banco));
 		formCriarBanco.setOutputMarkupId(true);
+		
+		formCriarBanco.add(titulo());
+		
 		formCriarBanco.add(campoNumero());
 		formCriarBanco.add(campoNome());
-		formCriarBanco.add(acaoSubmit());
+		
+		formCriarBanco.add(botaoCancelar());
+		formCriarBanco.add(botaoSalvar());
 		
 		return formCriarBanco;
 	}
 
-	private AjaxSubmitLink acaoSubmit() {
+	private Label titulo() {
+		Label titulo;
+		if (banco.getIdBanco() == null) {
+			titulo = new Label("titulo","Incluindo Novo Banco");
+		}else {
+			titulo = new Label("titulo","Editando Banco: "+banco.getNumeroNomeBanco());
+		}
+		return titulo;
+	}
+
+	private AjaxSubmitLink botaoSalvar() {
 		AjaxSubmitLink acaoSubmit = new AjaxSubmitLink("acaoSubmit",formCriarBanco) {
 			private static final long serialVersionUID = 1L;
 			@Override
@@ -71,7 +88,7 @@ public class CadastrarBanco extends Panel {
 				}
 				
 				if (retorno.isSucesso()) {
-					acaoSubmitCriarBanco(target);
+					acaoSalvarCancelarBanco(target,true);
 				} else {
 					notificationPanel.mensagem(retorno.getRetorno(), "erro");
 					target.add(notificationPanel);
@@ -87,8 +104,21 @@ public class CadastrarBanco extends Panel {
 		};
 		return acaoSubmit;
 	}
+	
+	private AjaxLink<Void> botaoCancelar() {
+		AjaxLink<Void> botaoCancelar = new AjaxLink<Void>("cancelar") {
+			private static final long serialVersionUID = 1L;
 
-	public void acaoSubmitCriarBanco(AjaxRequestTarget target) {
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				acaoSalvarCancelarBanco(target, false);
+			}
+			
+		};
+		return botaoCancelar;
+	}
+
+	public void acaoSalvarCancelarBanco(AjaxRequestTarget target,boolean tecla) {
 				
 	}
 

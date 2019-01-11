@@ -37,10 +37,17 @@
 									</select>
 								</div>
 							</div>
-							<div class="form-row form-group"
-								style="justify-content: flex-end">
-								<input type="submit" class="btn btn-info"
+							<div class="form-row form-group" style="float:right; margin-right: 5px">
+								<div class="col-md-12">
+									<button wicket:id="novaAgencia" class="btn btn-success"  title="Adcionar Novo Banco">
+												<img alt="Bolt" style="color: white;" src="icons/plus-2x.png"> Novo
+									</button>
+									<button wicket:id="gerarPdf" class="btn btn-success"  title="Adcionar Novo Banco">
+										 Gerar PDF
+									</button>
+									<input type="submit" class="btn btn-info"
 									wicket:id="acaoProcurar" value="Filtrar">
+								</div>
 							</div>
 						</form>
 
@@ -54,10 +61,7 @@
 										<th scope="col">Nome</th>
 										<th scope="col">Contas</th>
 										<th scope="col">Banco</th>
-										<th><button wicket:id="novaAgencia"
-												title="Adcionar Nova Agencia">
-												<img alt="Bolt" src="icons/plus-3x.png">
-											</button></th>
+										<th scope="col">Ações</th>
 									</tr>
 								</thead>
 								<tbody>

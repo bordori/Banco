@@ -42,6 +42,12 @@ public class OperacaoTransferencia extends CadastrarContato {
 		formCriarContato.add(new Label("saldoDisponivel", Validacao.FormatarSaldo(conta.getSaldo())));
 		formCriarContato.add(compoLabelTaxa());
 	}
+	
+	@Override
+	public Label titulo() {
+		Label titulo = new Label("titulo","Transferencia");
+		return titulo;
+	}
 
 	private Label compoLabelTaxa() {
 		labelTaxa = new Label("taxa", "Taxa: " + "R$ 0,00");
@@ -126,8 +132,8 @@ public class OperacaoTransferencia extends CadastrarContato {
 	}
 
 	@Override
-	protected void acaoSubmitCriarConta(AjaxRequestTarget target, Boolean tecla) {
-		super.acaoSubmitCriarConta(target, tecla);
+	protected void acaoSalvarCancelarContato(AjaxRequestTarget target, Boolean tecla) {
+		super.acaoSalvarCancelarContato(target, tecla);
 		acaoSubmitTrasferencia(target, tecla, conta, valorTransferencia, contato, taxa);
 	}
 

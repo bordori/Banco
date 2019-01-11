@@ -36,9 +36,6 @@ public class ServicoContatoTeste {
 		contato.setUsuario(usuario);
 		contato.setConta("56127486");
 //		contato.setAgencia("0025");
-		contato.setNumeroBanco("104");
-		contato.setNomeBanco("Caixa");
-		
 		Retorno retorno = servicoContato.incluir(contato);
 		
 		assertEquals(true, retorno.isSucesso());
@@ -55,8 +52,7 @@ public class ServicoContatoTeste {
 		contato.setUsuario(usuario);
 		contato.setConta("56127486");
 //		contato.setAgencia("0025");
-		contato.setNumeroBanco("1");
-		contato.setNomeBanco("Brasil");
+		
 		
 		Retorno retorno = servicoContato.alterar(contato);
 		

@@ -1,5 +1,8 @@
 package br.com.unika.paginas;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 import javax.swing.text.AbstractDocument.Content;
@@ -25,6 +28,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
+import org.apache.wicket.util.resource.IResourceStream;
 
 import com.googlecode.genericdao.search.Search;
 
@@ -35,8 +40,10 @@ import br.com.unika.modelo.Usuario;
 import br.com.unika.servicos.ServicoAgencia;
 import br.com.unika.servicos.ServicoBanco;
 import br.com.unika.servicos.ServicoConta;
+import br.com.unika.util.AJAXDownload;
 import br.com.unika.util.Confirmacao;
 import br.com.unika.util.NotificationPanel;
+import br.com.unika.util.RelatorioExcel;
 import br.com.unika.util.Retorno;
 
 public class ListaAgencia extends NavBar {
@@ -79,7 +86,6 @@ public class ListaAgencia extends NavBar {
 		notificationPanel.setOutputMarkupId(true);
 		containerListView.add(notificationPanel);
 		containerListView.add(polularTabelaAgencias());
-		containerListView.add(acaoNovaAgencia());
 
 		return containerListView;
 	}
@@ -91,7 +97,10 @@ public class ListaAgencia extends NavBar {
 		formFiltro.add(filtroNome());
 		formFiltro.add(filtroNumero());
 		formFiltro.add(campoBancoFiltro());
+		
+		formFiltro.add(acaoNovaAgencia());
 		formFiltro.add(acaoProcurar());
+		formFiltro.add(gerarPdf());
 		return formFiltro;
 	}
 
@@ -258,12 +267,15 @@ public class ListaAgencia extends NavBar {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					protected void acaoSubmitCriarAgencia(AjaxRequestTarget target) {
+					protected void acaoSalvarCancelarAgencia(AjaxRequestTarget target,boolean tecla) {
+						if (tecla) {
+							notificationPanel.mensagem("Agencia Alterada Com Sucesso!", "sucesso");
+							preencherListView();
+							target.add(containerListView);
+						}
 						janela.close(target);
-						notificationPanel.mensagem("Agencia Alterada Com Sucesso!", "sucesso");
-						preencherListView();
-						target.add(containerListView);
-						super.acaoSubmitCriarAgencia(target);
+						
+						super.acaoSalvarCancelarAgencia(target,tecla);
 					}
 				};
 				janela.setContent(cadastrarAgencia);
@@ -272,6 +284,37 @@ public class ListaAgencia extends NavBar {
 			}
 		};
 		return acaoAlterarAgencia;
+	}
+	
+	protected AjaxLink<Void> gerarPdf() {
+		AjaxLink<Void> gerarPdf = new AjaxLink<Void>("gerarPdf") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				RelatorioExcel relatorio = new RelatorioExcel();
+				final ByteArrayOutputStream bytes = relatorio.GerarExcelInclusaoAgencia(servicoBanco.listar());
+				
+				final AJAXDownload download = new AJAXDownload("teste.xls") {
+					
+					@Override
+					protected IResourceStream getResourceStream() {
+						AbstractResourceStreamWriter streamWriter = new AbstractResourceStreamWriter() {
+							
+							@Override
+							public void write(OutputStream output) throws IOException {
+								output.write(bytes.toByteArray());
+							}
+						};
+						return streamWriter;
+					}
+				};
+				add(download);
+				download.initiate(target);
+
+			}
+		};
+		return gerarPdf;
 	}
 
 	private AjaxLink<Void> acaoNovaAgencia() {
@@ -290,11 +333,15 @@ public class ListaAgencia extends NavBar {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					protected void acaoSubmitCriarAgencia(AjaxRequestTarget target) {
+					protected void acaoSalvarCancelarAgencia(AjaxRequestTarget target,boolean tecla) {
+						if (tecla) {
+							notificationPanel.mensagem("Agencia Incluida Com Sucesso!", "sucesso");
+							preencherListView();
+							target.add(containerListView);
+						}
 						janela.close(target);
-						preencherListView();
-						target.add(containerListView);
-						super.acaoSubmitCriarAgencia(target);
+	
+						super.acaoSalvarCancelarAgencia(target,tecla);
 					}
 				};
 				janela.setContent(cadastrarAgencia);

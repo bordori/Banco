@@ -35,17 +35,9 @@ public class Contato implements Serializable {
 	@JoinColumn(name = "USUARIO_ID", nullable = false)
 	private Usuario usuario;
 
-	@Column(nullable = false, name = "NUMERO_BANCO")
-	private String numeroBanco;
-
-	@Column(nullable = false, name = "NOME_BANCO")
-	private String nomeBanco;
-
-	@Column(nullable = false, name = "NUMERO_AGENCIA")
-	private String numeroAgencia;
-
-	@Column(nullable = false, name = "NOME_AGENCIA")
-	private String nomeAgencia;
+	@ManyToOne
+	@JoinColumn(name = "AGENCIA_ID", nullable = false)
+	private Agencia agencia;
 
 	@Column(nullable = false, name = "CONTA")
 	private String conta;
@@ -85,22 +77,6 @@ public class Contato implements Serializable {
 		this.usuario = usuario;
 	}
 
-	public String getNumeroBanco() {
-		return numeroBanco;
-	}
-
-	public void setNumeroBanco(String numeroBanco) {
-		this.numeroBanco = numeroBanco;
-	}
-
-	public String getNomeBanco() {
-		return nomeBanco;
-	}
-
-	public void setNomeBanco(String nomeBanco) {
-		this.nomeBanco = nomeBanco;
-	}
-
 	public String getConta() {
 		return conta;
 	}
@@ -117,20 +93,12 @@ public class Contato implements Serializable {
 		this.tipoConta = tipoConta;
 	}
 
-	public String getNumeroAgencia() {
-		return numeroAgencia;
+	public Agencia getAgencia() {
+		return agencia;
 	}
 
-	public void setNumeroAgencia(String numeroAgencia) {
-		this.numeroAgencia = numeroAgencia;
-	}
-
-	public String getNomeAgencia() {
-		return nomeAgencia;
-	}
-
-	public void setNomeAgencia(String nomeAgencia) {
-		this.nomeAgencia = nomeAgencia;
+	public void setAgencia(Agencia agencia) {
+		this.agencia = agencia;
 	}
 
 	public static long getSerialversionuid() {

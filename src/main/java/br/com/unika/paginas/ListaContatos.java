@@ -39,6 +39,8 @@ public class ListaContatos extends NavBar {
 	public ListaContatos() {
 		preencherListView();
 //		add(formFiltro());
+		add(acaoNovoContato());
+
 		add(containerListView());
 		add(initModal());
 	}
@@ -71,7 +73,6 @@ public class ListaContatos extends NavBar {
 		notificationPanel.setOutputMarkupId(true);
 		containerListView.add(notificationPanel);
 		containerListView.add(polularTabelaContatos());
-		containerListView.add(acaoNovoContato());
 
 		return containerListView;
 	}
@@ -94,9 +95,9 @@ public class ListaContatos extends NavBar {
 
 				item.add(new Label("apelido", contatos.getApelido()).setOutputMarkupId(true));
 				item.add(new Label("cpf", contatos.getCpf()).setOutputMarkupId(true));
-				item.add(new Label("banco", contatos.getNumeroBanco() + "-" + contatos.getNomeBanco())
+				item.add(new Label("banco", contatos.getAgencia().getBanco().getNumeroNomeBanco())
 						.setOutputMarkupId(true));
-				item.add(new Label("agencia", contatos.getNumeroAgencia() + "-" + contatos.getNomeAgencia())
+				item.add(new Label("agencia", contatos.getAgencia().getNumeroNomeAgencia())
 						.setOutputMarkupId(true));
 				item.add(new Label("conta", contatos.getConta()).setOutputMarkupId(true));
 				item.add(new Label("tipoConta", Validacao.tipoConta(contatos.getTipoConta())).setOutputMarkupId(true));
@@ -123,7 +124,7 @@ public class ListaContatos extends NavBar {
 				janela.setInitialHeight(400);
 				CadastrarContato cadastrarContato = new CadastrarContato(janela.getContentId(),contatos) {
 					@Override
-					protected void acaoSubmitCriarConta(AjaxRequestTarget target,Boolean tecla) {
+					protected void acaoSalvarCancelarContato(AjaxRequestTarget target,Boolean tecla) {
 						if (tecla) {
 							janela.close(target);
 							preencherListView();
@@ -133,7 +134,7 @@ public class ListaContatos extends NavBar {
 						}
 						
 						target.add(containerListView);
-						super.acaoSubmitCriarConta(target,tecla);
+						super.acaoSalvarCancelarContato(target,tecla);
 					}
 				};
 
@@ -206,7 +207,7 @@ public class ListaContatos extends NavBar {
 				janela.setInitialHeight(400);
 				CadastrarContato cadastrarContato = new CadastrarContato(janela.getContentId()) {
 					@Override
-					protected void acaoSubmitCriarConta(AjaxRequestTarget target,Boolean tecla) {
+					protected void acaoSalvarCancelarContato(AjaxRequestTarget target,Boolean tecla) {
 						if (tecla) {
 							janela.close(target);
 							preencherListView();
@@ -218,7 +219,7 @@ public class ListaContatos extends NavBar {
 						}
 						
 						target.add(containerListView);
-						super.acaoSubmitCriarConta(target,tecla);
+						super.acaoSalvarCancelarContato(target,tecla);
 					}
 				};
 

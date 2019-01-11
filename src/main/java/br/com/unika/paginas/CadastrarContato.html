@@ -24,10 +24,9 @@
 			<form wicket:id="formCriarContato">
 				<div class="border rounded "
 					style="margin: 20px; background: #F9F9F9">
-					<div class="border-bottom "
-						style="padding: 5px; padding-left: 20px; background: #F5F5F5">
-						<span><img alt="" src="icons/lock-locked-2x.png"
-							style="margin-right: 2px">Incluindo Novo Contato</span>
+					<div class="border-bottom "	style="padding: 5px; padding-left: 20px; background: #F5F5F5">
+						<img alt="" src="icons/lock-locked-2x.png"	style="margin-right: 2px">
+						<span wicket:id="titulo"></span>
 					</div>
 					<div style="padding: 20px">
 						<div class="form-row form-group">
@@ -64,12 +63,9 @@
 						</div>
 
 						<BR />
-						<div class="form-row form-group">
-							<button type="button" wicket:id="sim"
-								class="btn btn-success btn-sm">Confirmar</button>
-							<button type="button" style="background-color: #eeeeee"
-								wicket:id="nao" class="btn btn-light btn-sm">Cancelar</button>
-						</div>
+						<button type="button" class="btn btn-success" wicket:id="sim">Salvar</button>
+						<button type="button" class="btn btn-light" style="border-color: gray;"  wicket:id="nao">Cancelar</button>
+							
 					</div>
 				</div>
 			</form>

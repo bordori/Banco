@@ -129,10 +129,10 @@ public class ServicoMovimentacao implements IServico<Movimentacao, Long>, Serial
 		Calendar data = Calendar.getInstance();
 		movimentacao.setNomeFavorecido(contato.getApelido());
 		movimentacao.setCpfFavoracido(contato.getCpf());
-		movimentacao.setNumeroBancoFavorecido(contato.getNumeroBanco());
-		movimentacao.setNomeBancoFavorecido(contato.getNomeBanco());
-		movimentacao.setNumeroAgenciaFavorecido(contato.getNumeroAgencia());
-		movimentacao.setNomeAgenciaFavorecido(contato.getNomeAgencia());
+		movimentacao.setNumeroBancoFavorecido(contato.getAgencia().getBanco().getNumero());
+		movimentacao.setNomeBancoFavorecido(contato.getAgencia().getBanco().getNome());
+		movimentacao.setNumeroAgenciaFavorecido(contato.getAgencia().getNumero());
+		movimentacao.setNomeAgenciaFavorecido(contato.getAgencia().getNome());
 		movimentacao.setContaFavorecido(contato.getConta());
 		movimentacao.setData(data);
 

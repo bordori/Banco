@@ -123,35 +123,12 @@ public class ServicoContato implements IServico<Contato, Long>, Serializable {
 			retorno.addMensagem("Conta Deve Ter 6 Digitos!");
 		}
 
-		if (contato.getNumeroAgencia() == null || contato.getNumeroAgencia().length() < 2
-				|| contato.getNumeroAgencia().length() > 4) {
+		if (contato.getAgencia() == null) {
 			retorno.setSucesso(false);
-			retorno.addMensagem("Numero da Agencia Deve Ter Entre 2 e 4 Digitos!");
-		} else if (!Validacao.validaSeTemSoNumeros(contato.getNumeroAgencia())) {
-			retorno.setSucesso(false);
-			retorno.addMensagem("Numero da Agecia Deve Ter Apenas Numeros!");
-		}
+			retorno.addMensagem("Agência Não está Preenchida!");
+		} 
 
-		if (contato.getNomeBanco() == null || contato.getNumeroBanco() == null) {
-			retorno.setSucesso(false);
-			retorno.addMensagem("Banco Deve Ser Preenchido!");
-		}
-
-		if (contato.getNomeBanco() == null || contato.getNomeBanco().length() < 3
-				|| contato.getNomeBanco().length() > 20) {
-			retorno.setSucesso(false);
-			retorno.addMensagem("Nome do Banco Deve Ter Entre 3 e 20 Digitos");
-		}
-
-		if (contato.getNumeroBanco() == null || contato.getNumeroBanco().length() < 1
-				|| contato.getNumeroBanco().length() > 4) {
-			retorno.setSucesso(false);
-			retorno.addMensagem("Número do Banco Deve Ter Entre 1 e 4 Digitos");
-
-		} else if (!Validacao.validaSeTemSoNumeros(contato.getNumeroBanco())) {
-			retorno.setSucesso(false);
-			retorno.addMensagem("Numero do Banco Deve Ter Apenas Numeros!");
-		}
+		
 		return retorno;
 	}
 

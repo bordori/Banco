@@ -24,14 +24,15 @@ public class Confirmacao extends Panel {
 
 		super(id);
 		add(new Label("titulo", "Exclusão"));
-		add(new Label("mensagem", "Esta operação não pode ser desfeita. Confirmar exclusão "+string+"?"));
-		add(formConfirmacao());
+		
+		add(formConfirmacao(string));
 
 	}
 
-	private Form<String> formConfirmacao() {
+	private Form<String> formConfirmacao(String mensagem) {
 		formConfirmacao = new Form<String>("formConfirmacao");
 		formConfirmacao.setOutputMarkupId(true);
+		formConfirmacao.add(new Label("mensagem", "Esta operação não pode ser desfeita. Confirmar exclusão "+mensagem+"?"));
 		formConfirmacao.add(sim());
 		formConfirmacao.add(nao());
 		formConfirmacao.add(senha());

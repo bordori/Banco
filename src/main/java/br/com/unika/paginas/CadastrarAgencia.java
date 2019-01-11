@@ -3,7 +3,9 @@ package br.com.unika.paginas;
 import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -63,12 +65,26 @@ public class CadastrarAgencia extends Panel {
 		formCriarAgencia = new Form<Agencia>("formCriarAgencia", new CompoundPropertyModel<>(agencia));
 		formCriarAgencia.setOutputMarkupId(true);
 		
+		formCriarAgencia.add(titulo());
+		
 		formCriarAgencia.add(campoNome());
 		formCriarAgencia.add(campoNumero());
 		formCriarAgencia.add(campoBanco());
-		formCriarAgencia.add(acaoSubmit());
+		
+		formCriarAgencia.add(botaoCancelar());
+		formCriarAgencia.add(botaoSalvar());
 
 		return formCriarAgencia;
+	}
+
+	private Label titulo() {
+		Label titulo;
+		if (agencia.getIdAgencia() == null) {
+			titulo = new Label("titulo","Incluindo Nova Agência");
+		}else {
+			titulo = new Label("titulo","Editando Agência: "+agencia.getNumeroNomeAgencia());
+		}
+		return titulo;
 	}
 
 	private TextField<String> campoNumero() {
@@ -102,7 +118,7 @@ public class CadastrarAgencia extends Panel {
 	}
 
 
-	private AjaxSubmitLink acaoSubmit() {
+	private AjaxSubmitLink botaoSalvar() {
 		AjaxSubmitLink acaoSubmit = new AjaxSubmitLink("acaoSubmit", formCriarAgencia) {
 			private static final long serialVersionUID = 1L;
 
@@ -117,7 +133,7 @@ public class CadastrarAgencia extends Panel {
 				}
 
 				if (retorno.isSucesso()) {
-					acaoSubmitCriarAgencia(target);
+					acaoSalvarCancelarAgencia(target,true);
 				} else {
 					notificationPanel.mensagem(retorno.getRetorno(), "erro");
 					target.add(notificationPanel);
@@ -134,8 +150,21 @@ public class CadastrarAgencia extends Panel {
 		};
 		return acaoSubmit;
 	}
+	
+	private AjaxLink<Void> botaoCancelar() {
+		AjaxLink<Void> botaoCancelar = new AjaxLink<Void>("cancelar") {
+			private static final long serialVersionUID = 1L;
 
-	protected void acaoSubmitCriarAgencia(AjaxRequestTarget target) {
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				acaoSalvarCancelarAgencia(target, false);
+			}
+			
+		};
+		return botaoCancelar;
+	}
+
+	protected void acaoSalvarCancelarAgencia(AjaxRequestTarget target,boolean tecla) {
 		// TODO Auto-generated method stub
 
 	}

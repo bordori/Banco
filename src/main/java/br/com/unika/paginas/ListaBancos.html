@@ -32,12 +32,17 @@
 										class="form-control" placeholder="numero do banco" id="numero">
 								</div>
 							</div>
-							<div class="form-row form-group"
-								style="justify-content: flex-end; margin-right: 5px">
-								<input type="submit" class="btn btn-info"
+							<div class="form-row form-group" style="float:right; margin-right: 5px">
+								<div class="col-md-12">
+									<button wicket:id="novoBanco" class="btn btn-success"  title="Adcionar Novo Banco">
+												<img alt="Bolt" style="color: white;" src="icons/plus-2x.png"> Novo
+											</button>
+									<input type="submit" class="btn btn-info"
 									wicket:id="acaoProcurar" value="Filtrar">
+								</div>
 							</div>
 						</form>
+						<BR>
 						<div class=" form-row form-group table-responsive"" wicket:id="containerListView"">
 							<div wicket:id="feedBack"></div>
 
@@ -50,10 +55,7 @@
 										<th scope="col">Contas</th>
 										<th scope="col">Contas Ativas</th>
 										<th scope="col">Contas Inativas</th>
-										<th><button wicket:id="novoBanco"
-												title="Adcionar Novo Banco">
-												<img alt="Bolt" src="icons/plus-3x.png">
-											</button></th>
+										<th scope="col">Ações</th>
 									</tr>
 								</thead>
 								<tbody>

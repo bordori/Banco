@@ -22,8 +22,8 @@
 	<div wicket:id="feedBackPanel"></div>
 	<form wicket:id="formCriarBanco">
 		<div class="border rounded " style="margin: 20px;background:  #F9F9F9">
-			<div class="border-bottom " style="padding: 5px;padding-left: 20px;background:   #F5F5F5 ">
-				<span><img alt="" src="icons/lock-locked-2x.png" style="margin-right: 2px">Incluindo Novo Banco</span>
+			<div class="border-bottom " style="padding: 5px;padding-left: 20px;background:   #F5F5F5 "><img alt="" src="icons/lock-locked-2x.png" style="margin-right: 2px">
+				<span wicket:id="titulo"></span>
 			</div>
 			<div style="padding: 20px">
 				<div class="form-row form-group">
@@ -38,9 +38,9 @@
 					
 				</div>
 				
-				<BR/><div class="form-row form-group">
-					<input type="submit"  class="btn btn-primary" wicket:id="acaoSubmit" value="Salvar">
-				</div>
+				<BR/>
+				<button type="button" class="btn btn-success" wicket:id="acaoSubmit">Salvar</button>
+				<button type="button" class="btn btn-light" style="border-color: gray;"  wicket:id="cancelar">Cancelar</button>
 			</div>	
 		</div>	
 	</form>

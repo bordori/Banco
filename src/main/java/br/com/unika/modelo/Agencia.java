@@ -41,6 +41,9 @@ public class Agencia implements Serializable{
 	
 	@OneToMany(mappedBy = "agencia", targetEntity = Conta.class, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	private Set<Conta> conta;
+	
+	@OneToMany(mappedBy = "agencia", targetEntity = Contato.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<Contato> contato;
 
 	public String getNumeroNomeAgencia() {
 		return getNumero()+"-"+getNome();
@@ -84,6 +87,14 @@ public class Agencia implements Serializable{
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public Set<Contato> getContato() {
+		return contato;
+	}
+
+	public void setContato(Set<Contato> contato) {
+		this.contato = contato;
 	}
 
 	public static long getSerialversionuid() {

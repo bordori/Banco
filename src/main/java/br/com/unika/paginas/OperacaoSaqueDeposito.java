@@ -23,19 +23,18 @@ public class OperacaoSaqueDeposito extends Panel {
 		super(id);
 		if (movimentacao.getValor() == 1) /*Saque*/ {
 			add(new Label("titulo", "Saque"));
-			add(new Label("mensagem", "Digite o Valor do Saque!"));
-			add(formConfirmacao("100.000,00","Saldo Disponivel:"+Validacao.FormatarSaldo(saldo)));
+			add(formConfirmacao("100.000,00","Saldo Disponivel:"+Validacao.FormatarSaldo(saldo),"Digite o Valor do Saque!"));
 		}else if (movimentacao.getValor() == 2 ) /*Deposito*/ {
 			add(new Label("titulo", "Deposito"));
-			add(new Label("mensagem", "Digite o Valor do Deposito!"));
-			add(formConfirmacao("1.000.000,00",""));
+			add(formConfirmacao("1.000.000,00","","Digite o Valor do Deposito!"));
 		}
 		
 	}
 
-	private Form<Double> formConfirmacao(String max,String saldoDisponivel) {
+	private Form<Double> formConfirmacao(String max,String saldoDisponivel,String mensagem) {
 		formDeposito = new Form<Double>("formDeposito");
 		formDeposito.setOutputMarkupId(true);
+		formDeposito.add(new Label("mensagem",mensagem ));
 		formDeposito.add(new Label("valorMinMax", "Mínimo:R$ 2,00   Máximo:R$ "+max));
 		formDeposito.add(new Label("saldoDisponivel", saldoDisponivel));
 		formDeposito.add(sim());

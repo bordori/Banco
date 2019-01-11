@@ -180,8 +180,7 @@ public class ServicoConta implements IServico<Conta, Long>, Serializable {
 		if (retorno.isSucesso()) {
 			Search search = new Search(Conta.class);
 			search.addFilterEqual("conta", contato.getConta());
-			search.addFilterEqual("agencia.numero", contato.getNumeroAgencia());
-			search.addFilterEqual("agencia.banco.numero", contato.getNumeroBanco());
+			search.addFilterEqual("agencia", contato.getAgencia());
 			search.addFilterEqual("usuario.cpf", contato.getCpf());
 			List<Conta> contaLista = search(search); 
 			if ( contaLista.size() == 1) {

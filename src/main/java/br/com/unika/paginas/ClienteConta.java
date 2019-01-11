@@ -55,6 +55,8 @@ public class ClienteConta extends NavBar {
 	public ClienteConta() {
 		preencherListView();
 //		add(formFiltro());
+		add(acaoNovaAgencia());
+
 		add(containerListView());
 		add(initModal());
 	}
@@ -88,7 +90,6 @@ public class ClienteConta extends NavBar {
 		notificationPanel.setOutputMarkupId(true);
 		containerListView.add(notificationPanel);
 		containerListView.add(polularTabelaContas());
-		containerListView.add(acaoNovaAgencia());
 
 		return containerListView;
 	}
@@ -227,23 +228,23 @@ public class ClienteConta extends NavBar {
 				OperacaoTransferencia operacaoTransferencia = new OperacaoTransferencia(janela.getContentId(), conta) {
 					@Override
 					public void acaoSubmitTrasferencia(AjaxRequestTarget target, Boolean tecla, Conta conta,
-							Double valorTransferencia, Contato contato,Double taxa) {
+							Double valorTransferencia, Contato contato, Double taxa) {
 						Retorno retorno = new Retorno(true, null);
 						if (tecla) {
-							retorno = servicoConta.transferencia(contato,valorTransferencia,conta,taxa);
-							
+							retorno = servicoConta.transferencia(contato, valorTransferencia, conta, taxa);
+
 							if (!retorno.isSucesso()) {
 								notificationPanel.mensagem(retorno.getRetorno(), "erro");
-							}else {
-								notificationPanel.mensagem("Transferencia Concluida com Sucesso!","sucesso");
+							} else {
+								notificationPanel.mensagem("Transferencia Concluida com Sucesso!", "sucesso");
 								janela.close(target);
-								servicoMovimentacao.comprovanteTransferencia(conta,valorTransferencia,contato,taxa);
+								servicoMovimentacao.comprovanteTransferencia(conta, valorTransferencia, contato, taxa);
 							}
 						} else {
 							janela.close(target);
 						}
 						target.add(containerListView);
-						super.acaoSubmitTrasferencia(target, tecla, conta, valorTransferencia,contato,taxa);
+						super.acaoSubmitTrasferencia(target, tecla, conta, valorTransferencia, contato, taxa);
 					}
 				};
 
@@ -376,12 +377,15 @@ public class ClienteConta extends NavBar {
 				Usuario usuario = (Usuario) getSession().getAttribute("usuarioLogado");
 				CadastrarConta cadastrarConta = new CadastrarConta(janela.getContentId(), usuario) {
 					@Override
-					protected void acaoSubmitCriarConta(AjaxRequestTarget target) {
-						super.acaoSubmitCriarConta(target);
+					protected void acaoSalvarCancelarConta(AjaxRequestTarget target, boolean tecla) {
+						super.acaoSalvarCancelarConta(target, tecla);
+						if (tecla) {
+							preencherListView();
+							notificationPanel.mensagem("Conta Criada com Sucesso!", "sucesso");
+							target.add(containerListView);
+						}
 						janela.close(target);
-						preencherListView();
-						notificationPanel.mensagem("Conta Criada com Sucesso!", "sucesso");
-						target.add(containerListView);
+
 					}
 				};
 				janela.setContent(cadastrarConta);

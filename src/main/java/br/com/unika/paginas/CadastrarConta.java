@@ -6,6 +6,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -87,7 +88,8 @@ public class CadastrarConta extends Panel {
 		formCriarConta.add(campoConta());
 		formCriarConta.add(campoDropTipoConta());
 
-		formCriarConta.add(acaoSubmit());
+		formCriarConta.add(botaoCancelar());
+		formCriarConta.add(botaoSalvar());
 
 		return formCriarConta;
 	}
@@ -114,14 +116,7 @@ public class CadastrarConta extends Panel {
 
 		dropTipoConta = new DropDownChoice<EnumTipoConta>("tipoConta", new PropertyModel<>(this, "tipoDeContaEnum"),
 				model, tipoConta);
-		dropTipoConta.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-			
-			@Override
-			protected void onUpdate(AjaxRequestTarget target) {
-				conta.setTipoConta(getTipoDeContaEnum().getValor());
-				
-			}
-		});
+		
 		dropTipoConta.setOutputMarkupId(true);
 
 		return dropTipoConta;
@@ -217,14 +212,14 @@ public class CadastrarConta extends Panel {
 		return dropBanco;
 	}
 
-	private AjaxSubmitLink acaoSubmit() {
+	private AjaxSubmitLink botaoSalvar() {
 		AjaxSubmitLink acaoSubmit = new AjaxSubmitLink("acaoSubmit", formCriarConta) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				Retorno retorno = new Retorno(true, null);
-				
+				conta.setTipoConta(getTipoDeContaEnum().getValor());
 				if (conta.getIdConta() == null) {
 					retorno = servicoConta.incluir(conta);
 				} else {
@@ -232,7 +227,7 @@ public class CadastrarConta extends Panel {
 				}
 
 				if (retorno.isSucesso()) {
-					acaoSubmitCriarConta(target);
+					acaoSalvarCancelarConta(target,true);
 				} else {
 					notificationPanel.mensagem(retorno.getRetorno(), "erro");
 					target.add(notificationPanel);
@@ -249,8 +244,21 @@ public class CadastrarConta extends Panel {
 		};
 		return acaoSubmit;
 	}
+	
+	private AjaxLink<Void> botaoCancelar() {
+		AjaxLink<Void> botaoCancelar = new AjaxLink<Void>("cancelar") {
+			private static final long serialVersionUID = 1L;
 
-	protected void acaoSubmitCriarConta(AjaxRequestTarget target) {
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				acaoSalvarCancelarConta(target, false);
+			}
+			
+		};
+		return botaoCancelar;
+	}
+
+	protected void acaoSalvarCancelarConta(AjaxRequestTarget target,boolean tecla) {
 		// TODO Auto-generated method stub
 
 	}

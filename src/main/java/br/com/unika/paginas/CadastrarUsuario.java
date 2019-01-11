@@ -10,18 +10,21 @@ import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.markup.html.form.select.Select;
 import org.apache.wicket.extensions.markup.html.form.select.SelectOption;
 import org.apache.wicket.extensions.yui.calendar.DatePicker;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.EmailTextField;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.validation.IFormValidator;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -74,21 +77,17 @@ public class CadastrarUsuario extends Panel {
 		super(id);
 		this.usuario = usuarioAlterar;
 		montarTela();
-		cpf.setEnabled(false);
-		login.setEnabled(false);
-		senha.setRequired(false);
-		confirmarSenha.setRequired(false);
 		alterarSenha = usuario.getSenha();
-
-		if (!alterarPermissaoDeAcesso()) {
-			permissaoDeAcesso.setEnabled(false);
-		}
-
 	}
 
 	private Boolean alterarPermissaoDeAcesso() {
 		Usuario usuarioLogado = (Usuario) getSession().getAttribute("usuarioLogado");
-		if (usuarioLogado.getPermissaoDeAcesso().getAlterarPermissoes()) {
+		if (usuarioLogado != null) {
+
+			if (usuarioLogado.getPermissaoDeAcesso().getAlterarPermissoes()) {
+				return true;
+			}
+		}else {
 			return true;
 		}
 		return false;
@@ -97,7 +96,7 @@ public class CadastrarUsuario extends Panel {
 	private void montarTela() {
 		notificationPanel = new NotificationPanel("feedBackPanel");
 		notificationPanel.setOutputMarkupId(true);
-		add(notificationPanel);
+
 		add(formCriarUsuario());
 	}
 
@@ -107,6 +106,9 @@ public class CadastrarUsuario extends Panel {
 		formCriarUsuario.setOutputMarkupId(true);
 
 		formCriarUsuario.add(new AttributeModifier("autocomplete", "off"));
+		formCriarUsuario.add(notificationPanel);
+
+		formCriarUsuario.add(titulo());
 
 		formCriarUsuario.add(campoNome());
 		formCriarUsuario.add(campoSobrenome());
@@ -121,7 +123,8 @@ public class CadastrarUsuario extends Panel {
 		formCriarUsuario.add(campoPermissoesDeAcesso());
 		formCriarUsuario.add(criarContainer());
 
-		formCriarUsuario.add(acaoSubmit());
+		formCriarUsuario.add(botaoSalvar());
+		formCriarUsuario.add(botaoCancelar());
 
 		if (usuario.getDataNascimento() != null) {
 			Date date = usuario.getDataNascimento().getTime();
@@ -131,6 +134,16 @@ public class CadastrarUsuario extends Panel {
 
 		return formCriarUsuario;
 
+	}
+
+	private Label titulo() {
+		Label titulo;
+		if (usuario.getIdUsuario() == null) {
+			titulo = new Label("titulo", "Incluindo Novo Usuário");
+		} else {
+			titulo = new Label("titulo", "Editando Usuário: " + usuario.getNomeCompleto());
+		}
+		return titulo;
 	}
 
 	private WebMarkupContainer criarContainer() {
@@ -160,7 +173,9 @@ public class CadastrarUsuario extends Panel {
 		};
 
 		permissaoDeAcesso = new DropDownChoice<>("permissaoDeAcesso", model, permissao);
-
+		if (!alterarPermissaoDeAcesso()) {
+			permissaoDeAcesso.setEnabled(false);
+		}
 		return permissaoDeAcesso;
 	}
 
@@ -169,27 +184,34 @@ public class CadastrarUsuario extends Panel {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				String cepConsulta = cep.getModelObject();
-				if (cepConsulta != null && !cepConsulta.equals("") && cepConsulta.length() == 9) {
-					Map<String, String> mapa = new HashMap<>();
-					mapa = ViaCepWs.buscarCep(cepConsulta);
-					if (mapa != null && !mapa.isEmpty()) {
-						usuario.setComplemento(mapa.get("complemento"));
-						usuario.setEndereco(mapa.get("logradouro"));
-						usuario.setBairro(mapa.get("bairro"));
-						usuario.setCidade(mapa.get("localidade"));
-						usuario.setEstado(mapa.get("uf"));
-
-						target.add(containerCep);
-					} else {
-						notificationPanel.mensagem("Não foi encontrado esse cep!", "erro");
-						target.add(notificationPanel);
-					}
-
-				}
+				localizarCep(target);
 			}
 		};
 		return ajaxLink;
+	}
+
+	private void localizarCep(AjaxRequestTarget target) {
+		String cepConsulta = cep.getModelObject();
+		if (cepConsulta != null && !cepConsulta.equals("") && cepConsulta.length() == 9) {
+			Map<String, String> mapa = new HashMap<>();
+			mapa = ViaCepWs.buscarCep(cepConsulta);
+			if (mapa != null && !mapa.isEmpty()) {
+				usuario.setComplemento(mapa.get("complemento"));
+				usuario.setEndereco(mapa.get("logradouro"));
+				usuario.setBairro(mapa.get("bairro"));
+				usuario.setCidade(mapa.get("localidade"));
+				usuario.setEstado(mapa.get("uf"));
+
+				formCriarUsuario.setModel(new CompoundPropertyModel<Usuario>(usuario));
+
+				target.add(containerCep);
+
+			} else {
+				notificationPanel.mensagem("Não foi encontrado esse cep!", "erro");
+				target.add(notificationPanel);
+			}
+
+		}
 	}
 
 	private TextField<String> campoEstado() {
@@ -234,18 +256,21 @@ public class CadastrarUsuario extends Panel {
 
 	private TextField<String> campoEndereco() {
 		endereco = new TextField<>("endereco");
+		endereco.setOutputMarkupId(true);
 		endereco.setRequired(true);
 		return endereco;
 	}
 
 	private TextField<String> campoCep() {
 		cep = new TextField<>("cep");
-		cep.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+		cep.add(new AjaxFormComponentUpdatingBehavior("onkeyup") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-
+				if (usuario.getCep().length() == 9) {
+					localizarCep(target);
+				}
 			}
 		});
 		cep.add((new AttributeModifier("onfocus", "$(this).mask('99999-999');")));
@@ -286,9 +311,19 @@ public class CadastrarUsuario extends Panel {
 	}
 
 	private TextField<String> campoCpf() {
-		cpf = new TextField<>("cpf");
+		cpf = new TextField<String>("cpf") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean isEnabled() {
+				if (usuario.getIdUsuario() == null) {
+					return true;
+				}
+				return false;
+			}
+		};
 		cpf.add((new AttributeModifier("onfocus", "$(this).mask('999.999.999-99');")));
-		cpf.setRequired(true);
+		cpf.setRequired(isEnabled());
 		return cpf;
 	}
 
@@ -305,20 +340,50 @@ public class CadastrarUsuario extends Panel {
 	}
 
 	private TextField<String> campoLogin() {
-		login = new TextField<>("login");
-		login.setRequired(true);
+		login = new TextField<String>("login") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean isEnabled() {
+				if (usuario.getIdUsuario() == null) {
+					return true;
+				}
+				return false;
+			}
+		};
+		login.setRequired(isEnabled());
 		return login;
 	}
 
 	private PasswordTextField campoSenha() {
-		senha = new PasswordTextField("senha");
-		senha.setRequired(true);
+		senha = new PasswordTextField("senha") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean isRequired() {
+				if (usuario.getIdUsuario() == null) {
+					return true;
+				}
+				return false;
+			}
+		};
+		senha.setRequired(senha.isRequired());
 		return senha;
 	}
 
 	private PasswordTextField campoConfirmarSenha() {
-		confirmarSenha = new PasswordTextField("confirmarSenha", new PropertyModel<String>(this, "confirmacaoSenha"));
-		confirmarSenha.setRequired(true);
+		confirmarSenha = new PasswordTextField("confirmarSenha", new PropertyModel<String>(this, "confirmacaoSenha")) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean isRequired() {
+				if (usuario.getIdUsuario() == null) {
+					return true;
+				}
+				return false;
+			}
+		};
+		confirmarSenha.setRequired(confirmarSenha.isRequired());
 		return confirmarSenha;
 	}
 
@@ -335,8 +400,8 @@ public class CadastrarUsuario extends Panel {
 		return email;
 	}
 
-	private AjaxSubmitLink acaoSubmit() {
-		AjaxSubmitLink ajaxSubmitLink = new AjaxSubmitLink("acaoNovoUsuario", formCriarUsuario) {
+	private AjaxButton botaoSalvar() {
+		AjaxButton ajaxSubmitLink = new AjaxButton("acaoNovoUsuario", formCriarUsuario) {
 
 			private static final long serialVersionUID = 1L;
 
@@ -347,16 +412,16 @@ public class CadastrarUsuario extends Panel {
 					usuario.setSenha(alterarSenha);
 					setConfirmacaoSenha(alterarSenha);
 				}
-				
+
 				if (!usuario.getSenha().equals(confirmacaoSenha)) {
 					notificationPanel.mensagem("Senha e Confirmação da Senha Devem Ser Iguais!", "erro");
 					target.add(notificationPanel);
 
-				}else if (usuario.getIdUsuario() == null) {
+				} else if (usuario.getIdUsuario() == null) {
 					usuario.setAtivo(true);
 					Retorno retorno = servicoUsuario.incluir(usuario);
 					if (retorno.isSucesso()) {
-						acaoSubmitCriarUsuario(target);
+						acaoSalvarCancelarUsuario(target, true);
 					} else {
 						notificationPanel.mensagem(retorno.getRetorno(), "erro");
 						target.add(notificationPanel);
@@ -364,7 +429,7 @@ public class CadastrarUsuario extends Panel {
 				} else {
 					Retorno retorno = servicoUsuario.alterar(usuario);
 					if (retorno.isSucesso()) {
-						acaoSubmitCriarUsuario(target);
+						acaoSalvarCancelarUsuario(target, true);
 					} else {
 						notificationPanel.mensagem(retorno.getRetorno(), "erro");
 						target.add(notificationPanel);
@@ -375,19 +440,32 @@ public class CadastrarUsuario extends Panel {
 
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
-				// TODO Auto-generated method stub
-				super.onError(target, form);
 
-				// Retorno retorno = servicoUsuario.validacaoDeNegocio(usuario);
 				notificationPanel.montarFeedBack();
+
 				target.add(notificationPanel);
+
+				super.onError(target, form);
 			}
 
 		};
 		return ajaxSubmitLink;
 	}
 
-	public void acaoSubmitCriarUsuario(AjaxRequestTarget target) {
+	private AjaxLink<Void> botaoCancelar() {
+		AjaxLink<Void> botaoCancelar = new AjaxLink<Void>("cancelar") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				acaoSalvarCancelarUsuario(target, false);
+			}
+
+		};
+		return botaoCancelar;
+	}
+
+	public void acaoSalvarCancelarUsuario(AjaxRequestTarget target, boolean tecla) {
 
 	}
 

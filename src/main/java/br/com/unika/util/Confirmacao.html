@@ -24,20 +24,22 @@
 					height="15" src="icons/warning-2x.png"> </img>
 				<div style="font-size: 12px;" wicket:id="titulo"></div>
 			</div>
-			<div style="font-size: 14px; margin-left: 10px; margin-top: 10px"
-				wicket:id="mensagem"></div>
-			<div style="margin-top: 25px; margin-bottom: 25px; margin-left: 10px">
-			
-				<form wicket:id="formConfirmacao">
-					<div class="col-sm-6">
-						<label for="senha">Senha</label> <input type="password"	maxlength="12" class="form-control" id="senha" wicket:id="senha">
-					</div><br>
+			<form wicket:id="formConfirmacao">
+				<div style="font-size: 14px; margin-left: 10px; margin-top: 10px"
+					wicket:id="mensagem"></div>
+				<div style="margin-top: 25px; margin-bottom: 25px; margin-left: 10px">
+					<div class="form-row form-group">
+						<div class="col-sm-6">
+							<label for="senha">Senha</label> <input type="password"	maxlength="12" class="form-control" id="senha" wicket:id="senha">
+						</div>
+					</div>
+					<br>
 					<button type="button" wicket:id="sim"	class="btn btn-success btn-sm">Confirmar</button>
 					<button type="button" style="background-color: #eeeeee"	wicket:id="cancelar" class="btn btn-light btn-sm">Cancelar</button>
-				</form>
+				</div>
+			</form>
 				
 			</div>
-		</div>
 	</wicket:panel>
 </body>
 </html>

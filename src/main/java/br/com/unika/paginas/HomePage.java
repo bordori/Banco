@@ -138,11 +138,14 @@ public class HomePage extends WebPage {
 				janela.setInitialHeight(550);
 				CadastrarUsuario cadastrarUsuario = new CadastrarUsuario(janela.getContentId()) {
 					@Override
-					public void acaoSubmitCriarUsuario(AjaxRequestTarget target) {
+					public void acaoSalvarCancelarUsuario(AjaxRequestTarget target,boolean tecla) {
+						if (tecla) {
+							notificationPanel.mensagem("O Usuario Foi Adicionado com sucesso", "sucesso");
+							
+						}
 						janela.close(target);
-						notificationPanel.mensagem("O Usuario Foi Adicionado com sucesso", "sucesso");
 						target.add(notificationPanel);
-						super.acaoSubmitCriarUsuario(target);
+						super.acaoSalvarCancelarUsuario(target,tecla);
 					}
 				};
 				janela.setContent(cadastrarUsuario);

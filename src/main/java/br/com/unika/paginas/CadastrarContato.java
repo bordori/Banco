@@ -3,16 +3,17 @@ package br.com.unika.paginas;
 import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.validation.IFormValidator;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -68,34 +69,27 @@ public class CadastrarContato extends Panel {
 	public CadastrarContato(String id, Contato contatoAlterar) {
 		super(id);
 		contato = contatoAlterar;
-		
+		preencherDropDown();
 		montarTela();
 		dropAgencia.setEnabled(true);
 	}
 
 	protected void preencherDropDown() {
-		Search search = new Search(Banco.class);
-		search.addFilterEqual("numero", contato.getNumeroBanco());
-		bancoSelecionado = servicoBanco.search(search).get(0);
-
-		search = new Search(Agencia.class);
-		search.addFilterEqual("numero", contato.getNumeroAgencia());
-		search.addFilterEqual("banco", bancoSelecionado);
-		agenciaSelecionado = servicoAgencia.search(search).get(0);
+		bancoSelecionado = contato.getAgencia().getBanco();
 		tipoDeContaEnum = Validacao.tipoContaEnum(contato.getTipoConta());
 	}
-	
+
 	private void montarTela() {
 		notificationPanel = new NotificationPanel("feedBackPanel");
 		notificationPanel.setOutputMarkupId(true);
 		add(montarContainer());
-		
+
 	}
 
 	private WebMarkupContainer montarContainer() {
 		container = new WebMarkupContainer("webContainer");
 		container.setOutputMarkupId(true);
-		
+
 		container.add(notificationPanel);
 		container.add(montarForm());
 		return container;
@@ -105,16 +99,28 @@ public class CadastrarContato extends Panel {
 		formCriarContato = new Form<Contato>("formCriarContato", new CompoundPropertyModel<Contato>(contato));
 		formCriarContato.setOutputMarkupId(true);
 
+		formCriarContato.add(titulo());
+
 		formCriarContato.add(campoApelido());
 		formCriarContato.add(campoCpf());
 		formCriarContato.add(campoConta());
 		formCriarContato.add(campoDropBanco());
 		formCriarContato.add(campoDropAgencia());
 		formCriarContato.add(campoDropTipoConta());
-		formCriarContato.add(acaoSubmit());
+		formCriarContato.add(botaoSalvar());
 		formCriarContato.add(cancelar());
 
 		return formCriarContato;
+	}
+
+	public Label titulo() {
+		Label titulo;
+		if (contato.getIdContato() == null) {
+			titulo = new Label("titulo", "Incluindo Novo Contato");
+		} else {
+			titulo = new Label("titulo", "Editando Contato: " + contato.getApelido());
+		}
+		return titulo;
 	}
 
 	private TextField<String> campoConta() {
@@ -139,19 +145,13 @@ public class CadastrarContato extends Panel {
 		return apelido;
 	}
 
-	private AjaxSubmitLink acaoSubmit() {
+	private AjaxSubmitLink botaoSalvar() {
 		AjaxSubmitLink acaoSubmit = new AjaxSubmitLink("sim", formCriarContato) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				Retorno retorno = new Retorno(true, null);
-
-				contato.setNomeBanco(bancoSelecionado.getNome());
-				contato.setNumeroBanco(bancoSelecionado.getNumero());
-
-				contato.setNumeroAgencia(agenciaSelecionado.getNumero());
-				contato.setNomeAgencia(agenciaSelecionado.getNome());
 
 				if (contato.getIdContato() == null) {
 					retorno = servicoContato.incluir(contato);
@@ -160,7 +160,7 @@ public class CadastrarContato extends Panel {
 				}
 
 				if (retorno.isSucesso()) {
-					acaoSubmitCriarConta(target,true);
+					acaoSalvarCancelarContato(target, true);
 				} else {
 					notificationPanel.mensagem(retorno.getRetorno(), "erro");
 					target.add(notificationPanel);
@@ -177,20 +177,21 @@ public class CadastrarContato extends Panel {
 		};
 		return acaoSubmit;
 	}
+
 	private AjaxLink<Void> cancelar() {
 		AjaxLink<Void> acaoSubmit = new AjaxLink<Void>("nao") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				acaoSubmitCriarConta(target, false);
-				
+				acaoSalvarCancelarContato(target, false);
+
 			}
 		};
 		return acaoSubmit;
 	}
 
-	protected void acaoSubmitCriarConta(AjaxRequestTarget target,Boolean tecla) {
+	protected void acaoSalvarCancelarContato(AjaxRequestTarget target, Boolean tecla) {
 		// TODO Auto-generated method stub
 
 	}
@@ -227,10 +228,13 @@ public class CadastrarContato extends Panel {
 
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-				contato.setTipoConta(tipoDeContaEnum.getValor());
+				if (tipoDeContaEnum != null) {
+					contato.setTipoConta(tipoDeContaEnum.getValor());
+				}
 
 			}
 		});
+		dropTipoConta.setRequired(true);
 		dropTipoConta.setOutputMarkupId(true);
 
 		return dropTipoConta;
@@ -256,7 +260,8 @@ public class CadastrarContato extends Panel {
 
 		};
 
-		dropBanco = new DropDownChoice<Banco>("banco", new PropertyModel<Banco>(this, "bancoSelecionado"), model, banco) {
+		dropBanco = new DropDownChoice<Banco>("banco", new PropertyModel<Banco>(this, "bancoSelecionado"), model,
+				banco) {
 			@Override
 			protected String getNullValidDisplayValue() {
 				// TODO Auto-generated method stub
@@ -289,7 +294,7 @@ public class CadastrarContato extends Panel {
 					}
 
 				};
-				agenciaSelecionado = null;
+				contato.setAgencia(null);
 				dropAgencia.setChoiceRenderer(agencia);
 				dropAgencia.setChoices(model);
 
@@ -315,26 +320,27 @@ public class CadastrarContato extends Panel {
 			}
 		};
 		IModel<List<Agencia>> model = new LoadableDetachableModel<List<Agencia>>() {
-			private static final long serialVersionUID = 1L;
-
 			@Override
 			protected List<Agencia> load() {
-
-				return servicoAgencia.listar();
+				Search search = new Search(Agencia.class);
+				if (bancoSelecionado != null) {
+					search.addFilterEqual("banco", bancoSelecionado);
+				}
+				return servicoAgencia.search(search);
 			}
-
 		};
-		dropAgencia = new DropDownChoice<Agencia>("agencia", new PropertyModel<Agencia>(this, "agenciaSelecionado"),
-				model, agencia) {
+
+		dropAgencia = new DropDownChoice<Agencia>("agencia", model, agencia) {
 			@Override
 			protected String getNullValidDisplayValue() {
 				// TODO Auto-generated method stub
 				return "Escolha";
 			}
 		};
+
 		dropAgencia.setOutputMarkupId(true);
 		dropAgencia.setNullValid(true);
-
+		dropAgencia.setRequired(true);
 		dropAgencia.setEnabled(false);
 
 		return dropAgencia;
