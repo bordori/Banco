@@ -1,14 +1,13 @@
 package br.com.unika.paginas;
 
+import java.beans.Transient;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.text.AbstractDocument.Content;
-
-import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -20,13 +19,12 @@ import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.form.validation.IFormValidator;
+import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
 import org.apache.wicket.util.resource.IResourceStream;
@@ -39,14 +37,13 @@ import br.com.unika.modelo.Conta;
 import br.com.unika.modelo.Usuario;
 import br.com.unika.servicos.ServicoAgencia;
 import br.com.unika.servicos.ServicoBanco;
-import br.com.unika.servicos.ServicoConta;
 import br.com.unika.util.AJAXDownload;
 import br.com.unika.util.Confirmacao;
 import br.com.unika.util.NotificationPanel;
 import br.com.unika.util.RelatorioExcel;
 import br.com.unika.util.Retorno;
 
-public class ListaAgencia extends NavBar {
+public class ListaAgencia extends NavBar implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
@@ -65,6 +62,7 @@ public class ListaAgencia extends NavBar {
 	@SpringBean(name = "servicoBanco")
 	private ServicoBanco servicoBanco;
 
+	
 	public ListaAgencia() {
 		verificarPermissaoBanco();
 		preencherListView();
@@ -99,6 +97,7 @@ public class ListaAgencia extends NavBar {
 		formFiltro.add(campoBancoFiltro());
 		
 		formFiltro.add(acaoNovaAgencia());
+		formFiltro.add(acaoImportar());
 		formFiltro.add(acaoProcurar());
 		formFiltro.add(gerarPdf());
 		return formFiltro;
@@ -293,17 +292,21 @@ public class ListaAgencia extends NavBar {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				RelatorioExcel relatorio = new RelatorioExcel();
-				final ByteArrayOutputStream bytes = relatorio.GerarExcelInclusaoAgencia(servicoBanco.listar());
 				
-				final AJAXDownload download = new AJAXDownload("teste.xls") {
-					
+				final byte[] bytes = relatorio.GerarExcelInclusaoAgencia(servicoBanco.listar());
+				
+				final AJAXDownload download = new AJAXDownload("Inclusao de Agencias.xls") {
+					private static final long serialVersionUID = 1L;
+
 					@Override
 					protected IResourceStream getResourceStream() {
 						AbstractResourceStreamWriter streamWriter = new AbstractResourceStreamWriter() {
-							
+							private static final long serialVersionUID = 1L;
+
 							@Override
 							public void write(OutputStream output) throws IOException {
-								output.write(bytes.toByteArray());
+								output.write(bytes);
+								
 							}
 						};
 						return streamWriter;
@@ -311,10 +314,83 @@ public class ListaAgencia extends NavBar {
 				};
 				add(download);
 				download.initiate(target);
+				
 
 			}
 		};
 		return gerarPdf;
+	}
+	
+	private AjaxLink<Void> acaoImportar(){
+		AjaxLink<Void> importar = new AjaxLink<Void>("importarAgencias") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				janela.setInitialWidth(550);
+				janela.setInitialHeight(270);
+				janela.setResizable(false);
+				ImportarAgencias importarAgencias = new ImportarAgencias(janela.getContentId()) {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void execultarFechar(AjaxRequestTarget target, boolean tecla, org.apache.wicket.markup.html.form.upload.FileUpload fileUpload) {
+						super.execultarFechar(target, tecla, fileUpload);
+						List<Agencia> listaAgencia = new ArrayList<>();
+						Retorno retorno = new Retorno(true, null);
+						if (tecla) {
+							if (fileUpload != null) {
+								RelatorioExcel relatorioExcel = new RelatorioExcel();
+								if (fileUpload.getContentType().equals("application/vnd.ms-excel")) {//.xls
+									listaAgencia = relatorioExcel.lerPlanilha(fileUpload,servicoBanco.listar(), true);
+								}else if(fileUpload.getContentType().equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")){//.xlsx
+									listaAgencia = relatorioExcel.lerPlanilha(fileUpload,servicoBanco.listar(), false);
+								}
+								
+								if (!listaAgencia.isEmpty()) {
+									
+									boolean sucesso = servicoAgencia.validarImportacaoDeAgencias(listaAgencia);
+									if (sucesso == true ) {
+										retorno = servicoAgencia.importarAgencias(listaAgencia);
+										if (retorno.isSucesso()) {
+											notificationPanel.mensagem("Agencias Incluidas com sucesso!", "sucesso");
+											preencherListView();
+											janela.close(target);
+										}else {
+											notificationPanel.mensagem(retorno.getRetorno(), "erro");
+										}
+										
+									}else { //mostra na tela os erros 
+										janela.close(target);
+										abrirModalComErros(target,listaAgencia);
+									}
+								}
+							}else {
+								notificationPanel.mensagem("Selecione Arquivo para Upload", "erro");
+							}
+						}else {
+							janela.close(target);
+						}
+						target.add(containerListView);
+					}
+
+					
+				};
+				janela.setContent(importarAgencias);
+				janela.show(target);
+			}
+		};
+		return importar;
+	}
+	
+	private void abrirModalComErros(AjaxRequestTarget target, List<Agencia> listaAgenciaErro) {
+		janela.setInitialWidth(800);
+		janela.setInitialHeight(400);
+		janela.setResizable(false);
+		ErrosImportacaoDeAgenciasPanel agenciasPanel = new ErrosImportacaoDeAgenciasPanel(janela.getContentId(), listaAgenciaErro);
+		janela.setContent(agenciasPanel);
+		janela.show(target);
+		
 	}
 
 	private AjaxLink<Void> acaoNovaAgencia() {

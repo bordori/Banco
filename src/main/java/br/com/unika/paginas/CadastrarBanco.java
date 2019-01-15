@@ -16,6 +16,9 @@ import br.com.unika.modelo.Banco;
 import br.com.unika.servicos.ServicoBanco;
 import br.com.unika.util.NotificationPanel;
 import br.com.unika.util.Retorno;
+import wicket.contrib.input.events.EventType;
+import wicket.contrib.input.events.InputBehavior;
+import wicket.contrib.input.events.key.KeyType;
 
 public class CadastrarBanco extends Panel {
 
@@ -115,6 +118,7 @@ public class CadastrarBanco extends Panel {
 			}
 			
 		};
+		botaoCancelar.add(new InputBehavior(new KeyType[] {KeyType.Escape}, EventType.click));
 		return botaoCancelar;
 	}
 

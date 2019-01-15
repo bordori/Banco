@@ -10,6 +10,10 @@ import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 
+import wicket.contrib.input.events.EventType;
+import wicket.contrib.input.events.InputBehavior;
+import wicket.contrib.input.events.key.KeyType;
+
 public class Confirmacao extends Panel {
 
 	/**
@@ -66,6 +70,7 @@ public class Confirmacao extends Panel {
 				execultarFechar(target,false,null);
 			}
 		};
+		nao.add(new InputBehavior(new KeyType[] {KeyType.Escape}, EventType.click));
 		return nao;
 
 	}

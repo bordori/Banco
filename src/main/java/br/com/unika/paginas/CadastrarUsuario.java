@@ -40,6 +40,9 @@ import br.com.unika.servicos.ServicoUsuario;
 import br.com.unika.util.NotificationPanel;
 import br.com.unika.util.Retorno;
 import br.com.unika.util.ViaCepWs;
+import wicket.contrib.input.events.EventType;
+import wicket.contrib.input.events.InputBehavior;
+import wicket.contrib.input.events.key.KeyType;
 
 public class CadastrarUsuario extends Panel {
 
@@ -187,6 +190,7 @@ public class CadastrarUsuario extends Panel {
 				localizarCep(target);
 			}
 		};
+		ajaxLink.add(new InputBehavior(new KeyType[] {KeyType.Enter}, EventType.click));
 		return ajaxLink;
 	}
 
@@ -462,6 +466,7 @@ public class CadastrarUsuario extends Panel {
 			}
 
 		};
+		botaoCancelar.add(new InputBehavior(new KeyType[] {KeyType.Escape}, EventType.click));
 		return botaoCancelar;
 	}
 

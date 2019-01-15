@@ -15,7 +15,7 @@
 		<div class=" limiter">
 			<div class="container-login100 ">
 				<div class="wrap-login100 ">
-					<div class="" style="width: 100%;">
+					<div style="width: 100%;">
 						<span class="login100-form-title">Agencias</span>
 						<form wicket:id="formFiltro">
 							<div class="form-row form-group ">
@@ -37,22 +37,42 @@
 									</select>
 								</div>
 							</div>
-							<div class="form-row form-group" style="float:right; margin-right: 5px">
+							<div class="form-row form-group">
 								<div class="col-md-12">
-									<button wicket:id="novaAgencia" class="btn btn-success"  title="Adcionar Novo Banco">
-												<img alt="Bolt" style="color: white;" src="icons/plus-2x.png"> Novo
-									</button>
-									<button wicket:id="gerarPdf" class="btn btn-success"  title="Adcionar Novo Banco">
-										 Gerar PDF
-									</button>
-									<input type="submit" class="btn btn-info"
-									wicket:id="acaoProcurar" value="Filtrar">
+									<div style="float: left;">
+										<button wicket:id="importarAgencias" class="btn btn-success"
+											title="Adcionar Novo Banco">Importar</button>
+										<button wicket:id="gerarPdf" class="btn btn-info"
+											title="Adcionar Novo Banco">Planilha Padrão</button>
+									</div>
+									<div style="float: right;">
+										<button wicket:id="novaAgencia" class="btn btn-success"
+											title="Adcionar Novo Banco">
+											<img alt="Bolt" style="color: white;" src="icons/plus-2x.png">
+											Novo
+										</button>
+
+										<input type="submit" class="btn btn-info"
+											wicket:id="acaoProcurar" value="Filtrar">
+									</div>
 								</div>
 							</div>
 						</form>
-
+						<div  style="margin-top: 50px;float: right;">
+							<nav aria-label="Page navigation example">
+								<ul class="pagination">
+									<li class="page-item"><a class="page-link" href="#">Previous</a></li>
+									<li class="page-item"><a class="page-link" href="#">1</a></li>
+									<li class="page-item"><a class="page-link" href="#">2</a></li>
+									<li class="page-item"><a class="page-link" href="#">3</a></li>
+									<li class="page-item"><a class="page-link" href="#">Next</a></li>
+								</ul>
+							</nav>
+						</div>
 						<div class=" form-row form-group table-responsive"
 							wicket:id="containerListView">
+							
+
 							<div wicket:id="feedBack"></div>
 							<table class=" table  table-striped">
 								<thead>

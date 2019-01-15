@@ -142,7 +142,8 @@ http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 	<!-- Fim da bean de Agencia -->
-
+	
+	
 
 
 </beans>

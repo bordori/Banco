@@ -19,6 +19,10 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 
 import br.com.unika.enums.EnumTipoMovimentacao;
+import javafx.scene.input.KeyCode;
+import wicket.contrib.input.events.EventType;
+import wicket.contrib.input.events.InputBehavior;
+import wicket.contrib.input.events.key.KeyType;
 
 public class ListaMovimentacoes extends Panel {
 
@@ -52,6 +56,15 @@ public class ListaMovimentacoes extends Panel {
 			private static final long serialVersionUID = 1L;
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				dateInicial.set(Calendar.MILLISECOND, 0);
+				dateInicial.set(Calendar.SECOND, 0);
+				dateInicial.set(Calendar.MINUTE, 0);
+				dateInicial.set(Calendar.HOUR, 0);
+				
+				dateFinal.set(Calendar.MILLISECOND, 59);
+				dateFinal.set(Calendar.SECOND, 59);
+				dateFinal.set(Calendar.MINUTE, 59);
+				dateFinal.set(Calendar.HOUR, 59);
 				execultarFechar(target, true,getDateInicial(),getDateFinal(),valorTipoMovimentacao);
 				super.onSubmit(target, form);
 				execultarFechar(target,false,null,null,null);
@@ -70,6 +83,7 @@ public class ListaMovimentacoes extends Panel {
 				execultarFechar(target,false,null,null,null);
 			}
 		};
+		nao.add(new InputBehavior(new KeyType[] {KeyType.Escape}, EventType.click));
 		return nao;
 
 	}

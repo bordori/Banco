@@ -17,6 +17,9 @@ import com.googlecode.genericdao.search.Search;
 
 import br.com.unika.modelo.Contato;
 import br.com.unika.servicos.ServicoContato;
+import wicket.contrib.input.events.EventType;
+import wicket.contrib.input.events.InputBehavior;
+import wicket.contrib.input.events.key.KeyType;
 
 public class SelecionarContato extends Panel {
 
@@ -33,6 +36,7 @@ public class SelecionarContato extends Panel {
 		super(id);
 		preencherLista();
 		add(montarContainer());
+		add(new InputBehavior(new KeyType[] {KeyType.Escape}, EventType.click));
 	}
 	
 	private void preencherLista() {

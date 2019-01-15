@@ -48,6 +48,7 @@ public class HomePage extends WebPage {
 		notificationPanel = new NotificationPanel("feedBack");
 		notificationPanel.setOutputMarkupId(true);
 		add(notificationPanel);
+		
 		add(formLogin());
 		add(initModal());
 		add(acaoResgistrar());
@@ -88,7 +89,7 @@ public class HomePage extends WebPage {
 				target.add(notificationPanel);
 			} else {
 				session.setAttribute("usuarioLogado", usuario);
-				setResponsePage(Menu.class);
+				setResponsePage(ClienteConta.class);
 			}
 
 		} else {

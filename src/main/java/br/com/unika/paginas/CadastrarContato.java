@@ -34,6 +34,9 @@ import br.com.unika.servicos.ServicoContato;
 import br.com.unika.util.NotificationPanel;
 import br.com.unika.util.Retorno;
 import br.com.unika.util.Validacao;
+import wicket.contrib.input.events.EventType;
+import wicket.contrib.input.events.InputBehavior;
+import wicket.contrib.input.events.key.KeyType;
 
 public class CadastrarContato extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -188,6 +191,7 @@ public class CadastrarContato extends Panel {
 
 			}
 		};
+		acaoSubmit.add(new InputBehavior(new KeyType[] {KeyType.Escape}, EventType.click));
 		return acaoSubmit;
 	}
 

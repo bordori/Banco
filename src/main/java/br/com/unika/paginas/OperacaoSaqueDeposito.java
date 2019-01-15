@@ -12,6 +12,9 @@ import org.apache.wicket.model.PropertyModel;
 
 import br.com.unika.enums.EnumTipoMovimentacao;
 import br.com.unika.util.Validacao;
+import wicket.contrib.input.events.EventType;
+import wicket.contrib.input.events.InputBehavior;
+import wicket.contrib.input.events.key.KeyType;
 
 public class OperacaoSaqueDeposito extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -71,6 +74,7 @@ public class OperacaoSaqueDeposito extends Panel {
 				execultarFechar(target,false,null);
 			}
 		};
+		nao.add(new InputBehavior(new KeyType[] {KeyType.Escape}, EventType.click));
 		return nao;
 
 	}

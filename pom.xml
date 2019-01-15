@@ -65,6 +65,14 @@
 			<version>${wicket.version}</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.wicketstuff/wicketstuff-input-events -->
+		<dependency>
+			<groupId>org.wicketstuff</groupId>
+			<artifactId>wicketstuff-input-events</artifactId>
+			<version>6.30.0</version>
+		</dependency>
+
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
@@ -114,6 +122,12 @@
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
+			<version>3.17</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
 			<version>3.17</version>
 		</dependency>
 
