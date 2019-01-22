@@ -1,6 +1,5 @@
 package br.com.unika.paginas;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -11,6 +10,8 @@ import br.com.unika.modelo.Usuario;
 
 public class NavBar extends WebPage {
 
+	private static final long serialVersionUID = 1L;
+	
 	private Label usuarioLogado;
 	private WebMarkupContainer alterarContas, alterarBancos;
 	private Usuario usuario;
@@ -45,6 +46,8 @@ public class NavBar extends WebPage {
 	private AjaxLink<Void> contatos(){
 		AjaxLink<Void> contatos = new AjaxLink<Void>("contatos") {
 			
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				setResponsePage(ListaContatos.class);				
@@ -133,6 +136,8 @@ public class NavBar extends WebPage {
 
 	private AjaxLink<Void> sairSession() {
 		AjaxLink<Void> sair = new AjaxLink<Void>("sair") {
+
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {

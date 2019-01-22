@@ -2,9 +2,7 @@ package br.com.unika.paginas;
 
 import java.util.List;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -12,16 +10,12 @@ import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.form.validation.IFormValidator;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-
-import com.googlecode.genericdao.search.Search;
 
 import br.com.unika.enums.EnumTipoConta;
 import br.com.unika.modelo.Agencia;
@@ -46,9 +40,7 @@ public class CadastrarConta extends Panel {
 	private NotificationPanel notificationPanel;
 	private Form<Conta> formCriarConta;
 	private DropDownChoice<Agencia> dropAgencia;
-	private DropDownChoice<Banco> dropBanco;
 	private TextField<String> numeroConta;
-	private DropDownChoice<EnumTipoConta> dropTipoConta;
 	private String contaGerada;
 	private EnumTipoConta tipoDeContaEnum;
 
@@ -117,9 +109,9 @@ public class CadastrarConta extends Panel {
 
 		};
 
-		dropTipoConta = new DropDownChoice<EnumTipoConta>("tipoConta", new PropertyModel<>(this, "tipoDeContaEnum"),
-				model, tipoConta);
-		
+		DropDownChoice<EnumTipoConta> dropTipoConta = new DropDownChoice<EnumTipoConta>("tipoConta",
+				new PropertyModel<>(this, "tipoDeContaEnum"), model, tipoConta);
+
 		dropTipoConta.setOutputMarkupId(true);
 
 		return dropTipoConta;
@@ -172,7 +164,8 @@ public class CadastrarConta extends Panel {
 
 		};
 
-		dropBanco = new DropDownChoice<>("banco", new PropertyModel<Banco>(this, "bancoSelecionado"), model, banco);
+		DropDownChoice<Banco> dropBanco = new DropDownChoice<>("banco",
+				new PropertyModel<Banco>(this, "bancoSelecionado"), model, banco);
 		dropBanco.setOutputMarkupId(true);
 		dropBanco.add(new AjaxFormComponentUpdatingBehavior("onchange") {
 			private static final long serialVersionUID = 1L;
@@ -192,9 +185,7 @@ public class CadastrarConta extends Panel {
 
 					@Override
 					protected List<Agencia> load() {
-						Search search = new Search(Agencia.class);
-						search.addFilterEqual("banco", bancoSelecionado);
-						return servicoAgencia.search(search);
+						return servicoAgencia.getAgenciasDoBanco(bancoSelecionado);
 					}
 
 				};
@@ -230,7 +221,7 @@ public class CadastrarConta extends Panel {
 				}
 
 				if (retorno.isSucesso()) {
-					acaoSalvarCancelarConta(target,true);
+					acaoSalvarCancelarConta(target, true);
 				} else {
 					notificationPanel.mensagem(retorno.getRetorno(), "erro");
 					target.add(notificationPanel);
@@ -247,7 +238,7 @@ public class CadastrarConta extends Panel {
 		};
 		return acaoSubmit;
 	}
-	
+
 	private AjaxLink<Void> botaoCancelar() {
 		AjaxLink<Void> botaoCancelar = new AjaxLink<Void>("cancelar") {
 			private static final long serialVersionUID = 1L;
@@ -256,13 +247,13 @@ public class CadastrarConta extends Panel {
 			public void onClick(AjaxRequestTarget target) {
 				acaoSalvarCancelarConta(target, false);
 			}
-			
+
 		};
-		botaoCancelar.add(new InputBehavior(new KeyType[] {KeyType.Escape}, EventType.click));
+		botaoCancelar.add(new InputBehavior(new KeyType[] { KeyType.Escape }, EventType.click));
 		return botaoCancelar;
 	}
 
-	protected void acaoSalvarCancelarConta(AjaxRequestTarget target,boolean tecla) {
+	protected void acaoSalvarCancelarConta(AjaxRequestTarget target, boolean tecla) {
 		// TODO Auto-generated method stub
 
 	}
@@ -290,7 +281,5 @@ public class CadastrarConta extends Panel {
 	public void setTipoDeContaEnum(EnumTipoConta tipoDeContaEnum) {
 		this.tipoDeContaEnum = tipoDeContaEnum;
 	}
-
-
 
 }

@@ -23,6 +23,9 @@ public class ServicoUsuario implements IServico<Usuario, Long>, Serializable {
 	@SpringBean(name = "usuarioDAO")
 	private UsuarioDAO usuarioDAO;
 
+	@SpringBean(name="servicoConta")
+	private ServicoConta servicoConta;
+	
 	@Override
 	public Retorno incluir(Usuario usuario) {
 		Retorno retorno = new Retorno(true, null);
@@ -254,11 +257,15 @@ public class ServicoUsuario implements IServico<Usuario, Long>, Serializable {
 	public void setUsuarioDAO(UsuarioDAO usuarioDAO) {
 		this.usuarioDAO = usuarioDAO;
 	}
+	
+	public void setServicoConta(ServicoConta servicoConta) {
+		this.servicoConta = servicoConta;
+	}
 
-	public Retorno ativarDesativarConta(Usuario usuario, int contasAtivas) {
+	public Retorno ativarDesativarConta(Usuario usuario) {
 		Retorno retorno = new Retorno(true, null);
 
-		if (contasAtivas == 0) {
+		if (servicoConta.numeroDeContasAtivasDoCliente(usuario) == 0) {
 			if (usuario.getAtivo()) {
 				usuario.setAtivo(false);
 			} else {

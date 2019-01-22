@@ -36,9 +36,9 @@ public class SelecionarContato extends Panel {
 		super(id);
 		preencherLista();
 		add(montarContainer());
-		add(new InputBehavior(new KeyType[] {KeyType.Escape}, EventType.click));
+		add(new InputBehavior(new KeyType[] { KeyType.Escape }, EventType.click));
 	}
-	
+
 	private void preencherLista() {
 		listaContatos = new ArrayList<>();
 		Search search = new Search(Contato.class);
@@ -57,14 +57,17 @@ public class SelecionarContato extends Panel {
 	private ListView<Contato> popularListView() {
 		LoadableDetachableModel<List<Contato>> loadableDetachableModel = new LoadableDetachableModel<List<Contato>>() {
 
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected List<Contato> load() {
-				// TODO Auto-generated method stub
 				return listaContatos;
 			}
 		};
 
 		listView = new ListView<Contato>("listaViewContatos", loadableDetachableModel) {
+
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<Contato> item) {
@@ -84,17 +87,18 @@ public class SelecionarContato extends Panel {
 	private AjaxLink<Void> acaoSelecionar(Contato contato) {
 		AjaxLink<Void> acaoSelecionar = new AjaxLink<Void>("acaoSelecionar") {
 
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				contatoSelecionado(target,contato);
+				contatoSelecionado(target, contato);
 			}
 		};
 		return acaoSelecionar;
 	}
 
 	public void contatoSelecionado(AjaxRequestTarget target, Contato contato) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 }

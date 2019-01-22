@@ -1,7 +1,5 @@
 package br.com.unika.paginas;
 
-import java.beans.Transient;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
@@ -19,7 +17,6 @@ import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -43,7 +40,7 @@ import br.com.unika.util.NotificationPanel;
 import br.com.unika.util.RelatorioExcel;
 import br.com.unika.util.Retorno;
 
-public class ListaAgencia extends NavBar implements Serializable{
+public class ListaAgencia extends NavBar implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -51,10 +48,10 @@ public class ListaAgencia extends NavBar implements Serializable{
 	private ModalWindow janela;
 	private NotificationPanel notificationPanel;
 	private WebMarkupContainer containerListView;
-	private TextField<String> nome, numero;
 	private Agencia agenciaProcurar;
 	private Form<Agencia> formFiltro;
 	private List<Agencia> agenciasList;
+	private int count = 0;
 
 	@SpringBean(name = "servicoAgencia")
 	private ServicoAgencia servicoAgencia;
@@ -62,10 +59,10 @@ public class ListaAgencia extends NavBar implements Serializable{
 	@SpringBean(name = "servicoBanco")
 	private ServicoBanco servicoBanco;
 
-	
 	public ListaAgencia() {
 		verificarPermissaoBanco();
 		preencherListView();
+		add(paginacao());
 		add(containerListView());
 		add(initModal());
 		add(formFiltro());
@@ -73,8 +70,58 @@ public class ListaAgencia extends NavBar implements Serializable{
 	}
 
 	private void preencherListView() {
-		agenciasList = servicoAgencia.listar();
+		Search search = new Search(Agencia.class);
+		search.setFirstResult(count);
+		search.setMaxResults(5);
+		agenciasList = servicoAgencia.search(search);
 
+	}
+
+	private ListView<Integer> paginacao() {
+		LoadableDetachableModel<List<Integer>> detachableModel = new LoadableDetachableModel<List<Integer>>() {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected List<Integer> load() {
+				int quantidade = servicoAgencia.countAll();
+				float quantidadePaginas = (float) quantidade / 5;
+				quantidade = (int) quantidadePaginas;
+				if (quantidadePaginas > quantidade) {
+					quantidade = quantidade + 1;
+				}
+
+				List<Integer> lista = new ArrayList<>();
+				for (int i = 1; i <= quantidade; i++) {
+					lista.add(i);
+				}
+				return lista;
+			}
+		};
+		ListView<Integer> listView = new ListView<Integer>("paginas", detachableModel) {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void populateItem(ListItem<Integer> item) {
+				Integer pagina = item.getModelObject();
+
+				AjaxLink<Void> index = new AjaxLink<Void>("index") {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void onClick(AjaxRequestTarget target) {
+						count = 5 * pagina;
+						count = count - 5;
+						preencherListView();
+						target.add(containerListView);
+					}
+				};
+				index.add(new Label("numero", pagina));
+				item.add(index);
+			}
+		};
+		return listView;
 	}
 
 	private WebMarkupContainer containerListView() {
@@ -95,7 +142,7 @@ public class ListaAgencia extends NavBar implements Serializable{
 		formFiltro.add(filtroNome());
 		formFiltro.add(filtroNumero());
 		formFiltro.add(campoBancoFiltro());
-		
+
 		formFiltro.add(acaoNovaAgencia());
 		formFiltro.add(acaoImportar());
 		formFiltro.add(acaoProcurar());
@@ -147,13 +194,13 @@ public class ListaAgencia extends NavBar implements Serializable{
 	}
 
 	private TextField<String> filtroNumero() {
-		numero = new TextField<>("numero");
+		TextField<String> numero = new TextField<>("numero");
 		numero.setOutputMarkupId(true);
 		return numero;
 	}
 
 	private TextField<String> filtroNome() {
-		nome = new TextField<>("nome");
+		TextField<String> nome = new TextField<>("nome");
 		return nome;
 	}
 
@@ -165,7 +212,6 @@ public class ListaAgencia extends NavBar implements Serializable{
 
 			@Override
 			public void onClose(AjaxRequestTarget target) {
-				// TODO Auto-generated method stub
 
 			}
 		});
@@ -266,15 +312,15 @@ public class ListaAgencia extends NavBar implements Serializable{
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					protected void acaoSalvarCancelarAgencia(AjaxRequestTarget target,boolean tecla) {
+					public void acaoSalvarCancelarAgencia(AjaxRequestTarget target, boolean tecla) {
 						if (tecla) {
 							notificationPanel.mensagem("Agencia Alterada Com Sucesso!", "sucesso");
 							preencherListView();
 							target.add(containerListView);
 						}
 						janela.close(target);
-						
-						super.acaoSalvarCancelarAgencia(target,tecla);
+
+						super.acaoSalvarCancelarAgencia(target, tecla);
 					}
 				};
 				janela.setContent(cadastrarAgencia);
@@ -284,7 +330,7 @@ public class ListaAgencia extends NavBar implements Serializable{
 		};
 		return acaoAlterarAgencia;
 	}
-	
+
 	protected AjaxLink<Void> gerarPdf() {
 		AjaxLink<Void> gerarPdf = new AjaxLink<Void>("gerarPdf") {
 			private static final long serialVersionUID = 1L;
@@ -292,9 +338,9 @@ public class ListaAgencia extends NavBar implements Serializable{
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				RelatorioExcel relatorio = new RelatorioExcel();
-				
+
 				final byte[] bytes = relatorio.GerarExcelInclusaoAgencia(servicoBanco.listar());
-				
+
 				final AJAXDownload download = new AJAXDownload("Inclusao de Agencias.xls") {
 					private static final long serialVersionUID = 1L;
 
@@ -306,7 +352,7 @@ public class ListaAgencia extends NavBar implements Serializable{
 							@Override
 							public void write(OutputStream output) throws IOException {
 								output.write(bytes);
-								
+
 							}
 						};
 						return streamWriter;
@@ -314,14 +360,13 @@ public class ListaAgencia extends NavBar implements Serializable{
 				};
 				add(download);
 				download.initiate(target);
-				
 
 			}
 		};
 		return gerarPdf;
 	}
-	
-	private AjaxLink<Void> acaoImportar(){
+
+	private AjaxLink<Void> acaoImportar() {
 		AjaxLink<Void> importar = new AjaxLink<Void>("importarAgencias") {
 			private static final long serialVersionUID = 1L;
 
@@ -334,47 +379,44 @@ public class ListaAgencia extends NavBar implements Serializable{
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					public void execultarFechar(AjaxRequestTarget target, boolean tecla, org.apache.wicket.markup.html.form.upload.FileUpload fileUpload) {
+					public void execultarFechar(AjaxRequestTarget target, boolean tecla,
+							org.apache.wicket.markup.html.form.upload.FileUpload fileUpload) {
 						super.execultarFechar(target, tecla, fileUpload);
 						List<Agencia> listaAgencia = new ArrayList<>();
 						Retorno retorno = new Retorno(true, null);
 						if (tecla) {
 							if (fileUpload != null) {
 								RelatorioExcel relatorioExcel = new RelatorioExcel();
-								if (fileUpload.getContentType().equals("application/vnd.ms-excel")) {//.xls
-									listaAgencia = relatorioExcel.lerPlanilha(fileUpload,servicoBanco.listar(), true);
-								}else if(fileUpload.getContentType().equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")){//.xlsx
-									listaAgencia = relatorioExcel.lerPlanilha(fileUpload,servicoBanco.listar(), false);
-								}
-								
+
+								listaAgencia = relatorioExcel.lerPlanilha(fileUpload, servicoBanco.listar());
+
 								if (!listaAgencia.isEmpty()) {
-									
+
 									boolean sucesso = servicoAgencia.validarImportacaoDeAgencias(listaAgencia);
-									if (sucesso == true ) {
+									if (sucesso == true) {
 										retorno = servicoAgencia.importarAgencias(listaAgencia);
 										if (retorno.isSucesso()) {
 											notificationPanel.mensagem("Agencias Incluidas com sucesso!", "sucesso");
 											preencherListView();
 											janela.close(target);
-										}else {
+										} else {
 											notificationPanel.mensagem(retorno.getRetorno(), "erro");
 										}
-										
-									}else { //mostra na tela os erros 
+
+									} else { // mostra na tela os erros
 										janela.close(target);
-										abrirModalComErros(target,listaAgencia);
+										abrirModalComErros(target, listaAgencia);
 									}
 								}
-							}else {
+							} else {
 								notificationPanel.mensagem("Selecione Arquivo para Upload", "erro");
 							}
-						}else {
+						} else {
 							janela.close(target);
 						}
 						target.add(containerListView);
 					}
 
-					
 				};
 				janela.setContent(importarAgencias);
 				janela.show(target);
@@ -382,15 +424,16 @@ public class ListaAgencia extends NavBar implements Serializable{
 		};
 		return importar;
 	}
-	
+
 	private void abrirModalComErros(AjaxRequestTarget target, List<Agencia> listaAgenciaErro) {
 		janela.setInitialWidth(800);
 		janela.setInitialHeight(400);
 		janela.setResizable(false);
-		ErrosImportacaoDeAgenciasPanel agenciasPanel = new ErrosImportacaoDeAgenciasPanel(janela.getContentId(), listaAgenciaErro);
+		ErrosImportacaoDeAgenciasPanel agenciasPanel = new ErrosImportacaoDeAgenciasPanel(janela.getContentId(),
+				listaAgenciaErro);
 		janela.setContent(agenciasPanel);
 		janela.show(target);
-		
+
 	}
 
 	private AjaxLink<Void> acaoNovaAgencia() {
@@ -409,15 +452,15 @@ public class ListaAgencia extends NavBar implements Serializable{
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					protected void acaoSalvarCancelarAgencia(AjaxRequestTarget target,boolean tecla) {
+					public void acaoSalvarCancelarAgencia(AjaxRequestTarget target, boolean tecla) {
 						if (tecla) {
 							notificationPanel.mensagem("Agencia Incluida Com Sucesso!", "sucesso");
 							preencherListView();
 							target.add(containerListView);
 						}
 						janela.close(target);
-	
-						super.acaoSalvarCancelarAgencia(target,tecla);
+
+						super.acaoSalvarCancelarAgencia(target, tecla);
 					}
 				};
 				janela.setContent(cadastrarAgencia);

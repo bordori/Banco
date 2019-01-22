@@ -98,12 +98,12 @@ public class RelatorioExcel implements Serializable {
 
 	}
 
-	public List<Agencia> lerPlanilha(FileUpload fileUpload, List<Banco> listaBancos, Boolean formatoDeArquivo) {// true=.xls
-																												// false=.xlsx
+	public List<Agencia> lerPlanilha(FileUpload fileUpload, List<Banco> listaBancos) {// true=.xls
+																						// false=.xlsx
 		Workbook workbook;
 		Sheet sheet = null;
 		List<Agencia> listaAgencia = new ArrayList<>();
-		if (formatoDeArquivo == true) {
+		if (fileUpload.getContentType().equals("application/vnd.ms-excel")) {// .xls
 			try {
 				workbook = new HSSFWorkbook(fileUpload.getInputStream());
 				sheet = workbook.getSheetAt(0);
@@ -111,7 +111,9 @@ public class RelatorioExcel implements Serializable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		} else {
+		} else if (fileUpload.getContentType()
+				.equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")) {// .xlsx
+
 			try {
 				workbook = new XSSFWorkbook(fileUpload.getInputStream());
 				sheet = workbook.getSheetAt(0);
@@ -119,8 +121,8 @@ public class RelatorioExcel implements Serializable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
 		}
+
 		Iterator<Row> rowIterator = sheet.iterator();
 		int count = 0;
 		while (rowIterator.hasNext()) {
@@ -130,10 +132,10 @@ public class RelatorioExcel implements Serializable {
 
 			Agencia agencia = new Agencia();
 			if (count != 0) {
-				agencia.setIdAgencia(new Long(count+1));
+				agencia.setIdAgencia(new Long(count + 1));
 				while (cellIterator.hasNext()) {
 					Cell cell = cellIterator.next();
-					
+
 					switch (cell.getColumnIndex()) {
 					case 0:
 						agencia.setNumero(retornoValorCelulaString(cell));
@@ -151,29 +153,27 @@ public class RelatorioExcel implements Serializable {
 				listaAgencia.add(agencia);
 			}
 
-			
 			count++;
 		}
 
 		return listaAgencia;
 	}
-	
+
 	private String retornoValorCelulaString(Cell cell) {
-		String retorno="";
-		
+		String retorno = "";
+
 		if (cell.getCellTypeEnum() == CellType.STRING) {
 			return cell.getStringCellValue();
-		}else if (cell.getCellTypeEnum() == CellType.NUMERIC) {
+		} else if (cell.getCellTypeEnum() == CellType.NUMERIC) {
 			int i = (int) cell.getNumericCellValue();
-			return ""+i;
+			return "" + i;
 		}
-		
+
 		return retorno;
 	}
 
 	private Banco getBanco(List<Banco> listaBancos, String celulaBanco) {
-		
-		
+
 		String[] bancoSeparado = celulaBanco.split("-");
 		for (Banco banco2 : listaBancos) {
 			if (bancoSeparado[0].equals(banco2.getNumero()) && bancoSeparado[1].equals(banco2.getNome())) {

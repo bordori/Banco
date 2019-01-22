@@ -1,7 +1,6 @@
 package br.com.unika.paginas;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
@@ -19,7 +18,6 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 
 import br.com.unika.enums.EnumTipoMovimentacao;
-import javafx.scene.input.KeyCode;
 import wicket.contrib.input.events.EventType;
 import wicket.contrib.input.events.InputBehavior;
 import wicket.contrib.input.events.key.KeyType;
@@ -27,11 +25,10 @@ import wicket.contrib.input.events.key.KeyType;
 public class ListaMovimentacoes extends Panel {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private Form<String> formFiltro;
-	private DateTextField dataInicial,dataFinal;
-	private DropDownChoice<EnumTipoMovimentacao> tipoMovimentacao;
-	private Calendar dateInicial,dateFinal;
+	private DateTextField dataInicial, dataFinal;
+	private Calendar dateInicial, dateFinal;
 	private EnumTipoMovimentacao valorTipoMovimentacao;
 
 	public ListaMovimentacoes(String id) {
@@ -41,61 +38,65 @@ public class ListaMovimentacoes extends Panel {
 
 	private Form<String> formFiltro() {
 		formFiltro = new Form<String>("formFiltro");
-		
+
 		formFiltro.add(dataInicial());
 		formFiltro.add(dataFinal());
 		formFiltro.add(DropDownTipoDeMovimentacao());
 		formFiltro.add(sim());
 		formFiltro.add(nao());
-		
+
 		return formFiltro;
 	}
-	
+
 	private AjaxSubmitLink sim() {
-		AjaxSubmitLink sim = new AjaxSubmitLink("sim",formFiltro) {
+		AjaxSubmitLink sim = new AjaxSubmitLink("sim", formFiltro) {
 			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				dateInicial.set(Calendar.MILLISECOND, 0);
 				dateInicial.set(Calendar.SECOND, 0);
 				dateInicial.set(Calendar.MINUTE, 0);
 				dateInicial.set(Calendar.HOUR, 0);
-				
+
 				dateFinal.set(Calendar.MILLISECOND, 59);
 				dateFinal.set(Calendar.SECOND, 59);
 				dateFinal.set(Calendar.MINUTE, 59);
-				dateFinal.set(Calendar.HOUR, 59);
-				execultarFechar(target, true,getDateInicial(),getDateFinal(),valorTipoMovimentacao);
+				dateFinal.set(Calendar.HOUR, 23);
+				execultarFechar(target, true, getDateInicial(), getDateFinal(), valorTipoMovimentacao);
 				super.onSubmit(target, form);
-				execultarFechar(target,false,null,null,null);
+				execultarFechar(target, false, null, null, null);
 			}
 		};
-			
+
 		return sim;
 
 	}
 
-	private  AjaxLink  nao() {
-		AjaxLink nao = new AjaxLink("cancelar") {
+	private AjaxLink<Void> nao() {
+		AjaxLink<Void> nao = new AjaxLink<Void>("cancelar") {
+
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				execultarFechar(target,false,null,null,null);
+				execultarFechar(target, false, null, null, null);
 			}
 		};
-		nao.add(new InputBehavior(new KeyType[] {KeyType.Escape}, EventType.click));
+		nao.add(new InputBehavior(new KeyType[] { KeyType.Escape }, EventType.click));
 		return nao;
 
 	}
-	
-	public void execultarFechar(AjaxRequestTarget target,boolean tecla, Calendar dataInicial, Calendar dataFinal, EnumTipoMovimentacao valorTipoMovimentacao) {
-		//System.out.println("inicial:"+getDateInicial()+" Final: "+getDateFinal()+" tipo: "+valorTipoMovimentacao.getDescricao() );
+
+	public void execultarFechar(AjaxRequestTarget target, boolean tecla, Calendar dataInicial, Calendar dataFinal,
+			EnumTipoMovimentacao valorTipoMovimentacao) {
 	}
 
 	private DropDownChoice<EnumTipoMovimentacao> DropDownTipoDeMovimentacao() {
-		
-		ChoiceRenderer<EnumTipoMovimentacao> choiceRenderer = new ChoiceRenderer<EnumTipoMovimentacao>("descricao","valor");
-		
+
+		ChoiceRenderer<EnumTipoMovimentacao> choiceRenderer = new ChoiceRenderer<EnumTipoMovimentacao>("descricao",
+				"valor");
+
 		IModel<List<EnumTipoMovimentacao>> model = new LoadableDetachableModel<List<EnumTipoMovimentacao>>() {
 			private static final long serialVersionUID = 1L;
 
@@ -104,14 +105,15 @@ public class ListaMovimentacoes extends Panel {
 				return EnumTipoMovimentacao.getTipoDeMovimentacao();
 			}
 		};
-		
-		tipoMovimentacao = new DropDownChoice<>("tipoMovimentacao",new PropertyModel<>(this, "valorTipoMovimentacao"),model,choiceRenderer);
-		
+
+		DropDownChoice<EnumTipoMovimentacao> tipoMovimentacao = new DropDownChoice<>("tipoMovimentacao",
+				new PropertyModel<>(this, "valorTipoMovimentacao"), model, choiceRenderer);
+
 		return tipoMovimentacao;
 	}
 
 	private DateTextField dataInicial() {
-		dataInicial = new DateTextField("dataInicial",new PropertyModel<>(this, "dateInicial"), "dd/MM/yyyy");
+		dataInicial = new DateTextField("dataInicial", new PropertyModel<>(this, "dateInicial"), "dd/MM/yyyy");
 		DatePicker datePicker = new DatePicker() {
 			/**
 			 * 
@@ -126,7 +128,6 @@ public class ListaMovimentacoes extends Panel {
 
 			@Override
 			protected boolean enableMonthYearSelection() {
-				// TODO Auto-generated method stub
 				return true;
 			}
 
@@ -139,9 +140,9 @@ public class ListaMovimentacoes extends Panel {
 
 		return dataInicial;
 	}
-	
+
 	private DateTextField dataFinal() {
-		dataFinal = new DateTextField("dataFinal",new PropertyModel<>(this, "dateFinal"), "dd/MM/yyyy");
+		dataFinal = new DateTextField("dataFinal", new PropertyModel<>(this, "dateFinal"), "dd/MM/yyyy");
 		DatePicker datePicker = new DatePicker() {
 			/**
 			 * 
@@ -156,7 +157,6 @@ public class ListaMovimentacoes extends Panel {
 
 			@Override
 			protected boolean enableMonthYearSelection() {
-				// TODO Auto-generated method stub
 				return true;
 			}
 
@@ -185,7 +185,5 @@ public class ListaMovimentacoes extends Panel {
 	public void setDateFinal(Calendar dateFinal) {
 		this.dateFinal = dateFinal;
 	}
-
-	
 
 }

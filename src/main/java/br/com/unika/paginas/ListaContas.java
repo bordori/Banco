@@ -72,7 +72,6 @@ public class ListaContas extends NavBar {
 
 			@Override
 			public void onClose(AjaxRequestTarget target) {
-				// TODO Auto-generated method stub
 
 			}
 		});
@@ -187,11 +186,9 @@ public class ListaContas extends NavBar {
 
 		if (conta.getAtivo()) {
 			ativo.add(new AttributeModifier("class", "botaoAtivoSim"));
-			// ativo.add(new AttributeModifier("style", "color:green"));
 
 		} else {
 			ativo.add(new AttributeModifier("class", "botaoAtivoNao"));
-			// ativo.add(new AttributeModifier("style", "color:red"));
 		}
 		return ativo;
 	}

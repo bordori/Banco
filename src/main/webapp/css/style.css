@@ -1,28 +1,47 @@
+@
+keyframes hide {
+	/* from { opacity: 1 }
+  to   { opacity: 0 } */ to { width:0;
+	height: 0;
+	overflow: hidden;
+	display: none;
+}
 
-@keyframes hide {
-  /* from { opacity: 1 }
-  to   { opacity: 0 } */
-  to {
-        width:0;
-        height:0;
-        overflow:hidden;
-    }
- 
- 
+}
+.alertStyle {
+	position: absolute;
+	top: 40px;
+	height: auto;
+	list-style-type: none;
+	text-align: center;
+	padding-top: 20px;
+	right: 0px;
+	z-index: 999999;
+	width: auto;
+	left: 70%;
+	margin-right: 10px;
 }
 
 .hideMe {
-  animation: hide 0s ease-in 5s forwards;;
-
+	animation: hide 0s ease-in 5s forwards;;
 }
 
 .botaoAtivoSim {
-   content: url(/icons/check-3x.png);
-   color: green;
+	content: url(../icons/check-3x.png);
+	color: green;
 }
 
 .botaoAtivoNao {
-    content: url(/icons/x-3x.png);
+	content: url(/icons/x-3x.png);
 }
 
+.containerPanel { "
+	margin: 20px;
+	background: #F9F9F9";
+}
 
+.containerPanelTitulo {
+	padding: 5px;
+	padding-left: 20px;
+	background: #F5F5F5;
+}

@@ -8,8 +8,6 @@ import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow.WindowClosedCallback;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.form.validation.IFormValidator;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -60,6 +58,8 @@ public class OperacaoTransferencia extends CadastrarContato {
 		valor.setRequired(true);
 		valor.add(new AjaxFormComponentUpdatingBehavior("onkeyup") {
 
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {		
 				if (bancoSelecionado != null) {
@@ -81,12 +81,17 @@ public class OperacaoTransferencia extends CadastrarContato {
 	private AjaxLink<Void> acaoLocalizarContato() {
 		AjaxLink<Void> acaoLocalizarContato = new AjaxLink<Void>("acaoLocalizarContato") {
 
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				janela.setInitialWidth(450);
 				janela.setInitialHeight(300);
 				janela.setResizable(false);
 				SelecionarContato selecionarContato = new SelecionarContato(janela.getContentId()) {
+					
+					private static final long serialVersionUID = 1L;
+
 					@Override
 					public void contatoSelecionado(AjaxRequestTarget target, Contato contatoSelecionado) {
 						super.contatoSelecionado(target, contatoSelecionado);
@@ -116,7 +121,6 @@ public class OperacaoTransferencia extends CadastrarContato {
 
 			@Override
 			public void onClose(AjaxRequestTarget target) {
-				// TODO Auto-generated method stub
 
 			}
 		});
@@ -139,7 +143,6 @@ public class OperacaoTransferencia extends CadastrarContato {
 
 	public void acaoSubmitTrasferencia(AjaxRequestTarget target, Boolean tecla, Conta conta, Double valorTransferencia,
 			Contato contato, Double taxa) {
-		// TODO Auto-generated method stub
 
 	}
 

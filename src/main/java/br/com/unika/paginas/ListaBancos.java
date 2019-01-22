@@ -2,8 +2,6 @@ package br.com.unika.paginas;
 
 import java.util.List;
 
-import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -13,25 +11,20 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.form.validation.IFormValidator;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.genericdao.search.Search;
 
 import br.com.unika.modelo.Banco;
-import br.com.unika.modelo.Conta;
 import br.com.unika.modelo.Usuario;
 import br.com.unika.servicos.ServicoBanco;
-import br.com.unika.servicos.ServicoConta;
 import br.com.unika.util.Confirmacao;
 import br.com.unika.util.NotificationPanel;
 import br.com.unika.util.Retorno;
-import br.com.unika.util.Validacao;
 
 public class ListaBancos extends NavBar {
 
@@ -41,16 +34,12 @@ public class ListaBancos extends NavBar {
 	private ModalWindow janela;
 	private NotificationPanel notificationPanel;
 	private WebMarkupContainer containerListView;
-	private TextField<String> nomeFiltro, numeroFiltro;
 	private Form<Banco> formFiltro;
 	private List<Banco> bancos;
 	private Banco bancoProcurar;
 
 	@SpringBean(name = "servicoBanco")
 	private ServicoBanco servicoBanco;
-
-	@SpringBean(name = "servicoConta")
-	private ServicoConta servicoConta;
 
 	public ListaBancos() {
 
@@ -73,7 +62,6 @@ public class ListaBancos extends NavBar {
 		notificationPanel.setOutputMarkupId(true);
 		containerListView.add(notificationPanel);
 		containerListView.add(polularTabelaBancos());
-		
 
 		return containerListView;
 	}
@@ -112,13 +100,13 @@ public class ListaBancos extends NavBar {
 	}
 
 	private TextField<String> filtroNumero() {
-		numeroFiltro = new TextField<>("numero");
+		TextField<String> numeroFiltro = new TextField<>("numero");
 		numeroFiltro.setOutputMarkupId(true);
 		return numeroFiltro;
 	}
 
 	private TextField<String> filtroNome() {
-		nomeFiltro = new TextField<>("nome");
+		TextField<String> nomeFiltro = new TextField<>("nome");
 		return nomeFiltro;
 	}
 
@@ -138,16 +126,15 @@ public class ListaBancos extends NavBar {
 			protected void populateItem(ListItem<Banco> item) {
 				Banco banco = item.getModelObject();
 
-				Search search = new Search(Conta.class);
-				search.addFilterEqual("agencia.banco", banco);
-
 				item.add(new Label("numero", banco.getNumero()).setOutputMarkupId(true));
 				item.add(new Label("nome", banco.getNome()).setOutputMarkupId(true));
-				int contas = servicoConta.count(search);
+
+				int contas = servicoBanco.numeroDeContasDoBanco(banco);
 				item.add(new Label("contas", contas).setOutputMarkupId(true));
-				search.addFilterEqual("ativo", true);
-				int ativos = servicoConta.count(search);
+
+				int ativos = servicoBanco.numeroDeContasAtivasDoBanco(banco);
 				item.add(new Label("contasAtivas", ativos).setOutputMarkupId(true));
+
 				item.add(new Label("contasInativas", contas - ativos).setOutputMarkupId(true));
 				item.add(new Label("agencias", servicoBanco.verificaSeTemAgencias(banco)).setOutputMarkupId(true));
 				item.add(acaoAlterar(banco));
@@ -218,7 +205,7 @@ public class ListaBancos extends NavBar {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					public void acaoSalvarCancelarBanco(AjaxRequestTarget target,boolean tecla) {
+					public void acaoSalvarCancelarBanco(AjaxRequestTarget target, boolean tecla) {
 						if (tecla) {
 							notificationPanel.mensagem("Banco foi Alterado Com Sucesso!", "sucesso");
 							preencherListaBancos();
@@ -226,7 +213,7 @@ public class ListaBancos extends NavBar {
 
 						}
 						janela.close(target);
-						super.acaoSalvarCancelarBanco(target,tecla);
+						super.acaoSalvarCancelarBanco(target, tecla);
 					}
 				};
 				janela.setContent(cadastrarBanco);
@@ -244,7 +231,6 @@ public class ListaBancos extends NavBar {
 
 			@Override
 			public void onClose(AjaxRequestTarget target) {
-				// TODO Auto-generated method stub
 
 			}
 		});
@@ -254,6 +240,8 @@ public class ListaBancos extends NavBar {
 	private AjaxLink<Void> acaoNovoBanco() {
 		AjaxLink<Void> acaoNovoBanco = new AjaxLink<Void>("novoBanco") {
 
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 
@@ -262,16 +250,19 @@ public class ListaBancos extends NavBar {
 				janela.setMinimalHeight(300);
 				janela.setInitialHeight(350);
 				CadastrarBanco cadastrarBanco = new CadastrarBanco(janela.getContentId()) {
+
+					private static final long serialVersionUID = 1L;
+
 					@Override
-					public void acaoSalvarCancelarBanco(AjaxRequestTarget target,boolean tecla) {
+					public void acaoSalvarCancelarBanco(AjaxRequestTarget target, boolean tecla) {
 						if (tecla) {
 							notificationPanel.mensagem("Banco Adicionado Com Sucesso!", "sucesso");
 							preencherListaBancos();
 							target.add(containerListView);
 						}
 						janela.close(target);
-						
-						super.acaoSalvarCancelarBanco(target,tecla);
+
+						super.acaoSalvarCancelarBanco(target, tecla);
 					}
 				};
 				janela.setContent(cadastrarBanco);

@@ -1,6 +1,7 @@
 package br.com.unika.servicos;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -15,6 +16,7 @@ import br.com.unika.modelo.Agencia;
 import br.com.unika.modelo.Banco;
 import br.com.unika.modelo.Conta;
 import br.com.unika.modelo.Contato;
+import br.com.unika.modelo.Usuario;
 import br.com.unika.util.Retorno;
 import br.com.unika.util.Validacao;
 
@@ -106,6 +108,21 @@ public class ServicoConta implements IServico<Conta, Long>, Serializable {
 	public int count(Search search) {
 		return contaDAO.countDAO(search);
 	}
+	
+	public int numeroDeContasDoCliente(Usuario usuario) {
+		Search search = new Search(Conta.class);
+		search.addFilterEqual("usuario", usuario);
+		
+		return this.count(search);
+	}
+	
+	public int numeroDeContasAtivasDoCliente(Usuario usuario) {
+		Search search = new Search(Conta.class);
+		search.addFilterEqual("usuario", usuario);
+		search.addFilterEqual("ativo", true);
+		
+		return this.count(search);
+	}
 
 	public Retorno ativarDesativarConta(Conta conta) {
 		Retorno retorno = new Retorno(true, null);
@@ -144,8 +161,8 @@ public class ServicoConta implements IServico<Conta, Long>, Serializable {
 
 	public Retorno Saque(Conta conta, Double valorSaque) {
 		Retorno retorno = new Retorno(true, null);
-
-		if (conta.getSaldo() < valorSaque) {
+		BigDecimal bd1 = new BigDecimal(conta.getSaldo()).setScale(2,BigDecimal.ROUND_HALF_UP);
+		if (bd1.doubleValue() < valorSaque) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Saldo Insuficiente Para Realizar o Saque!");
 		} else if (valorSaque < 2) {
@@ -164,10 +181,10 @@ public class ServicoConta implements IServico<Conta, Long>, Serializable {
 		return retorno;
 	}
 
-	public Retorno transferencia(Contato contato, Double valorTransferencia, Conta conta,Double taxa) {
+	public Retorno transferencia(Contato contato, Double valorTransferencia, Conta conta, Double taxa) {
 		Retorno retorno = new Retorno(true, null);
 
-		if (conta.getSaldo() < (valorTransferencia+taxa)) {
+		if (conta.getSaldo() < (valorTransferencia + taxa)) {
 			retorno.setSucesso(false);
 			retorno.addMensagem("Saldo Insuficiente Para Realizar a Transferencia!");
 		} else if (valorTransferencia < 1) {
@@ -182,16 +199,16 @@ public class ServicoConta implements IServico<Conta, Long>, Serializable {
 			search.addFilterEqual("conta", contato.getConta());
 			search.addFilterEqual("agencia", contato.getAgencia());
 			search.addFilterEqual("usuario.cpf", contato.getCpf());
-			List<Conta> contaLista = search(search); 
-			if ( contaLista.size() == 1) {
+			List<Conta> contaLista = search(search);
+			if (contaLista.size() == 1) {
 				Conta contaFavorecido = contaLista.get(0);
 				if (contaFavorecido.getAtivo() == true) {
-					this.transferir(contaFavorecido,conta,valorTransferencia,taxa);
-				}else {
+					this.transferir(contaFavorecido, conta, valorTransferencia, taxa);
+				} else {
 					retorno.setSucesso(false);
 					retorno.addMensagem("Essa Conta Está Desativada!");
 				}
-			}else {
+			} else {
 				retorno.setSucesso(false);
 				retorno.addMensagem("A Conta não Existe!");
 			}
@@ -200,16 +217,16 @@ public class ServicoConta implements IServico<Conta, Long>, Serializable {
 		return retorno;
 	}
 
-	private Retorno transferir(Conta contaFavorecido, Conta conta,Double valorTrasferencia,Double taxa) {
+	private Retorno transferir(Conta contaFavorecido, Conta conta, Double valorTrasferencia, Double taxa) {
 		Retorno retorno = new Retorno(true, null);
-		
-		contaFavorecido.setSaldo(contaFavorecido.getSaldo()+valorTrasferencia);
-		conta.setSaldo(conta.getSaldo()-valorTrasferencia);
-		if (!conta.getAgencia().getBanco().getNumero().equals(contaFavorecido.getAgencia().getBanco().getNumero())){
-			conta.setSaldo(conta.getSaldo()-taxa);
+
+		contaFavorecido.setSaldo(contaFavorecido.getSaldo() + valorTrasferencia);
+		conta.setSaldo(conta.getSaldo() - valorTrasferencia);
+		if (!conta.getAgencia().getBanco().getNumero().equals(contaFavorecido.getAgencia().getBanco().getNumero())) {
+			conta.setSaldo(conta.getSaldo() - taxa);
 		}
-		retorno = contaDAO.transferir(contaFavorecido,conta);
-		
+		retorno = contaDAO.transferir(contaFavorecido, conta);
+
 		return retorno;
 	}
 

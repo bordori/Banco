@@ -54,7 +54,6 @@ public class ClienteConta extends NavBar {
 
 	public ClienteConta() {
 		preencherListView();
-//		add(formFiltro());
 		add(acaoNovaAgencia());
 
 		add(containerListView());
@@ -76,7 +75,6 @@ public class ClienteConta extends NavBar {
 
 			@Override
 			public void onClose(AjaxRequestTarget target) {
-				// TODO Auto-generated method stub
 
 			}
 		});
@@ -116,7 +114,7 @@ public class ClienteConta extends NavBar {
 							retorno = servicoConta.Deposito(conta, valor);
 
 							if (retorno.isSucesso()) {
-								notificationPanel.mensagem("Deposito Efetuado com Sucesso!", "sucesso");
+								notificationPanel.success("Deposito Efetuado com Sucesso!");
 								janela.close(target);
 								servicoMovimentacao.comprovanteDepositoSaque(conta, EnumTipoMovimentacao.DEPOSITO,
 										valor);
@@ -226,6 +224,9 @@ public class ClienteConta extends NavBar {
 				janela.setMinimalHeight(500);
 				janela.setInitialHeight(520);
 				OperacaoTransferencia operacaoTransferencia = new OperacaoTransferencia(janela.getContentId(), conta) {
+					
+					private static final long serialVersionUID = 1L;
+
 					@Override
 					public void acaoSubmitTrasferencia(AjaxRequestTarget target, Boolean tecla, Conta conta,
 							Double valorTransferencia, Contato contato, Double taxa) {
@@ -266,14 +267,15 @@ public class ClienteConta extends NavBar {
 				janela.setMinimalHeight(300);
 				janela.setInitialHeight(350);
 				ListaMovimentacoes listaMovimentacoes = new ListaMovimentacoes(janela.getContentId()) {
+					
+					private static final long serialVersionUID = 1L;
+
 					@Override
 					public void execultarFechar(AjaxRequestTarget target, boolean tecla, Calendar dataInicial,
 							Calendar dataFinal, EnumTipoMovimentacao tipoMovimentacao) {
 						super.execultarFechar(target, tecla, dataInicial, dataFinal, tipoMovimentacao);
 						if (tecla) {
 							Search search = new Search(Movimentacao.class);
-							// DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.DATE_FIELD,new
-							// Locale("pt", "BR"));
 							search.addFilterEqual("conta", conta);
 							if (dataInicial != null) {
 								search.addFilterGreaterOrEqual("data", dataInicial);
@@ -354,11 +356,10 @@ public class ClienteConta extends NavBar {
 
 		if (conta.getAtivo()) {
 			ativo.add(new AttributeModifier("class", "botaoAtivoSim"));
-			// ativo.add(new AttributeModifier("style", "color:green"));
+			
 
 		} else {
 			ativo.add(new AttributeModifier("class", "botaoAtivoNao"));
-			// ativo.add(new AttributeModifier("style", "color:red"));
 		}
 		return ativo;
 	}
@@ -376,6 +377,9 @@ public class ClienteConta extends NavBar {
 				janela.setInitialHeight(400);
 				Usuario usuario = (Usuario) getSession().getAttribute("usuarioLogado");
 				CadastrarConta cadastrarConta = new CadastrarConta(janela.getContentId(), usuario) {
+					
+					private static final long serialVersionUID = 1L;
+
 					@Override
 					protected void acaoSalvarCancelarConta(AjaxRequestTarget target, boolean tecla) {
 						super.acaoSalvarCancelarConta(target, tecla);

@@ -6,12 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.markup.html.form.select.Select;
 import org.apache.wicket.extensions.markup.html.form.select.SelectOption;
@@ -24,7 +22,6 @@ import org.apache.wicket.markup.html.form.EmailTextField;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.form.validation.IFormValidator;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -50,17 +47,11 @@ public class CadastrarUsuario extends Panel {
 
 	private Form<Usuario> formCriarUsuario;
 	private Usuario usuario;
-	private TextField<String> login, nome, sobrenome, cpf, cep, endereco, numero, complemento, bairro, cidade, estado;
-	private PasswordTextField senha, confirmarSenha;
-	private EmailTextField email;
-	private TextField<String> telefone;
+	private TextField<String> cep;
 	private DateTextField dataNascimento;
-	private Select<Boolean> sexo;
-	private DropDownChoice<PermissaoDeAcesso> permissaoDeAcesso;
 	private WebMarkupContainer containerCep;
 	private String confirmacaoSenha;
 	private String alterarSenha;
-
 	private NotificationPanel notificationPanel;
 
 	@SpringBean(name = "servicoPermissaoDeAcesso")
@@ -90,7 +81,7 @@ public class CadastrarUsuario extends Panel {
 			if (usuarioLogado.getPermissaoDeAcesso().getAlterarPermissoes()) {
 				return true;
 			}
-		}else {
+		} else {
 			return true;
 		}
 		return false;
@@ -142,9 +133,9 @@ public class CadastrarUsuario extends Panel {
 	private Label titulo() {
 		Label titulo;
 		if (usuario.getIdUsuario() == null) {
-			titulo = new Label("titulo", "Incluindo Novo Usuário");
+			titulo = new Label("titulo", "Incluindo Novo Cliente");
 		} else {
-			titulo = new Label("titulo", "Editando Usuário: " + usuario.getNomeCompleto());
+			titulo = new Label("titulo", "Editando Cliente: " + usuario.getNomeCompleto());
 		}
 		return titulo;
 	}
@@ -167,6 +158,8 @@ public class CadastrarUsuario extends Panel {
 		ChoiceRenderer<PermissaoDeAcesso> permissao = new ChoiceRenderer<PermissaoDeAcesso>("descricao", "idPermissao");
 		IModel<List<PermissaoDeAcesso>> model = new LoadableDetachableModel<List<PermissaoDeAcesso>>() {
 
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected List<PermissaoDeAcesso> load() {
 
@@ -175,7 +168,7 @@ public class CadastrarUsuario extends Panel {
 
 		};
 
-		permissaoDeAcesso = new DropDownChoice<>("permissaoDeAcesso", model, permissao);
+		DropDownChoice<PermissaoDeAcesso> permissaoDeAcesso = new DropDownChoice<>("permissaoDeAcesso", model, permissao);
 		if (!alterarPermissaoDeAcesso()) {
 			permissaoDeAcesso.setEnabled(false);
 		}
@@ -185,12 +178,14 @@ public class CadastrarUsuario extends Panel {
 	private AjaxLink<Void> acaoLocalizarCep() {
 		AjaxLink<Void> ajaxLink = new AjaxLink<Void>("acaoLocalizarCep") {
 
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				localizarCep(target);
 			}
 		};
-		ajaxLink.add(new InputBehavior(new KeyType[] {KeyType.Enter}, EventType.click));
+		ajaxLink.add(new InputBehavior(new KeyType[] { KeyType.Enter }, EventType.click));
 		return ajaxLink;
 	}
 
@@ -219,27 +214,27 @@ public class CadastrarUsuario extends Panel {
 	}
 
 	private TextField<String> campoEstado() {
-		estado = new TextField<>("estado");
+		TextField<String> estado = new TextField<>("estado");
 		estado.setRequired(true);
 		estado.add(new AttributeModifier("readonly", "readonly"));
 		return estado;
 	}
 
 	private TextField<String> campoCidade() {
-		cidade = new TextField<>("cidade");
+		TextField<String> cidade = new TextField<>("cidade");
 		cidade.setRequired(true);
 		cidade.add(new AttributeModifier("readonly", "readonly"));
 		return cidade;
 	}
 
 	private TextField<String> campoBairro() {
-		bairro = new TextField<>("bairro");
+		TextField<String> bairro = new TextField<>("bairro");
 		bairro.setRequired(true);
 		return bairro;
 	}
 
 	private Select<Boolean> campoSexo() {
-		sexo = new Select<Boolean>("sexo");
+		Select<Boolean> sexo = new Select<Boolean>("sexo");
 		sexo.add(new SelectOption<Boolean>("escolhaSexo", new Model<Boolean>(null)));
 		sexo.add(new SelectOption<Boolean>("masculino", new Model<Boolean>(true)));
 		sexo.add(new SelectOption<Boolean>("feminino", new Model<Boolean>(false)));
@@ -247,19 +242,19 @@ public class CadastrarUsuario extends Panel {
 	}
 
 	private TextField<String> campoComplemento() {
-		complemento = new TextField<>("complemento");
+		TextField<String> complemento = new TextField<>("complemento");
 		return complemento;
 	}
 
 	private TextField<String> campoNumero() {
-		numero = new TextField<>("numero");
+		TextField<String> numero = new TextField<>("numero");
 		numero.add(new AttributeModifier("onfocus", "$(this).mask('999999');"));
 		numero.setRequired(true);
 		return numero;
 	}
 
 	private TextField<String> campoEndereco() {
-		endereco = new TextField<>("endereco");
+		TextField<String> endereco = new TextField<>("endereco");
 		endereco.setOutputMarkupId(true);
 		endereco.setRequired(true);
 		return endereco;
@@ -299,7 +294,6 @@ public class CadastrarUsuario extends Panel {
 
 			@Override
 			protected boolean enableMonthYearSelection() {
-				// TODO Auto-generated method stub
 				return true;
 			}
 
@@ -315,7 +309,7 @@ public class CadastrarUsuario extends Panel {
 	}
 
 	private TextField<String> campoCpf() {
-		cpf = new TextField<String>("cpf") {
+		TextField<String> cpf = new TextField<String>("cpf") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -332,19 +326,19 @@ public class CadastrarUsuario extends Panel {
 	}
 
 	private TextField<String> campoSobrenome() {
-		sobrenome = new TextField<>("sobrenome");
+		TextField<String> sobrenome = new TextField<>("sobrenome");
 		sobrenome.setRequired(true);
 		return sobrenome;
 	}
 
 	private TextField<String> campoNome() {
-		nome = new TextField<>("nome");
+		TextField<String> nome = new TextField<>("nome");
 		nome.setRequired(true);
 		return nome;
 	}
 
 	private TextField<String> campoLogin() {
-		login = new TextField<String>("login") {
+		TextField<String> login = new TextField<String>("login") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -360,7 +354,7 @@ public class CadastrarUsuario extends Panel {
 	}
 
 	private PasswordTextField campoSenha() {
-		senha = new PasswordTextField("senha") {
+		PasswordTextField senha = new PasswordTextField("senha") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -376,7 +370,7 @@ public class CadastrarUsuario extends Panel {
 	}
 
 	private PasswordTextField campoConfirmarSenha() {
-		confirmarSenha = new PasswordTextField("confirmarSenha", new PropertyModel<String>(this, "confirmacaoSenha")) {
+		PasswordTextField confirmarSenha = new PasswordTextField("confirmarSenha", new PropertyModel<String>(this, "confirmacaoSenha")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -392,14 +386,14 @@ public class CadastrarUsuario extends Panel {
 	}
 
 	private TextField<String> campoTelefone() {
-		telefone = new TextField<>("telefone");
+		TextField<String> telefone = new TextField<>("telefone");
 		telefone.add((new AttributeModifier("onfocus", "$(this).mask('(99)99999-9999');")));
 		telefone.setRequired(true);
 		return telefone;
 	}
 
 	private EmailTextField campoEmail() {
-		email = new EmailTextField("email");
+		EmailTextField email = new EmailTextField("email");
 		email.setRequired(true);
 		return email;
 	}
@@ -466,16 +460,12 @@ public class CadastrarUsuario extends Panel {
 			}
 
 		};
-		botaoCancelar.add(new InputBehavior(new KeyType[] {KeyType.Escape}, EventType.click));
+		botaoCancelar.add(new InputBehavior(new KeyType[] { KeyType.Escape }, EventType.click));
 		return botaoCancelar;
 	}
 
 	public void acaoSalvarCancelarUsuario(AjaxRequestTarget target, boolean tecla) {
 
-	}
-
-	private String getConfirmacaoSenha() {
-		return confirmacaoSenha;
 	}
 
 	private void setConfirmacaoSenha(String confirmacaoSenha) {

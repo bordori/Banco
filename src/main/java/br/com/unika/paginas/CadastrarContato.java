@@ -13,7 +13,6 @@ import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.form.validation.IFormValidator;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -44,8 +43,6 @@ public class CadastrarContato extends Panel {
 	protected Contato contato;
 	protected Form<Contato> formCriarContato;
 	private NotificationPanel notificationPanel;
-	private TextField<String> apelido, cpf, conta;
-	private DropDownChoice<Banco> dropBanco;
 	protected DropDownChoice<Agencia> dropAgencia;
 	private DropDownChoice<EnumTipoConta> dropTipoConta;
 	protected Banco bancoSelecionado;
@@ -127,7 +124,7 @@ public class CadastrarContato extends Panel {
 	}
 
 	private TextField<String> campoConta() {
-		conta = new TextField<>("conta");
+		TextField<String> conta = new TextField<>("conta");
 		conta.setOutputMarkupId(true);
 		conta.add((new AttributeModifier("onfocus", "$(this).mask('999999');")));
 		conta.setRequired(true);
@@ -135,14 +132,14 @@ public class CadastrarContato extends Panel {
 	}
 
 	private TextField<String> campoCpf() {
-		cpf = new TextField<>("cpf");
+		TextField<String> cpf = new TextField<>("cpf");
 		cpf.add((new AttributeModifier("onfocus", "$(this).mask('999.999.999-99');")));
 		cpf.setRequired(true);
 		return cpf;
 	}
 
 	private TextField<String> campoApelido() {
-		apelido = new TextField<String>("apelido");
+		TextField<String> apelido = new TextField<String>("apelido");
 		apelido.setRequired(true);
 
 		return apelido;
@@ -191,7 +188,7 @@ public class CadastrarContato extends Panel {
 
 			}
 		};
-		acaoSubmit.add(new InputBehavior(new KeyType[] {KeyType.Escape}, EventType.click));
+		acaoSubmit.add(new InputBehavior(new KeyType[] { KeyType.Escape }, EventType.click));
 		return acaoSubmit;
 	}
 
@@ -222,13 +219,17 @@ public class CadastrarContato extends Panel {
 
 		dropTipoConta = new DropDownChoice<EnumTipoConta>("tipoConta", new PropertyModel<>(this, "tipoDeContaEnum"),
 				model, tipoConta) {
+
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected String getNullValidDisplayValue() {
-				// TODO Auto-generated method stub
 				return "Escolha";
 			}
 		};
 		dropTipoConta.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
@@ -264,11 +265,13 @@ public class CadastrarContato extends Panel {
 
 		};
 
-		dropBanco = new DropDownChoice<Banco>("banco", new PropertyModel<Banco>(this, "bancoSelecionado"), model,
-				banco) {
+		DropDownChoice<Banco> dropBanco = new DropDownChoice<Banco>("banco",
+				new PropertyModel<Banco>(this, "bancoSelecionado"), model, banco) {
+
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected String getNullValidDisplayValue() {
-				// TODO Auto-generated method stub
 				return "Escolha";
 			}
 		};
@@ -292,9 +295,8 @@ public class CadastrarContato extends Panel {
 
 					@Override
 					protected List<Agencia> load() {
-						Search search = new Search(Agencia.class);
-						search.addFilterEqual("banco", bancoSelecionado);
-						return servicoAgencia.search(search);
+
+						return servicoAgencia.getAgenciasDoBanco(bancoSelecionado);
 					}
 
 				};
@@ -324,6 +326,9 @@ public class CadastrarContato extends Panel {
 			}
 		};
 		IModel<List<Agencia>> model = new LoadableDetachableModel<List<Agencia>>() {
+
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected List<Agencia> load() {
 				Search search = new Search(Agencia.class);
@@ -335,9 +340,11 @@ public class CadastrarContato extends Panel {
 		};
 
 		dropAgencia = new DropDownChoice<Agencia>("agencia", model, agencia) {
+			
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected String getNullValidDisplayValue() {
-				// TODO Auto-generated method stub
 				return "Escolha";
 			}
 		};

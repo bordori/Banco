@@ -12,12 +12,8 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.unika.modelo.Agencia;
-import br.com.unika.modelo.Contato;
 import br.com.unika.servicos.ServicoAgencia;
 import br.com.unika.util.Retorno;
-import wicket.contrib.input.events.EventType;
-import wicket.contrib.input.events.InputBehavior;
-import wicket.contrib.input.events.key.KeyType;
 
 public class ErrosImportacaoDeAgenciasPanel extends Panel {
 
@@ -32,7 +28,7 @@ public class ErrosImportacaoDeAgenciasPanel extends Panel {
 		super(id);
 		validarLista(listaAgenciasErro);
 		add(montarContainer());
-		add(new InputBehavior(new KeyType[] { KeyType.Escape }, EventType.click));
+		
 	}
 
 	private void validarLista(List<Agencia> listaAgenciasErro) {
@@ -59,6 +55,8 @@ public class ErrosImportacaoDeAgenciasPanel extends Panel {
 	private ListView<Agencia> popularListView() {
 		LoadableDetachableModel<List<Agencia>> loadableDetachableModel = new LoadableDetachableModel<List<Agencia>>() {
 
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected List<Agencia> load() {
 
@@ -67,6 +65,8 @@ public class ErrosImportacaoDeAgenciasPanel extends Panel {
 		};
 
 		ListView<Agencia> listView = new ListView<Agencia>("listViewAgencia", loadableDetachableModel) {
+
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<Agencia> item) {

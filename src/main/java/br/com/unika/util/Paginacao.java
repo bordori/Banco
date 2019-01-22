@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -21,14 +23,6 @@ public class Paginacao {
 		this.quantidadeDeItens = quantidadeDeitens;
 	}
 
-	private WebMarkupContainer paginacao(String id) {
-		WebMarkupContainer container = new WebMarkupContainer(id);
-		container.setOutputMarkupId(true);
-
-		container.add(montarPaginas());
-
-		return container;
-	}
 
 	private ListView<Integer> montarPaginas() {
 		float quantidadeDePaginas = (float) quantidadeDeItens / itensPorPagina;
@@ -59,7 +53,18 @@ public class Paginacao {
 
 			@Override
 			protected void populateItem(ListItem<Integer> item) {
+				Integer count = item.getModelObject();
 				
+				item.add(new AjaxLink<Void>("indice") {
+					
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void onClick(AjaxRequestTarget target) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
 			}
 		};
 

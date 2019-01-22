@@ -106,6 +106,17 @@ public class ServicoAgencia implements IServico<Agencia, Long> {
 	public int count(Search search) {
 		return agenciaDAO.countDAO(search);
 	}
+	
+	public int countAll() {
+		Search search = new Search(Agencia.class);
+		return agenciaDAO.countDAO(search);
+	}
+	
+	public List<Agencia> getAgenciasDoBanco(Banco banco){
+		Search search = new Search(Agencia.class);
+		search.addFilterEqual("banco", banco);
+		return search(search);
+	}
 
 	public Retorno importarAgencias(List<Agencia> listaAgencia) {
 		Retorno retorno = new Retorno(true, null);

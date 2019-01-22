@@ -14,9 +14,6 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import com.googlecode.genericdao.search.Search;
-
-import br.com.unika.modelo.Conta;
 import br.com.unika.modelo.Usuario;
 import br.com.unika.servicos.ServicoConta;
 import br.com.unika.servicos.ServicoUsuario;
@@ -24,7 +21,7 @@ import br.com.unika.util.NotificationPanel;
 import br.com.unika.util.Retorno;
 import br.com.unika.util.Validacao;
 
-public class ListaClientes extends NavBar{
+public class ListaClientes extends NavBar {
 
 	private static final long serialVersionUID = 1L;
 
@@ -33,13 +30,13 @@ public class ListaClientes extends NavBar{
 	private NotificationPanel notificationPanel;
 	private WebMarkupContainer containerListView;
 	private List<Usuario> usuariosList;
-	
-	@SpringBean(name="servicoUsuario")
+
+	@SpringBean(name = "servicoUsuario")
 	private ServicoUsuario servicoUsuario;
-	
+
 	@SpringBean(name = "servicoConta")
 	private ServicoConta servicoConta;
-	
+
 	public ListaClientes() {
 		verificarPermissaoConta();
 		preencherListView();
@@ -60,7 +57,6 @@ public class ListaClientes extends NavBar{
 
 			@Override
 			public void onClose(AjaxRequestTarget target) {
-				// TODO Auto-generated method stub
 
 			}
 		});
@@ -97,14 +93,13 @@ public class ListaClientes extends NavBar{
 				item.add(new Label("nomeCliente", usuario.getNomeCompleto()).setOutputMarkupId(true));
 				item.add(new Label("telefone", usuario.getTelefone()).setOutputMarkupId(true));
 				item.add(new Label("cpf", usuario.getCpf()).setOutputMarkupId(true));
+
 				
-				Search search = new Search(Conta.class);
-				search.addFilterEqual("usuario", usuario);
-				item.add(new Label("contas", servicoConta.count(search)).setOutputMarkupId(true));
-				search.addFilterEqual("ativo", true);
-				int contasAtivas = servicoConta.count(search);
-				item.add(new Label("contasAtivas", contasAtivas).setOutputMarkupId(true));
-				item.add(AtivarDesativarConta(usuario,contasAtivas).setOutputMarkupId(true));
+				item.add(new Label("contas", servicoConta.numeroDeContasDoCliente(usuario)).setOutputMarkupId(true));
+				
+			
+				item.add(new Label("contasAtivas", servicoConta.numeroDeContasAtivasDoCliente(usuario)).setOutputMarkupId(true));
+				item.add(AtivarDesativarConta(usuario).setOutputMarkupId(true));
 
 				item.add(acaoAlterar(usuario));
 			}
@@ -112,7 +107,7 @@ public class ListaClientes extends NavBar{
 		listaUsuario.setOutputMarkupId(true);
 		return listaUsuario;
 	}
-	
+
 	private AjaxLink<Void> acaoAlterar(Usuario usuarioAlterar) {
 		AjaxLink<Void> acaoAlterar = new AjaxLink<Void>("acaoAlterar") {
 
@@ -124,18 +119,18 @@ public class ListaClientes extends NavBar{
 				janela.setInitialWidth(1200);
 				janela.setMinimalHeight(400);
 				janela.setInitialHeight(550);
-				CadastrarUsuario cadastrarUsuario = new CadastrarUsuario(janela.getContentId(),usuarioAlterar) {
+				CadastrarUsuario cadastrarUsuario = new CadastrarUsuario(janela.getContentId(), usuarioAlterar) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					public void acaoSalvarCancelarUsuario(AjaxRequestTarget target,boolean tecla) {
+					public void acaoSalvarCancelarUsuario(AjaxRequestTarget target, boolean tecla) {
 						if (tecla) {
-							notificationPanel.mensagem("O Usuario Foi Alterado com sucesso", "sucesso");
-							
+							notificationPanel.mensagem("O Cliente Foi Alterado com Sucesso", "sucesso");
+
 						}
 						janela.close(target);
 						target.add(containerListView);
-						super.acaoSalvarCancelarUsuario(target,tecla);
+						super.acaoSalvarCancelarUsuario(target, tecla);
 					}
 				};
 				janela.setContent(cadastrarUsuario);
@@ -145,16 +140,15 @@ public class ListaClientes extends NavBar{
 
 		return acaoAlterar;
 	}
-	
-	
-	private AjaxLink<Void> AtivarDesativarConta(final Usuario usuario, int contasAtivas) {
+
+	private AjaxLink<Void> AtivarDesativarConta(final Usuario usuario) {
 
 		AjaxLink<Void> ativo = new AjaxLink<Void>("ativo") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				Retorno retorno = servicoUsuario.ativarDesativarConta(usuario,contasAtivas);
+				Retorno retorno = servicoUsuario.ativarDesativarConta(usuario);
 				if (retorno.isSucesso()) {
 					notificationPanel.mensagem("O Cliente foi " + Validacao.converterBooleanAtivo(usuario.getAtivo()),
 							"sucesso");
@@ -167,11 +161,9 @@ public class ListaClientes extends NavBar{
 
 		if (usuario.getAtivo()) {
 			ativo.add(new AttributeModifier("class", "botaoAtivoSim"));
-			// ativo.add(new AttributeModifier("style", "color:green"));
 
 		} else {
 			ativo.add(new AttributeModifier("class", "botaoAtivoNao"));
-			// ativo.add(new AttributeModifier("style", "color:red"));
 		}
 		return ativo;
 	}

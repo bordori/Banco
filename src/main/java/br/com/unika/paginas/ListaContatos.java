@@ -2,7 +2,6 @@ package br.com.unika.paginas;
 
 import java.util.List;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
@@ -38,7 +37,6 @@ public class ListaContatos extends NavBar {
 
 	public ListaContatos() {
 		preencherListView();
-//		add(formFiltro());
 		add(acaoNovoContato());
 
 		add(containerListView());
@@ -59,7 +57,6 @@ public class ListaContatos extends NavBar {
 
 			@Override
 			public void onClose(AjaxRequestTarget target) {
-				// TODO Auto-generated method stub
 
 			}
 		});
@@ -97,11 +94,10 @@ public class ListaContatos extends NavBar {
 				item.add(new Label("cpf", contatos.getCpf()).setOutputMarkupId(true));
 				item.add(new Label("banco", contatos.getAgencia().getBanco().getNumeroNomeBanco())
 						.setOutputMarkupId(true));
-				item.add(new Label("agencia", contatos.getAgencia().getNumeroNomeAgencia())
-						.setOutputMarkupId(true));
+				item.add(new Label("agencia", contatos.getAgencia().getNumeroNomeAgencia()).setOutputMarkupId(true));
 				item.add(new Label("conta", contatos.getConta()).setOutputMarkupId(true));
 				item.add(new Label("tipoConta", Validacao.tipoConta(contatos.getTipoConta())).setOutputMarkupId(true));
-				
+
 				item.add(acaoAlterar(contatos));
 				item.add(acaoDeletar(contatos));
 			}
@@ -122,19 +118,22 @@ public class ListaContatos extends NavBar {
 				janela.setInitialWidth(700);
 				janela.setMinimalHeight(350);
 				janela.setInitialHeight(400);
-				CadastrarContato cadastrarContato = new CadastrarContato(janela.getContentId(),contatos) {
+				CadastrarContato cadastrarContato = new CadastrarContato(janela.getContentId(), contatos) {
+					
+					private static final long serialVersionUID = 1L;
+
 					@Override
-					protected void acaoSalvarCancelarContato(AjaxRequestTarget target,Boolean tecla) {
+					protected void acaoSalvarCancelarContato(AjaxRequestTarget target, Boolean tecla) {
 						if (tecla) {
 							janela.close(target);
 							preencherListView();
 							notificationPanel.mensagem("Contato Alterado Com Sucesso!", "sucesso");
-						}else {
+						} else {
 							janela.close(target);
 						}
-						
+
 						target.add(containerListView);
-						super.acaoSalvarCancelarContato(target,tecla);
+						super.acaoSalvarCancelarContato(target, tecla);
 					}
 				};
 
@@ -206,20 +205,23 @@ public class ListaContatos extends NavBar {
 				janela.setMinimalHeight(350);
 				janela.setInitialHeight(400);
 				CadastrarContato cadastrarContato = new CadastrarContato(janela.getContentId()) {
+					
+					private static final long serialVersionUID = 1L;
+
 					@Override
-					protected void acaoSalvarCancelarContato(AjaxRequestTarget target,Boolean tecla) {
+					protected void acaoSalvarCancelarContato(AjaxRequestTarget target, Boolean tecla) {
 						if (tecla) {
 							janela.close(target);
 							preencherListView();
 							notificationPanel.mensagem("Contato Adicionado Com Sucesso!", "sucesso");
 
-						}else {
+						} else {
 							janela.close(target);
 
 						}
-						
+
 						target.add(containerListView);
-						super.acaoSalvarCancelarContato(target,tecla);
+						super.acaoSalvarCancelarContato(target, tecla);
 					}
 				};
 

@@ -10,7 +10,6 @@ import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.form.validation.IFormValidator;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -19,7 +18,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.unika.modelo.Agencia;
 import br.com.unika.modelo.Banco;
-import br.com.unika.modelo.PermissaoDeAcesso;
 import br.com.unika.servicos.ServicoAgencia;
 import br.com.unika.servicos.ServicoBanco;
 import br.com.unika.util.NotificationPanel;
@@ -35,13 +33,11 @@ public class CadastrarAgencia extends Panel {
 	private NotificationPanel notificationPanel;
 	private Agencia agencia;
 	private Form<Agencia> formCriarAgencia;
-	private TextField<String> nome, numero;
-	private DropDownChoice<Banco> DropBanco;
 
 	@SpringBean(name = "servicoAgencia")
 	private ServicoAgencia servicoAgencia;
-	
-	@SpringBean(name="servicoBanco")
+
+	@SpringBean(name = "servicoBanco")
 	private ServicoBanco servicoBanco;
 
 	public CadastrarAgencia(String id) {
@@ -67,13 +63,13 @@ public class CadastrarAgencia extends Panel {
 	private Form<Agencia> formCriarAgencia() {
 		formCriarAgencia = new Form<Agencia>("formCriarAgencia", new CompoundPropertyModel<>(agencia));
 		formCriarAgencia.setOutputMarkupId(true);
-		
+
 		formCriarAgencia.add(titulo());
-		
+
 		formCriarAgencia.add(campoNome());
 		formCriarAgencia.add(campoNumero());
 		formCriarAgencia.add(campoBanco());
-		
+
 		formCriarAgencia.add(botaoCancelar());
 		formCriarAgencia.add(botaoSalvar());
 
@@ -83,25 +79,25 @@ public class CadastrarAgencia extends Panel {
 	private Label titulo() {
 		Label titulo;
 		if (agencia.getIdAgencia() == null) {
-			titulo = new Label("titulo","Incluindo Nova Agência");
-		}else {
-			titulo = new Label("titulo","Editando Agência: "+agencia.getNumeroNomeAgencia());
+			titulo = new Label("titulo", "Incluindo Nova Agência");
+		} else {
+			titulo = new Label("titulo", "Editando Agência: " + agencia.getNumeroNomeAgencia());
 		}
 		return titulo;
 	}
 
 	private TextField<String> campoNumero() {
-		numero = new TextField<>("numero");
+		TextField<String> numero = new TextField<>("numero");
 		numero.setRequired(true);
 		return numero;
 	}
 
 	private TextField<String> campoNome() {
-		nome = new TextField<>("nome");
+		TextField<String> nome = new TextField<>("nome");
 		nome.setRequired(true);
 		return nome;
 	}
-	
+
 	private DropDownChoice<Banco> campoBanco() {
 		ChoiceRenderer<Banco> banco = new ChoiceRenderer<Banco>("nome", "idBanco");
 		IModel<List<Banco>> model = new LoadableDetachableModel<List<Banco>>() {
@@ -115,11 +111,10 @@ public class CadastrarAgencia extends Panel {
 
 		};
 
-		DropBanco = new DropDownChoice<>("banco", model, banco);
+		DropDownChoice<Banco> DropBanco = new DropDownChoice<>("banco", model, banco);
 
 		return DropBanco;
 	}
-
 
 	private AjaxSubmitLink botaoSalvar() {
 		AjaxSubmitLink acaoSubmit = new AjaxSubmitLink("acaoSubmit", formCriarAgencia) {
@@ -136,7 +131,7 @@ public class CadastrarAgencia extends Panel {
 				}
 
 				if (retorno.isSucesso()) {
-					acaoSalvarCancelarAgencia(target,true);
+					acaoSalvarCancelarAgencia(target, true);
 				} else {
 					notificationPanel.mensagem(retorno.getRetorno(), "erro");
 					target.add(notificationPanel);
@@ -153,7 +148,7 @@ public class CadastrarAgencia extends Panel {
 		};
 		return acaoSubmit;
 	}
-	
+
 	private AjaxLink<Void> botaoCancelar() {
 		AjaxLink<Void> botaoCancelar = new AjaxLink<Void>("cancelar") {
 			private static final long serialVersionUID = 1L;
@@ -162,13 +157,13 @@ public class CadastrarAgencia extends Panel {
 			public void onClick(AjaxRequestTarget target) {
 				acaoSalvarCancelarAgencia(target, false);
 			}
-			
+
 		};
-		botaoCancelar.add(new InputBehavior(new KeyType[] {KeyType.Escape}, EventType.click));
+		botaoCancelar.add(new InputBehavior(new KeyType[] { KeyType.Escape }, EventType.click));
 		return botaoCancelar;
 	}
 
-	protected void acaoSalvarCancelarAgencia(AjaxRequestTarget target,boolean tecla) {
+	public void acaoSalvarCancelarAgencia(AjaxRequestTarget target, boolean tecla) {
 		// TODO Auto-generated method stub
 
 	}

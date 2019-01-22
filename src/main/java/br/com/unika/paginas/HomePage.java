@@ -2,9 +2,6 @@ package br.com.unika.paginas;
 
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
-import org.apache.wicket.Component;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -15,7 +12,6 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.form.validation.IFormValidator;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -24,7 +20,6 @@ import com.googlecode.genericdao.search.Search;
 import br.com.unika.modelo.Usuario;
 import br.com.unika.servicos.ServicoUsuario;
 import br.com.unika.util.NotificationPanel;
-import br.com.unika.util.Retorno;
 
 public class HomePage extends WebPage {
 	private static final long serialVersionUID = 1L;
@@ -43,12 +38,12 @@ public class HomePage extends WebPage {
 
 	public HomePage() {
 		if (getSession().getAttribute("usuarioLogado") != null) {
-			setResponsePage(Menu.class);
+			setResponsePage(ClienteConta.class);
 		}
 		notificationPanel = new NotificationPanel("feedBack");
 		notificationPanel.setOutputMarkupId(true);
 		add(notificationPanel);
-		
+
 		add(formLogin());
 		add(initModal());
 		add(acaoResgistrar());
@@ -93,7 +88,7 @@ public class HomePage extends WebPage {
 			}
 
 		} else {
-			notificationPanel.mensagem("Login ou Senha Esta Incorreto!", "erro");
+			notificationPanel.mensagem("Login ou Senha esta Incorreto!", "erro");
 			target.add(notificationPanel);
 		}
 
@@ -119,7 +114,6 @@ public class HomePage extends WebPage {
 
 			@Override
 			public void onClose(AjaxRequestTarget target) {
-				// TODO Auto-generated method stub
 
 			}
 		});
@@ -138,15 +132,18 @@ public class HomePage extends WebPage {
 				janela.setMinimalHeight(400);
 				janela.setInitialHeight(550);
 				CadastrarUsuario cadastrarUsuario = new CadastrarUsuario(janela.getContentId()) {
+
+					private static final long serialVersionUID = 1L;
+
 					@Override
-					public void acaoSalvarCancelarUsuario(AjaxRequestTarget target,boolean tecla) {
+					public void acaoSalvarCancelarUsuario(AjaxRequestTarget target, boolean tecla) {
 						if (tecla) {
-							notificationPanel.mensagem("O Usuario Foi Adicionado com sucesso", "sucesso");
-							
+							notificationPanel.mensagem("O Cliente Foi Adicionado com Sucesso", "sucesso");
+
 						}
 						janela.close(target);
 						target.add(notificationPanel);
-						super.acaoSalvarCancelarUsuario(target,tecla);
+						super.acaoSalvarCancelarUsuario(target, tecla);
 					}
 				};
 				janela.setContent(cadastrarUsuario);

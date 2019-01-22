@@ -28,6 +28,9 @@ public class ServicoBanco implements IServico<Banco, Long>, Serializable {
 	@SpringBean(name = "servicoAgencia")
 	private ServicoAgencia servicoAgencia;
 
+	@SpringBean(name = "servicoConta")
+	private ServicoConta servicoConta;
+
 	@Override
 	public Retorno incluir(Banco banco) {
 
@@ -120,6 +123,22 @@ public class ServicoBanco implements IServico<Banco, Long>, Serializable {
 		return bancoDAO.countDAO(search);
 	}
 
+	public int numeroDeContasDoBanco(Banco banco) {
+		Search search = new Search(Conta.class);
+		search.addFilterEqual("agencia.banco", banco);
+
+		
+		return servicoConta.count(search);
+	}
+	
+	public int numeroDeContasAtivasDoBanco(Banco banco) {
+		Search search = new Search(Conta.class);
+		search.addFilterEqual("agencia.banco", banco);
+		search.addFilterEqual("ativo", true);
+		
+		return servicoConta.count(search);
+	} 
+	
 	private Retorno validacaoDeNegocio(Banco banco) {
 		Retorno retorno = new Retorno(true, null);
 
@@ -163,8 +182,12 @@ public class ServicoBanco implements IServico<Banco, Long>, Serializable {
 	public void setBancoDAO(BancoDAO bancoDAO) {
 		this.bancoDAO = bancoDAO;
 	}
-	
+
 	public void setServicoAgencia(ServicoAgencia servicoAgencia) {
 		this.servicoAgencia = servicoAgencia;
+	}
+	
+	public void setServicoConta(ServicoConta servicoConta) {
+		this.servicoConta = servicoConta;
 	}
 }
