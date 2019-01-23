@@ -19,13 +19,13 @@ import com.googlecode.genericdao.search.Search;
 
 import br.com.unika.modelo.Usuario;
 import br.com.unika.servicos.ServicoUsuario;
-import br.com.unika.util.NotificationPanel;
+import br.com.unika.util.CustomFeedbackPanel;
 
 public class HomePage extends WebPage {
 	private static final long serialVersionUID = 1L;
 
 	private ModalWindow janela;
-	private NotificationPanel notificationPanel;
+	private CustomFeedbackPanel feedbackPanel;
 
 	private TextField<String> login;
 	private PasswordTextField senha;
@@ -40,9 +40,9 @@ public class HomePage extends WebPage {
 		if (getSession().getAttribute("usuarioLogado") != null) {
 			setResponsePage(ClienteConta.class);
 		}
-		notificationPanel = new NotificationPanel("feedBack");
-		notificationPanel.setOutputMarkupId(true);
-		add(notificationPanel);
+		feedbackPanel = new CustomFeedbackPanel("feedBack");
+		feedbackPanel.setOutputMarkupId(true);
+		add(feedbackPanel);
 
 		add(formLogin());
 		add(initModal());
@@ -80,16 +80,16 @@ public class HomePage extends WebPage {
 		if (!lista.isEmpty()) {
 			Usuario usuario = lista.get(0);
 			if (usuario.getAtivo() == false) {
-				notificationPanel.mensagem("Usuario Desativado!", "erro");
-				target.add(notificationPanel);
+				feedbackPanel.error("Usuario Desativado!");
+				target.add(feedbackPanel);
 			} else {
 				session.setAttribute("usuarioLogado", usuario);
 				setResponsePage(ClienteConta.class);
 			}
 
 		} else {
-			notificationPanel.mensagem("Login ou Senha esta Incorreto!", "erro");
-			target.add(notificationPanel);
+			feedbackPanel.error("Login ou senha inválido");
+			target.add(feedbackPanel);
 		}
 
 	}
@@ -138,11 +138,11 @@ public class HomePage extends WebPage {
 					@Override
 					public void acaoSalvarCancelarUsuario(AjaxRequestTarget target, boolean tecla) {
 						if (tecla) {
-							notificationPanel.mensagem("O Cliente Foi Adicionado com Sucesso", "sucesso");
+							feedbackPanel.error("O Cliente Foi Adicionado com Sucesso");
 
 						}
 						janela.close(target);
-						target.add(notificationPanel);
+						target.add(feedbackPanel);
 						super.acaoSalvarCancelarUsuario(target, tecla);
 					}
 				};

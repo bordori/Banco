@@ -20,7 +20,7 @@ import br.com.unika.modelo.Agencia;
 import br.com.unika.modelo.Banco;
 import br.com.unika.servicos.ServicoAgencia;
 import br.com.unika.servicos.ServicoBanco;
-import br.com.unika.util.NotificationPanel;
+import br.com.unika.util.CustomFeedbackPanel;
 import br.com.unika.util.Retorno;
 import wicket.contrib.input.events.EventType;
 import wicket.contrib.input.events.InputBehavior;
@@ -30,7 +30,7 @@ public class CadastrarAgencia extends Panel {
 
 	private static final long serialVersionUID = 1L;
 
-	private NotificationPanel notificationPanel;
+	private CustomFeedbackPanel feedbackPanel;
 	private Agencia agencia;
 	private Form<Agencia> formCriarAgencia;
 
@@ -53,9 +53,9 @@ public class CadastrarAgencia extends Panel {
 	}
 
 	private void montarTela() {
-		notificationPanel = new NotificationPanel("feedBackPanel");
-		notificationPanel.setOutputMarkupId(true);
-		add(notificationPanel);
+		feedbackPanel = new CustomFeedbackPanel("feedBackPanel");
+		feedbackPanel.setOutputMarkupId(true);
+		add(feedbackPanel);
 		add(formCriarAgencia());
 
 	}
@@ -133,16 +133,16 @@ public class CadastrarAgencia extends Panel {
 				if (retorno.isSucesso()) {
 					acaoSalvarCancelarAgencia(target, true);
 				} else {
-					notificationPanel.mensagem(retorno.getRetorno(), "erro");
-					target.add(notificationPanel);
+					feedbackPanel = retorno.getMensagens(feedbackPanel);
+					target.add(feedbackPanel);
 				}
 				super.onSubmit(target, form);
 			}
 
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
-				notificationPanel.montarFeedBack();
-				target.add(notificationPanel);
+				
+				target.add(feedbackPanel);
 				super.onError(target, form);
 			}
 		};

@@ -19,7 +19,7 @@ import br.com.unika.modelo.Contato;
 import br.com.unika.modelo.Usuario;
 import br.com.unika.servicos.ServicoContato;
 import br.com.unika.util.Confirmacao;
-import br.com.unika.util.NotificationPanel;
+import br.com.unika.util.CustomFeedbackPanel;
 import br.com.unika.util.Retorno;
 import br.com.unika.util.Validacao;
 
@@ -28,7 +28,7 @@ public class ListaContatos extends NavBar {
 
 	private ListView<Contato> listaContatos;
 	private ModalWindow janela;
-	private NotificationPanel notificationPanel;
+	private CustomFeedbackPanel feedbackPanel;
 	private WebMarkupContainer containerListView;
 	private List<Contato> contatosLista;
 
@@ -66,9 +66,9 @@ public class ListaContatos extends NavBar {
 	private WebMarkupContainer containerListView() {
 		containerListView = new WebMarkupContainer("containerListView");
 		containerListView.setOutputMarkupId(true);
-		notificationPanel = new NotificationPanel("feedBack");
-		notificationPanel.setOutputMarkupId(true);
-		containerListView.add(notificationPanel);
+		feedbackPanel = new CustomFeedbackPanel("feedBack");
+		feedbackPanel.setOutputMarkupId(true);
+		containerListView.add(feedbackPanel);
 		containerListView.add(polularTabelaContatos());
 
 		return containerListView;
@@ -127,7 +127,7 @@ public class ListaContatos extends NavBar {
 						if (tecla) {
 							janela.close(target);
 							preencherListView();
-							notificationPanel.mensagem("Contato Alterado Com Sucesso!", "sucesso");
+							feedbackPanel.success("Contato alterado com sucesso!");
 						} else {
 							janela.close(target);
 						}
@@ -165,18 +165,18 @@ public class ListaContatos extends NavBar {
 							if (usuarioLogado.getSenha().equals(senha)) {
 								Retorno retorno = servicoContato.remover(contatos);
 								if (retorno.isSucesso()) {
-									notificationPanel.mensagem("Contato Deletado com Sucesso!", "sucesso");
+									feedbackPanel.success("Contato deletado com sucesso!");
 									janela.close(target);
 									preencherListView();
 									target.add(containerListView);
 								} else {
-									notificationPanel.mensagem(retorno.getRetorno(), "erro");
+									feedbackPanel = retorno.getMensagens(feedbackPanel);
 									janela.close(target);
-									target.add(notificationPanel);
+									target.add(feedbackPanel);
 								}
 							} else {
-								notificationPanel.mensagem("Senha Incorreta!", "erro");
-								target.add(notificationPanel);
+								feedbackPanel.error("Senha incorreta!");
+								target.add(feedbackPanel);
 							}
 						} else {
 							janela.close(target);
@@ -213,7 +213,7 @@ public class ListaContatos extends NavBar {
 						if (tecla) {
 							janela.close(target);
 							preencherListView();
-							notificationPanel.mensagem("Contato Adicionado Com Sucesso!", "sucesso");
+							feedbackPanel.success("Contato adicionado com sucesso!");
 
 						} else {
 							janela.close(target);

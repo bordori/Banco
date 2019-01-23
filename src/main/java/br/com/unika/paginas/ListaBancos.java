@@ -23,7 +23,7 @@ import br.com.unika.modelo.Banco;
 import br.com.unika.modelo.Usuario;
 import br.com.unika.servicos.ServicoBanco;
 import br.com.unika.util.Confirmacao;
-import br.com.unika.util.NotificationPanel;
+import br.com.unika.util.CustomFeedbackPanel;
 import br.com.unika.util.Retorno;
 
 public class ListaBancos extends NavBar {
@@ -32,7 +32,7 @@ public class ListaBancos extends NavBar {
 
 	private ListView<Banco> listaBancos;
 	private ModalWindow janela;
-	private NotificationPanel notificationPanel;
+	private CustomFeedbackPanel feedbackPanel;
 	private WebMarkupContainer containerListView;
 	private Form<Banco> formFiltro;
 	private List<Banco> bancos;
@@ -58,9 +58,9 @@ public class ListaBancos extends NavBar {
 	private WebMarkupContainer containerListView() {
 		containerListView = new WebMarkupContainer("containerListView");
 		containerListView.setOutputMarkupId(true);
-		notificationPanel = new NotificationPanel("feedBack");
-		notificationPanel.setOutputMarkupId(true);
-		containerListView.add(notificationPanel);
+		feedbackPanel = new CustomFeedbackPanel("feedBack");
+		feedbackPanel.setOutputMarkupId(true);
+		containerListView.add(feedbackPanel);
 		containerListView.add(polularTabelaBancos());
 
 		return containerListView;
@@ -165,18 +165,18 @@ public class ListaBancos extends NavBar {
 							if (usuarioLogado.getSenha().equals(senha)) {
 								Retorno retorno = servicoBanco.remover(banco);
 								if (retorno.isSucesso()) {
-									notificationPanel.mensagem("Banco Deletado com Sucesso!", "sucesso");
+									feedbackPanel.success("Banco deletado com sucesso!");
 									janela.close(target);
 									preencherListaBancos();
 									target.add(containerListView);
 								} else {
-									notificationPanel.mensagem(retorno.getRetorno(), "erro");
+									feedbackPanel = retorno.getMensagens(feedbackPanel);
 									janela.close(target);
-									target.add(notificationPanel);
+									target.add(feedbackPanel);
 								}
 							} else {
-								notificationPanel.mensagem("Senha Incorreta!", "erro");
-								target.add(notificationPanel);
+								feedbackPanel.error("Senha incorreta!");
+								target.add(feedbackPanel);
 							}
 						} else {
 							janela.close(target);
@@ -207,7 +207,7 @@ public class ListaBancos extends NavBar {
 					@Override
 					public void acaoSalvarCancelarBanco(AjaxRequestTarget target, boolean tecla) {
 						if (tecla) {
-							notificationPanel.mensagem("Banco foi Alterado Com Sucesso!", "sucesso");
+							feedbackPanel.success("Banco foi alterado com sucesso!");
 							preencherListaBancos();
 							target.add(containerListView);
 
@@ -256,7 +256,7 @@ public class ListaBancos extends NavBar {
 					@Override
 					public void acaoSalvarCancelarBanco(AjaxRequestTarget target, boolean tecla) {
 						if (tecla) {
-							notificationPanel.mensagem("Banco Adicionado Com Sucesso!", "sucesso");
+							feedbackPanel.success("Banco adicionado com sucesso!");
 							preencherListaBancos();
 							target.add(containerListView);
 						}

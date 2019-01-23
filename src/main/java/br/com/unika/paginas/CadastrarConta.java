@@ -25,7 +25,7 @@ import br.com.unika.modelo.Usuario;
 import br.com.unika.servicos.ServicoAgencia;
 import br.com.unika.servicos.ServicoBanco;
 import br.com.unika.servicos.ServicoConta;
-import br.com.unika.util.NotificationPanel;
+import br.com.unika.util.CustomFeedbackPanel;
 import br.com.unika.util.Retorno;
 import wicket.contrib.input.events.EventType;
 import wicket.contrib.input.events.InputBehavior;
@@ -37,7 +37,7 @@ public class CadastrarConta extends Panel {
 
 	private Conta conta;
 	private Banco bancoSelecionado;
-	private NotificationPanel notificationPanel;
+	private CustomFeedbackPanel feedbackPanel;
 	private Form<Conta> formCriarConta;
 	private DropDownChoice<Agencia> dropAgencia;
 	private TextField<String> numeroConta;
@@ -67,9 +67,9 @@ public class CadastrarConta extends Panel {
 	}
 
 	private void montarTela() {
-		notificationPanel = new NotificationPanel("feedBackPanel");
-		notificationPanel.setOutputMarkupId(true);
-		add(notificationPanel);
+		feedbackPanel = new CustomFeedbackPanel("feedBackPanel");
+		feedbackPanel.setOutputMarkupId(true);
+		add(feedbackPanel);
 		add(formCriarConta());
 
 	}
@@ -223,16 +223,15 @@ public class CadastrarConta extends Panel {
 				if (retorno.isSucesso()) {
 					acaoSalvarCancelarConta(target, true);
 				} else {
-					notificationPanel.mensagem(retorno.getRetorno(), "erro");
-					target.add(notificationPanel);
+					feedbackPanel = retorno.getMensagens(feedbackPanel);
+					target.add(feedbackPanel);
 				}
 				super.onSubmit(target, form);
 			}
 
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
-				notificationPanel.montarFeedBack();
-				target.add(notificationPanel);
+				target.add(feedbackPanel);
 				super.onError(target, form);
 			}
 		};

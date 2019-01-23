@@ -36,7 +36,7 @@ import br.com.unika.servicos.ServicoAgencia;
 import br.com.unika.servicos.ServicoBanco;
 import br.com.unika.util.AJAXDownload;
 import br.com.unika.util.Confirmacao;
-import br.com.unika.util.NotificationPanel;
+import br.com.unika.util.CustomFeedbackPanel;
 import br.com.unika.util.RelatorioExcel;
 import br.com.unika.util.Retorno;
 
@@ -46,7 +46,7 @@ public class ListaAgencia extends NavBar implements Serializable {
 
 	private ListView<Agencia> listaAgencia;
 	private ModalWindow janela;
-	private NotificationPanel notificationPanel;
+	private CustomFeedbackPanel feedbackPanel;
 	private WebMarkupContainer containerListView;
 	private Agencia agenciaProcurar;
 	private Form<Agencia> formFiltro;
@@ -127,9 +127,9 @@ public class ListaAgencia extends NavBar implements Serializable {
 	private WebMarkupContainer containerListView() {
 		containerListView = new WebMarkupContainer("containerListView");
 		containerListView.setOutputMarkupId(true);
-		notificationPanel = new NotificationPanel("feedBack");
-		notificationPanel.setOutputMarkupId(true);
-		containerListView.add(notificationPanel);
+		feedbackPanel = new CustomFeedbackPanel("feedBack");
+		feedbackPanel.setOutputMarkupId(true);
+		containerListView.add(feedbackPanel);
 		containerListView.add(polularTabelaAgencias());
 
 		return containerListView;
@@ -272,18 +272,18 @@ public class ListaAgencia extends NavBar implements Serializable {
 							if (usuarioLogado.getSenha().equals(senha)) {
 								Retorno retorno = servicoAgencia.remover(agencia);
 								if (retorno.isSucesso()) {
-									notificationPanel.mensagem("Agencia Deletada com Sucesso!", "sucesso");
+									feedbackPanel.success("Agencia deletada com sucesso!");
 									janela.close(target);
 									preencherListView();
 									target.add(containerListView);
 								} else {
-									notificationPanel.mensagem(retorno.getRetorno(), "erro");
+									feedbackPanel = retorno.getMensagens(feedbackPanel);
 									janela.close(target);
-									target.add(notificationPanel);
+									target.add(feedbackPanel);
 								}
 							} else {
-								notificationPanel.mensagem("Senha Incorreta!", "erro");
-								target.add(notificationPanel);
+								feedbackPanel.error("Senha incorreta!");
+								target.add(feedbackPanel);
 							}
 						} else {
 							janela.close(target);
@@ -314,7 +314,7 @@ public class ListaAgencia extends NavBar implements Serializable {
 					@Override
 					public void acaoSalvarCancelarAgencia(AjaxRequestTarget target, boolean tecla) {
 						if (tecla) {
-							notificationPanel.mensagem("Agencia Alterada Com Sucesso!", "sucesso");
+							feedbackPanel.success("Agencia alterada com sucesso!");
 							preencherListView();
 							target.add(containerListView);
 						}
@@ -396,11 +396,11 @@ public class ListaAgencia extends NavBar implements Serializable {
 									if (sucesso == true) {
 										retorno = servicoAgencia.importarAgencias(listaAgencia);
 										if (retorno.isSucesso()) {
-											notificationPanel.mensagem("Agencias Incluidas com sucesso!", "sucesso");
+											feedbackPanel.success("Agencias incluidas com sucesso!");
 											preencherListView();
 											janela.close(target);
 										} else {
-											notificationPanel.mensagem(retorno.getRetorno(), "erro");
+											feedbackPanel = retorno.getMensagens(feedbackPanel);
 										}
 
 									} else { // mostra na tela os erros
@@ -409,7 +409,7 @@ public class ListaAgencia extends NavBar implements Serializable {
 									}
 								}
 							} else {
-								notificationPanel.mensagem("Selecione Arquivo para Upload", "erro");
+								feedbackPanel.error("Selecione o arquivo para upload");
 							}
 						} else {
 							janela.close(target);
@@ -454,7 +454,7 @@ public class ListaAgencia extends NavBar implements Serializable {
 					@Override
 					public void acaoSalvarCancelarAgencia(AjaxRequestTarget target, boolean tecla) {
 						if (tecla) {
-							notificationPanel.mensagem("Agencia Incluida Com Sucesso!", "sucesso");
+							feedbackPanel.success("Agencia incluida com sucesso!");
 							preencherListView();
 							target.add(containerListView);
 						}

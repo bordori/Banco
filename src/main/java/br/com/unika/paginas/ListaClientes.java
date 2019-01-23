@@ -17,7 +17,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import br.com.unika.modelo.Usuario;
 import br.com.unika.servicos.ServicoConta;
 import br.com.unika.servicos.ServicoUsuario;
-import br.com.unika.util.NotificationPanel;
+import br.com.unika.util.CustomFeedbackPanel;
 import br.com.unika.util.Retorno;
 import br.com.unika.util.Validacao;
 
@@ -27,7 +27,7 @@ public class ListaClientes extends NavBar {
 
 	private ListView<Usuario> listaUsuario;
 	private ModalWindow janela;
-	private NotificationPanel notificationPanel;
+	private CustomFeedbackPanel feedbackPanel;
 	private WebMarkupContainer containerListView;
 	private List<Usuario> usuariosList;
 
@@ -66,9 +66,9 @@ public class ListaClientes extends NavBar {
 	private WebMarkupContainer containerListView() {
 		containerListView = new WebMarkupContainer("containerListView");
 		containerListView.setOutputMarkupId(true);
-		notificationPanel = new NotificationPanel("feedBack");
-		notificationPanel.setOutputMarkupId(true);
-		containerListView.add(notificationPanel);
+		feedbackPanel = new CustomFeedbackPanel("feedBack");
+		feedbackPanel.setOutputMarkupId(true);
+		containerListView.add(feedbackPanel);
 		containerListView.add(polularTabelaUsuarios());
 
 		return containerListView;
@@ -94,11 +94,10 @@ public class ListaClientes extends NavBar {
 				item.add(new Label("telefone", usuario.getTelefone()).setOutputMarkupId(true));
 				item.add(new Label("cpf", usuario.getCpf()).setOutputMarkupId(true));
 
-				
 				item.add(new Label("contas", servicoConta.numeroDeContasDoCliente(usuario)).setOutputMarkupId(true));
-				
-			
-				item.add(new Label("contasAtivas", servicoConta.numeroDeContasAtivasDoCliente(usuario)).setOutputMarkupId(true));
+
+				item.add(new Label("contasAtivas", servicoConta.numeroDeContasAtivasDoCliente(usuario))
+						.setOutputMarkupId(true));
 				item.add(AtivarDesativarConta(usuario).setOutputMarkupId(true));
 
 				item.add(acaoAlterar(usuario));
@@ -125,7 +124,7 @@ public class ListaClientes extends NavBar {
 					@Override
 					public void acaoSalvarCancelarUsuario(AjaxRequestTarget target, boolean tecla) {
 						if (tecla) {
-							notificationPanel.mensagem("O Cliente Foi Alterado com Sucesso", "sucesso");
+							feedbackPanel.success("Cliente alterado com sucesso!");
 
 						}
 						janela.close(target);
@@ -150,10 +149,9 @@ public class ListaClientes extends NavBar {
 			public void onClick(AjaxRequestTarget target) {
 				Retorno retorno = servicoUsuario.ativarDesativarConta(usuario);
 				if (retorno.isSucesso()) {
-					notificationPanel.mensagem("O Cliente foi " + Validacao.converterBooleanAtivo(usuario.getAtivo()),
-							"sucesso");
+					feedbackPanel.success("Cliente foi " + Validacao.converterBooleanAtivo(usuario.getAtivo()));
 				} else {
-					notificationPanel.mensagem(retorno.getRetorno(), "erro");
+					feedbackPanel = retorno.getMensagens(feedbackPanel);
 				}
 				target.add(containerListView);
 			}

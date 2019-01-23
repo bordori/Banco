@@ -29,7 +29,7 @@ import br.com.unika.modelo.Usuario;
 import br.com.unika.servicos.ServicoBanco;
 import br.com.unika.servicos.ServicoConta;
 import br.com.unika.util.Confirmacao;
-import br.com.unika.util.NotificationPanel;
+import br.com.unika.util.CustomFeedbackPanel;
 import br.com.unika.util.Retorno;
 import br.com.unika.util.Validacao;
 
@@ -39,7 +39,7 @@ public class ListaContas extends NavBar {
 
 	private ListView<Conta> listaConta;
 	private ModalWindow janela;
-	private NotificationPanel notificationPanel;
+	private CustomFeedbackPanel feedbackPanel;
 	private WebMarkupContainer containerListView;
 	private List<Conta> contasList;
 	private Conta contaProcurar;
@@ -81,9 +81,9 @@ public class ListaContas extends NavBar {
 	private WebMarkupContainer containerListView() {
 		containerListView = new WebMarkupContainer("containerListView");
 		containerListView.setOutputMarkupId(true);
-		notificationPanel = new NotificationPanel("feedBack");
-		notificationPanel.setOutputMarkupId(true);
-		containerListView.add(notificationPanel);
+		feedbackPanel = new CustomFeedbackPanel("feedBack");
+		feedbackPanel.setOutputMarkupId(true);
+		containerListView.add(feedbackPanel);
 		containerListView.add(polularTabelaContas());
 
 		return containerListView;
@@ -140,18 +140,18 @@ public class ListaContas extends NavBar {
 									&& usuarioLogado.getPermissaoDeAcesso().getAlterarConta() == true) {
 								Retorno retorno = servicoConta.remover(conta);
 								if (retorno.isSucesso()) {
-									notificationPanel.mensagem("Conta Deletada com Sucesso!", "sucesso");
+									feedbackPanel.success("Conta deletada com sucesso!");
 									janela.close(target);
 									preencherListView();
 									target.add(containerListView);
 								} else {
-									notificationPanel.mensagem(retorno.getRetorno(), "erro");
+									feedbackPanel = retorno.getMensagens(feedbackPanel);
 									janela.close(target);
-									target.add(notificationPanel);
+									target.add(feedbackPanel);
 								}
 							} else {
-								notificationPanel.mensagem("Senha Incorreta!", "erro");
-								target.add(notificationPanel);
+								feedbackPanel.error("Senha incorreta!");
+								target.add(feedbackPanel);
 							}
 						} else {
 							janela.close(target);
@@ -175,10 +175,9 @@ public class ListaContas extends NavBar {
 			public void onClick(AjaxRequestTarget target) {
 				Retorno retorno = servicoConta.ativarDesativarConta(conta);
 				if (retorno.isSucesso()) {
-					notificationPanel.mensagem("A Conta foi " + Validacao.converterBooleanAtivo(conta.getAtivo()),
-							"sucesso");
+					feedbackPanel.success("Conta foi " + Validacao.converterBooleanAtivo(conta.getAtivo()));
 				} else {
-					notificationPanel.mensagem(retorno.getRetorno(), "erro");
+					feedbackPanel = retorno.getMensagens(feedbackPanel);
 				}
 				target.add(containerListView);
 			}

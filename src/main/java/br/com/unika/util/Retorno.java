@@ -35,12 +35,12 @@ public class Retorno {
 		}
 	}
 	
-	public String getMensagens() {
-		String retorno = "";
+	public CustomFeedbackPanel getMensagens(CustomFeedbackPanel customFeedbackPanel) {
+		
 		for (String string : getRetorno()) {
-			retorno= retorno +string+"\n";
+			customFeedbackPanel.error(string);
 		}
-		return retorno;
+		return customFeedbackPanel;
 	}
 
 

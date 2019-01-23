@@ -31,7 +31,7 @@ import br.com.unika.servicos.ServicoConta;
 import br.com.unika.servicos.ServicoMovimentacao;
 import br.com.unika.util.AJAXDownload;
 import br.com.unika.util.Confirmacao;
-import br.com.unika.util.NotificationPanel;
+import br.com.unika.util.CustomFeedbackPanel;
 import br.com.unika.util.RelatorioJasper;
 import br.com.unika.util.Retorno;
 import br.com.unika.util.Validacao;
@@ -42,7 +42,7 @@ public class ClienteConta extends NavBar {
 
 	private ListView<Conta> listaConta;
 	private ModalWindow janela;
-	private NotificationPanel notificationPanel;
+	private CustomFeedbackPanel feedbackPanel;
 	private WebMarkupContainer containerListView;
 	private List<Conta> contasList;
 
@@ -84,9 +84,9 @@ public class ClienteConta extends NavBar {
 	private WebMarkupContainer containerListView() {
 		containerListView = new WebMarkupContainer("containerListView");
 		containerListView.setOutputMarkupId(true);
-		notificationPanel = new NotificationPanel("feedBack");
-		notificationPanel.setOutputMarkupId(true);
-		containerListView.add(notificationPanel);
+		feedbackPanel = new CustomFeedbackPanel("feedBack");
+		feedbackPanel.setOutputMarkupId(true);
+		containerListView.add(feedbackPanel);
 		containerListView.add(polularTabelaContas());
 
 		return containerListView;
@@ -114,13 +114,13 @@ public class ClienteConta extends NavBar {
 							retorno = servicoConta.Deposito(conta, valor);
 
 							if (retorno.isSucesso()) {
-								notificationPanel.success("Deposito Efetuado com Sucesso!");
+								feedbackPanel.success("Deposito Efetuado com Sucesso!");
 								janela.close(target);
 								servicoMovimentacao.comprovanteDepositoSaque(conta, EnumTipoMovimentacao.DEPOSITO,
 										valor);
 
 							} else {
-								notificationPanel.mensagem(retorno.getRetorno(), "erro");
+								feedbackPanel = retorno.getMensagens(feedbackPanel);
 							}
 
 						} else {
@@ -158,11 +158,11 @@ public class ClienteConta extends NavBar {
 							retorno = servicoConta.Saque(conta, valor);
 
 							if (retorno.isSucesso()) {
-								notificationPanel.mensagem("Saque Efetuado com Sucesso!", "sucesso");
+								feedbackPanel.success("Saque efetuado com sucesso!");
 								janela.close(target);
 								servicoMovimentacao.comprovanteDepositoSaque(conta, EnumTipoMovimentacao.SAQUE, valor);
 							} else {
-								notificationPanel.mensagem(retorno.getRetorno(), "erro");
+								feedbackPanel = retorno.getMensagens(feedbackPanel);
 							}
 
 						} else {
@@ -224,7 +224,7 @@ public class ClienteConta extends NavBar {
 				janela.setMinimalHeight(500);
 				janela.setInitialHeight(520);
 				OperacaoTransferencia operacaoTransferencia = new OperacaoTransferencia(janela.getContentId(), conta) {
-					
+
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -235,9 +235,9 @@ public class ClienteConta extends NavBar {
 							retorno = servicoConta.transferencia(contato, valorTransferencia, conta, taxa);
 
 							if (!retorno.isSucesso()) {
-								notificationPanel.mensagem(retorno.getRetorno(), "erro");
+								feedbackPanel = retorno.getMensagens(feedbackPanel);
 							} else {
-								notificationPanel.mensagem("Transferencia Concluida com Sucesso!", "sucesso");
+								feedbackPanel.success("Transfêrencia efetuada com sucesso!");
 								janela.close(target);
 								servicoMovimentacao.comprovanteTransferencia(conta, valorTransferencia, contato, taxa);
 							}
@@ -267,7 +267,7 @@ public class ClienteConta extends NavBar {
 				janela.setMinimalHeight(300);
 				janela.setInitialHeight(350);
 				ListaMovimentacoes listaMovimentacoes = new ListaMovimentacoes(janela.getContentId()) {
-					
+
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -292,7 +292,7 @@ public class ClienteConta extends NavBar {
 								gerarPdfMovimentacoes(target, conta, listaMovimentacoes);
 
 							} else {
-								notificationPanel.mensagem("Nenhuma Movimentação foi Encontrada", "erro");
+								feedbackPanel.error("Nenhuma movimentação encontrada");
 							}
 						} else {
 							janela.close(target);
@@ -345,10 +345,9 @@ public class ClienteConta extends NavBar {
 			public void onClick(AjaxRequestTarget target) {
 				Retorno retorno = servicoConta.ativarDesativarConta(conta);
 				if (retorno.isSucesso()) {
-					notificationPanel.mensagem("A Conta foi " + Validacao.converterBooleanAtivo(conta.getAtivo()),
-							"sucesso");
+					feedbackPanel.success("A conta foi " + Validacao.converterBooleanAtivo(conta.getAtivo()));
 				} else {
-					notificationPanel.mensagem(retorno.getRetorno(), "erro");
+					feedbackPanel = retorno.getMensagens(feedbackPanel);
 				}
 				target.add(containerListView);
 			}
@@ -356,7 +355,6 @@ public class ClienteConta extends NavBar {
 
 		if (conta.getAtivo()) {
 			ativo.add(new AttributeModifier("class", "botaoAtivoSim"));
-			
 
 		} else {
 			ativo.add(new AttributeModifier("class", "botaoAtivoNao"));
@@ -377,7 +375,7 @@ public class ClienteConta extends NavBar {
 				janela.setInitialHeight(400);
 				Usuario usuario = (Usuario) getSession().getAttribute("usuarioLogado");
 				CadastrarConta cadastrarConta = new CadastrarConta(janela.getContentId(), usuario) {
-					
+
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -385,7 +383,7 @@ public class ClienteConta extends NavBar {
 						super.acaoSalvarCancelarConta(target, tecla);
 						if (tecla) {
 							preencherListView();
-							notificationPanel.mensagem("Conta Criada com Sucesso!", "sucesso");
+							feedbackPanel.success("Conta criada com sucesso!");
 							target.add(containerListView);
 						}
 						janela.close(target);
@@ -421,18 +419,18 @@ public class ClienteConta extends NavBar {
 									&& usuarioLogado.getPermissaoDeAcesso().getAlterarConta() == true) {
 								Retorno retorno = servicoConta.remover(conta);
 								if (retorno.isSucesso()) {
-									notificationPanel.mensagem("Conta Deletada com Sucesso!", "sucesso");
+									feedbackPanel.success("Conta deletada com sucesso!");
 									janela.close(target);
 									preencherListView();
 									target.add(containerListView);
 								} else {
-									notificationPanel.mensagem(retorno.getRetorno(), "erro");
+									feedbackPanel = retorno.getMensagens(feedbackPanel);
 									janela.close(target);
-									target.add(notificationPanel);
+									target.add(feedbackPanel);
 								}
 							} else {
-								notificationPanel.mensagem("Senha Incorreta!", "erro");
-								target.add(notificationPanel);
+								feedbackPanel.error("Senha incorreta");
+								target.add(feedbackPanel);
 							}
 						} else {
 							janela.close(target);

@@ -30,7 +30,7 @@ import br.com.unika.modelo.Usuario;
 import br.com.unika.servicos.ServicoAgencia;
 import br.com.unika.servicos.ServicoBanco;
 import br.com.unika.servicos.ServicoContato;
-import br.com.unika.util.NotificationPanel;
+import br.com.unika.util.CustomFeedbackPanel;
 import br.com.unika.util.Retorno;
 import br.com.unika.util.Validacao;
 import wicket.contrib.input.events.EventType;
@@ -42,7 +42,7 @@ public class CadastrarContato extends Panel {
 
 	protected Contato contato;
 	protected Form<Contato> formCriarContato;
-	private NotificationPanel notificationPanel;
+	private CustomFeedbackPanel feedbackPanel;
 	protected DropDownChoice<Agencia> dropAgencia;
 	private DropDownChoice<EnumTipoConta> dropTipoConta;
 	protected Banco bancoSelecionado;
@@ -80,8 +80,8 @@ public class CadastrarContato extends Panel {
 	}
 
 	private void montarTela() {
-		notificationPanel = new NotificationPanel("feedBackPanel");
-		notificationPanel.setOutputMarkupId(true);
+		feedbackPanel = new CustomFeedbackPanel("feedBackPanel");
+		feedbackPanel.setOutputMarkupId(true);
 		add(montarContainer());
 
 	}
@@ -90,7 +90,7 @@ public class CadastrarContato extends Panel {
 		container = new WebMarkupContainer("webContainer");
 		container.setOutputMarkupId(true);
 
-		container.add(notificationPanel);
+		container.add(feedbackPanel);
 		container.add(montarForm());
 		return container;
 	}
@@ -162,16 +162,15 @@ public class CadastrarContato extends Panel {
 				if (retorno.isSucesso()) {
 					acaoSalvarCancelarContato(target, true);
 				} else {
-					notificationPanel.mensagem(retorno.getRetorno(), "erro");
-					target.add(notificationPanel);
+					feedbackPanel = retorno.getMensagens(feedbackPanel);
+					target.add(feedbackPanel);
 				}
 				super.onSubmit(target, form);
 			}
 
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
-				notificationPanel.montarFeedBack();
-				target.add(notificationPanel);
+				target.add(feedbackPanel);
 				super.onError(target, form);
 			}
 		};

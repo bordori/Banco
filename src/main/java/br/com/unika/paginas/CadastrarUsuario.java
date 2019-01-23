@@ -34,7 +34,7 @@ import br.com.unika.modelo.PermissaoDeAcesso;
 import br.com.unika.modelo.Usuario;
 import br.com.unika.servicos.ServicoPermissaoDeAcesso;
 import br.com.unika.servicos.ServicoUsuario;
-import br.com.unika.util.NotificationPanel;
+import br.com.unika.util.CustomFeedbackPanel;
 import br.com.unika.util.Retorno;
 import br.com.unika.util.ViaCepWs;
 import wicket.contrib.input.events.EventType;
@@ -52,7 +52,7 @@ public class CadastrarUsuario extends Panel {
 	private WebMarkupContainer containerCep;
 	private String confirmacaoSenha;
 	private String alterarSenha;
-	private NotificationPanel notificationPanel;
+	private CustomFeedbackPanel feedbackPanel;
 
 	@SpringBean(name = "servicoPermissaoDeAcesso")
 	private ServicoPermissaoDeAcesso servicoPermissaoDeAcesso;
@@ -88,8 +88,8 @@ public class CadastrarUsuario extends Panel {
 	}
 
 	private void montarTela() {
-		notificationPanel = new NotificationPanel("feedBackPanel");
-		notificationPanel.setOutputMarkupId(true);
+		feedbackPanel = new CustomFeedbackPanel("feedBackPanel");
+		feedbackPanel.setOutputMarkupId(true);
 
 		add(formCriarUsuario());
 	}
@@ -100,7 +100,7 @@ public class CadastrarUsuario extends Panel {
 		formCriarUsuario.setOutputMarkupId(true);
 
 		formCriarUsuario.add(new AttributeModifier("autocomplete", "off"));
-		formCriarUsuario.add(notificationPanel);
+		formCriarUsuario.add(feedbackPanel);
 
 		formCriarUsuario.add(titulo());
 
@@ -206,8 +206,8 @@ public class CadastrarUsuario extends Panel {
 				target.add(containerCep);
 
 			} else {
-				notificationPanel.mensagem("Não foi encontrado esse cep!", "erro");
-				target.add(notificationPanel);
+				feedbackPanel.error("Cep não encontrado");
+				target.add(feedbackPanel);
 			}
 
 		}
@@ -412,8 +412,8 @@ public class CadastrarUsuario extends Panel {
 				}
 
 				if (!usuario.getSenha().equals(confirmacaoSenha)) {
-					notificationPanel.mensagem("Senha e Confirmação da Senha Devem Ser Iguais!", "erro");
-					target.add(notificationPanel);
+					feedbackPanel.error("Confirme a senha");
+					target.add(feedbackPanel);
 
 				} else if (usuario.getIdUsuario() == null) {
 					usuario.setAtivo(true);
@@ -421,16 +421,16 @@ public class CadastrarUsuario extends Panel {
 					if (retorno.isSucesso()) {
 						acaoSalvarCancelarUsuario(target, true);
 					} else {
-						notificationPanel.mensagem(retorno.getRetorno(), "erro");
-						target.add(notificationPanel);
+						feedbackPanel = retorno.getMensagens(feedbackPanel);
+						target.add(feedbackPanel);
 					}
 				} else {
 					Retorno retorno = servicoUsuario.alterar(usuario);
 					if (retorno.isSucesso()) {
 						acaoSalvarCancelarUsuario(target, true);
 					} else {
-						notificationPanel.mensagem(retorno.getRetorno(), "erro");
-						target.add(notificationPanel);
+						feedbackPanel = retorno.getMensagens(feedbackPanel);
+						target.add(feedbackPanel);
 					}
 				}
 
@@ -439,9 +439,8 @@ public class CadastrarUsuario extends Panel {
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
 
-				notificationPanel.montarFeedBack();
 
-				target.add(notificationPanel);
+				target.add(feedbackPanel);
 
 				super.onError(target, form);
 			}

@@ -118,17 +118,17 @@ public class Validacao {
 	
 	public static String converterBoolean(Boolean booleano) {
 		if (booleano == true) {
-			return "Sim";
+			return "sim";
 		}else {
-			return "Não";
+			return "não";
 		}
 	}
 	
 	public static String converterBooleanAtivo(Boolean booleano) {
 		if (booleano == true) {
-			return "Ativada";
+			return "ativada";
 		}else {
-			return "Desativada";
+			return "desativada";
 		}
 	}
 
